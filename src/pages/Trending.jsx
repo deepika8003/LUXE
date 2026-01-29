@@ -41,7 +41,9 @@ const Trending = () => {
     <section className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* HEADING */}
-        <h2 className=" text-4xl mb-10 text-center font-serif">Trending Now</h2>
+        <h2 className="text-black text-4xl mb-10 text-center font-serif">
+          Trending Now
+        </h2>
         {/* SCROLL DIV */}
         <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-10">
           {products.map((item) => (
@@ -65,13 +67,13 @@ const Trending = () => {
               </div>
               {/* ABOUT PRODUCT DIV*/}
               <div>
-                <h4 className=" mb-1 text-sm  font-bold uppercase">
+                <h4 className="text-black mb-1 text-sm  font-bold uppercase">
                   {item.title}
                 </h4>
                 <p className="text-[#6b7280] text-xs uppercase tracking-widest mb-1">
                   {item.category}
                 </p>
-                <p className="font-serif text-lg">{item.price}</p>
+                <p className=" text-black font-serif text-lg">{item.price}</p>
               </div>
             </div>
           ))}

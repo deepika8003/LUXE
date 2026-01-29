@@ -28,19 +28,19 @@ const Nav = () => {
 
           {/* ICONS */}
           <div className="flex items-center gap-9 ">
-            <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-              <IoMdSearch className="text-xl" />
+            <div className=" w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
+              <IoMdSearch className="text-xl text-black" />
             </div>
 
             <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-              <MdOutlineShoppingBag className="text-xl" />
+              <MdOutlineShoppingBag className="text-xl text-black" />
               <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
                 2
               </span>
             </div>
 
             <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-              <FaRegUser className="text-md" />
+              <FaRegUser className="text-md text-black" />
             </div>
           </div>
         </div>
