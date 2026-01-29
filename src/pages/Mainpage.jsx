@@ -18,11 +18,11 @@ const Mainpage = () => {
           Autumn / Winter 2024
         </i>
 
-        <h1 className=" text-6xl font-bold text-white md:text-6xl lg:text-7xl">
+        <h1 className=" text-4xl md:text-6xl font-bold text-white md:text-6xl lg:text-7xl">
           THE NEW <br /> STANDARD
         </h1>
 
-        <div className="mt-8 flex flex-col lg:flex-row gap-6">
+        <div className="mt-8 flex flex-col sm:flex-row gap-6">
           <button className="bg-white px-8 py-4 text-md  tracking-widest rounded-xs text-black hover:text-white hover:bg-[#1152d4] transition">
             SHOP MEN
           </button>
