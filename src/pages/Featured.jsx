@@ -8,7 +8,9 @@ const Featured = () => {
         {/* TOP CONTENT */}
         <div className="block items-center justify-between mb-20">
           <div className="mb-5">
-            <h2 className="font-serif text-5xl mb-4">Curated Edits</h2>
+            <h2 className="font-serif text-5xl mb-4 text-black">
+              Curated Edits
+            </h2>
             <p className="text-[#6b7280] max-w-lg text-xl font-extralight ">
               Explore our meticulously crafted collections designed for the
               modern lifestyle.

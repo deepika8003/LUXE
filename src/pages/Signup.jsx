@@ -6,7 +6,9 @@ const Signup = () => {
       <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
         {/* LEFT CONTENT */}
         <div className="max-w-xl space-y-4">
-          <h1 className="text-3xl font-serif font-medium">Join The Circle</h1>
+          <h1 className="text-3xl text-black font-serif font-medium">
+            Join The Circle
+          </h1>
           <p className="text-[#6b7280] leading-7">
             Subscribe for early access to new collections, editorial stories,
             and exclusive events.
@@ -25,7 +27,7 @@ const Signup = () => {
             />
 
             {/* BUTTON */}
-            <button className="whitespace-nowrap py-4 text-xs tracking-widest hover:text-[#155dfc]">
+            <button className="whitespace-nowrap text-black py-4 text-xs tracking-widest hover:text-[#155dfc]">
               SIGN UP
             </button>
           </div>
