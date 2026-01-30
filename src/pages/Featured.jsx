@@ -20,7 +20,7 @@ const Featured = () => {
           <div className="w-full relative">
             <a
               href="#"
-              className=" absolute right-0 font-semibold flex items-center gap-2 text-sm tracking-widest uppercase "
+              className=" text-black absolute right-0 font-semibold flex items-center gap-2 text-sm tracking-widest uppercase "
             >
               View All Categories
               <IoIosArrowRoundForward className="text-2xl transform hover:translate-x-1 duration-300 cursor-pointer" />
@@ -29,9 +29,9 @@ const Featured = () => {
         </div>
 
         {/* IMAGE GRID */}
-        <div className="hidden md:grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* LEFT IMG */}
-          <div className="col-span-2 relative group overflow-hidden">
+          <div className="sm:col-span-2 relative group overflow-hidden">
             <img
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1IzqIFF44MKbyYUYp9Gvi8DVMADs8vR_oMGzOWTkv7v8wTXRYwrl0tYuRRLhTuBcMpmtt4lh_DpYKwOvJNK0XW5NbLB6RSdO10Gt1gBXyhtL0_5qsCZUm4dvLfOn9pnZQ9xxNzHg7-0fRLmcg8qP_J5KFJEoCGB98hNvBEK3WUL2F1AWgE4eO1rnRarZHJy3t2QbaW7YZN4XOsUfYuo6jydcvnU13VFKdxJgshTrcKz8XSaN3lzHaUX9n_6z2R05Fda34ILL7YhI"
               alt="Winter Edit"
@@ -51,9 +51,9 @@ const Featured = () => {
           </div>
 
           {/* RIGHT IMG */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 sm:col-span-1">
             {/* TOP IMG */}
-            <div className="relative group overflow-hidden">
+            <div className="relative group overflow-hidden sm:col-span-2">
               <img
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbRBWytVXZ3FdN0Y9wqgE1QxXLHyLH-mlS5xOsGOddzRSgfWumfRnrQz9skd-x_yXQuT-_RyFKUqwrf_7dp1AFANTzvwscz5DiJPTOjW6RXu1Sj9-hZ2zCj_eq678PcrMeCjuWWPBaX_7IOWtNqzO0Rh225rXNMMvG8BvbEeMdJjoIrZ5KuWnPDnWnfUmQ8UZMp5dn5h6NvIuQwPN9SU_keeME07vqaY32dDC4kxqODkzKfwfRCBU62OjX5R9uITaRgr7Hw2pTO4M"
                 alt="Essential Knits"
@@ -69,7 +69,7 @@ const Featured = () => {
             </div>
 
             {/* BOTTOM IMG */}
-            <div className="relative group overflow-hidden">
+            <div className="relative group overflow-hidden sm:col-span-2">
               <img
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDECsHXjR4_zXBt-4ehhJGwhbLnH9Hk0DraJLo2Tukxy15wzwDX--oYuxS-zaRfvYxj5qHiyGQ8Pzgg4hFQJt4PP1hu7Y2XBV5SX9ThF9YTawogfXTtlv2zWNalS_QCIz8zqobl_3LV0Qgz-6nKeK5Lfm7x8fvLxX3mtRq_XASSWmF8WFVAUPKzyOZzP7xEhh8R3G-ZjKC8c2VpoiUptbZZTYqG_1N_6_CbiSHNTVRaVyKj-ZMnyq24RKfPpcjTRLNYOfE5EgZCaJY"
                 alt="Occasion Wear"
