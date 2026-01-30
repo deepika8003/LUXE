@@ -9,21 +9,29 @@ const Nav = () => {
       <nav className="mx-auto flex  max-w-7xl items-center justify-between px-6  py-4.5 uppercase text-sm tracking-widest">
         {/* LEFT MENU */}
         <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold ">
-          <li className="cursor-pointer hover:text-[#1152d4]">New Arrivals</li>
-          <li className="cursor-pointer hover:text-[#1152d4]">Collections</li>
+          <li className="cursor-pointer hover:text-[#1152d4]">
+            <a href="">New Arrivals</a>
+          </li>
+          <li className="cursor-pointer hover:text-[#1152d4]">
+            <a href="">Collections</a>
+          </li>
         </ul>
 
         {/* LOGO */}
         <div className="flex items-center gap-2 text-3xl font-serif font-bold tracking-wider">
           <MdOutlineDiamond className="text-blue-600 text-3xl" />
-          <span className="text-black">LUXE</span>
+          <h1 className="text-black">LUXE</h1>
         </div>
 
         {/* RIGHT MENU */}
         <div className="flex items-center gap-12">
           <ul className=" text-black font-semibold hidden lg:flex gap-12  text-[12px] ">
-            <li className="cursor-pointer hover:text-[#1152d4]">Men</li>
-            <li className="cursor-pointer hover:text-[#1152d4]">Women</li>
+            <li className="cursor-pointer hover:text-[#1152d4]">
+              <a href="">Men</a>
+            </li>
+            <li className="cursor-pointer hover:text-[#1152d4]">
+              <a href="">Women</a>
+            </li>
           </ul>
 
           {/* ICONS */}
