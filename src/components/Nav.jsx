@@ -6,7 +6,7 @@ import { FaRegUser } from "react-icons/fa6";
 const Nav = () => {
   return (
     <header className="w-full bg-white/80 backdrop-blur-md fixed top-0 z-50 border-b border-black/5 ">
-      <nav className="mx-auto flex  max-w-7xl items-center justify-between px-4 py-4.5 uppercase text-sm tracking-widest">
+      <nav className="mx-auto flex  max-w-7xl items-center justify-between px-4 md:px-6 py-4.5 uppercase text-sm tracking-widest">
         {/* LEFT MENU */}
         <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold ">
           <li className="cursor-pointer hover:text-[#1152d4]">New Arrivals</li>
