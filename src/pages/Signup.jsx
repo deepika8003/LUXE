@@ -3,7 +3,7 @@ import React from "react";
 const Signup = () => {
   return (
     <section className="w-full bg-[#f6f6f8]  py-20">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 flex  flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
+      <div className="mx-auto max-w-7xl px-6  flex  flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
         {/* LEFT CONTENT */}
         <div className="max-w-xl space-y-4">
           <h1 className="text-3xl text-black font-serif font-medium">

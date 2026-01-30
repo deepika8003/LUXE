@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="w-full bg-[#0b0f18] text-sm text-[#b6bdc7]   ">
       {/* TOP FOOTER */}
-      <div className="mx-auto px-4 md:px-6 grid max-w-7xl grid-cols-1 gap-12 py-21  md:grid-cols-2 lg:grid-cols-4 border-b border-[#1f2430]">
+      <div className="mx-auto px-6  grid max-w-7xl grid-cols-1 gap-12 py-21  md:grid-cols-2 lg:grid-cols-4 border-b border-[#1f2430]">
         {/* BRAND */}
         <div className="space-y-6">
           <h2 className="text-2xl font-serif font-bold text-white pb-3">
