@@ -28,7 +28,7 @@ const About = () => {
         <div className="mt-10">
           <a
             href="#"
-            className="inline-block border-b-2 border-[#1152d4] pb-1 text-xs font-extralight tracking-widest text-[#0b0f18] hover:text-[#1152d4]"
+            className="inline-block font-semibold border-b-2 border-[#1152d4] pb-1 text-xs  tracking-widest text-[#0b0f18] hover:text-[#1152d4]"
           >
             OUR STORY
           </a>
