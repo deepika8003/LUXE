@@ -23,8 +23,8 @@ const ProductCard = ({ productData }) => {
                 />
 
                 {/* ADD TO BAG BUTTON */}
-                <div className="absolute bottom-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <button className="w-full flex justify-center items-center gap-2 bg-gray-950 text-white py-4 text-xs font-bold uppercase tracking-widest">
+                <div className="absolute bottom-0 w-full md:translate-y-full md:group-hover:translate-y-0  transition-transform duration-300">
+                  <button className="w-full flex justify-center items-center gap-2 bg-gray-950 hover:bg-gray-800 text-white py-4 text-xs font-bold uppercase tracking-widest">
                     <BsPlusLg />
                     Add to Cart
                   </button>
