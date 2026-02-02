@@ -16,7 +16,7 @@ const Product = () => {
   };
 
   return (
-    <div className="bg-[#fcfcfc] px-6 pt-33 pb-25 md:flex">
+    <div className="bg-[#fcfcfc] px-6 py-16 md:flex">
       <div className="max-w-7xl mx-auto px-6 md:flex gap-8">
         <div className="flex gap-6  md:w-[60%] flex-shrink-0">
           <div className="hidden md:block flex-row ">
@@ -95,19 +95,19 @@ const Product = () => {
               </a>
             </div>
             <div className="flex gap-4 ">
-              <div className="w-13 h-13 flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black text-black">
+              <div className="w-13 h-13 min-w-13 min-h-13 aspect-square flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black text-black">
                 XS
               </div>
-              <div className="w-13 h-13 flex items-center justify-center rounded-full border border-black  bg-black text-white">
+              <div className="w-13 h-13 min-w-13 min-h-13 aspect-square flex items-center justify-center rounded-full border border-black  bg-black text-white">
                 S
               </div>
-              <div className="w-13 h-13 flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black  text-black">
+              <div className="w-13 h-13 min-w-13 min-h-13 aspect-square flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black  text-black">
                 M
               </div>
-              <div className="w-13 h-13 flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black  text-black">
+              <div className="w-13 h-13 min-w-13 min-h-13 aspect-square flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black  text-black">
                 L
               </div>
-              <div className="w-13 h-13 flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black text-black ">
+              <div className="w-13 h-13 min-w-13 min-h-13 aspect-square flex items-center justify-center rounded-full border border-[#e5e7eb] hover:border-black text-black ">
                 XL
               </div>
             </div>
