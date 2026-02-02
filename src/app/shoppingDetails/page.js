@@ -1,5 +1,5 @@
-import Product from '@/pages/Product'
-import ProductCard from '@/pages/ProductCard'
+import Product from '@/pages/ProductDetails/Product'
+import ProductCard from '@/components/ProductCard'
 import React from 'react'
 
 const page = () => {
@@ -7,7 +7,7 @@ const page = () => {
         <div>
 
             <Product />
-            <ProductCard />
+
 
         </div >
     )

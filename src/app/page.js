@@ -1,8 +1,8 @@
-import About from "@/pages/About";
-import Featured from "@/pages/Featured";
-import Mainpage from "@/pages/Mainpage";
-import Signup from "@/pages/Signup";
-import Trending from "@/pages/Trending";
+import About from "@/pages/HomePage/About";
+import Featured from "@/pages/HomePage/Featured";
+import Mainpage from "@/pages/HomePage/Mainpage";
+import Signup from "@/pages/HomePage/Signup";
+import Trending from "@/pages/HomePage/Trending";
 
 
 export default function Home() {
