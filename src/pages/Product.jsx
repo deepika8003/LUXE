@@ -7,16 +7,18 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
 
 const Product = () => {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openSections, setOpenSections] = useState([]);
 
   const toggleSection = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+    setOpenSections((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
   };
 
   return (
     <div className="bg-[#fcfcfc] px-6 pt-33 pb-25 md:flex">
       <div className="max-w-7xl mx-auto px-6 md:flex gap-8">
-        <div className="flex gap-6  md:w-[60%]">
+        <div className="flex gap-6  md:w-[60%] flex-shrink-0">
           <div className="hidden md:block flex-row ">
             {/* SIDE IMAGES */}
             <img
@@ -45,15 +47,14 @@ const Product = () => {
             />
           </div>
           {/* MAIN IMAGE */}
-          <div
-            className="w-full min-h-[600px] relative bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjefRmKh9Ku3PvgSntBasogV94LwdiqA8R9C2_2nlNFaJikk5taowM4bTHAvX6euda-KAUqoUf8a_6vdo_J4ge4DlguYCdXAEwKFpauu5mD0JNhYGz_G53winsOMhOOiJDyUxMkXLeaDGzT1p55sqZW-kwL9UU2hKOCf4VWN1hrGDylrRnaRMU0ngc2bIWnIPRuzfAEBXHs4ejePYOC48a4l-VJ5UgHA78nQw8drISg0KK1-0slJxAdB1pCBdt6jjnLl_vU5xFIkc')",
-            }}
-          >
+          <div className="w-full aspect-[3/4] relative overflow-hidden">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjefRmKh9Ku3PvgSntBasogV94LwdiqA8R9C2_2nlNFaJikk5taowM4bTHAvX6euda-KAUqoUf8a_6vdo_J4ge4DlguYCdXAEwKFpauu5mD0JNhYGz_G53winsOMhOOiJDyUxMkXLeaDGzT1p55sqZW-kwL9UU2hKOCf4VWN1hrGDylrRnaRMU0ngc2bIWnIPRuzfAEBXHs4ejePYOC48a4l-VJ5UgHA78nQw8drISg0KK1-0slJxAdB1pCBdt6jjnLl_vU5xFIkc"
+              className="w-full h-full object-cover "
+            />
+
             {/* HEART ICON */}
-            <div className="absolute top-6 right-6 w-10 h-12 flex items-center justify-center rounded-full bg-red cursor-pointer shadow ">
+            <div className="absolute top-4 md:top-6 right-4 md:right-6 w-11 h-13 flex items-center justify-center rounded-full bg-white shadow cursor-pointer">
               <IoMdHeartEmpty className="text-xl text-black" />
             </div>
           </div>
@@ -62,7 +63,7 @@ const Product = () => {
         <div className="md:w-[40%] md:px-5 mt-8 md:mt-0">
           {/* HEADING */}
           <div>
-            <h4 className="text-[#6b7280] uppercase font-extralight mb-5 text-[10px] tracking-[3px]">
+            <h4 className="text-[#6b7280] uppercase font-extralight mb-5 pt-10 text-[10px] tracking-[3px]">
               The winter edit - outwear
             </h4>
 
@@ -115,7 +116,7 @@ const Product = () => {
           {/* ADD TO BAG  */}
 
           <div className="w-full mt-10 mb-5">
-            <button className="text-white tracking-widest text-md bg-black hover:bg-gray-800 w-full py-4 uppercase text">
+            <button className="text-white tracking-[5] text-sm bg-black hover:bg-gray-800 w-full py-4.5 uppercase text">
               add to bag
             </button>
           </div>
@@ -144,15 +145,15 @@ const Product = () => {
                   details & fit
                 </h2>
                 <IoIosArrowDown
-                  className={`transition-transform duration-300 ${
-                    openIndex === 0 ? "rotate-180" : ""
+                  className={`transition-transform duration-300 text-black ${
+                    openSections.includes(0) ? "rotate-180" : ""
                   }`}
                 />
               </div>
 
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === 0
+                  openSections.includes(0)
                     ? "max-h-[400px] opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
@@ -180,15 +181,15 @@ const Product = () => {
                   Composition & Care
                 </h2>
                 <IoIosArrowDown
-                  className={`transition-transform duration-300 ${
-                    openIndex === 1 ? "rotate-180" : ""
+                  className={`transition-transform duration-300 text-black ${
+                    openSections.includes(1) ? "rotate-180" : ""
                   }`}
                 />
               </div>
 
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === 1
+                  openSections.includes(1)
                     ? "max-h-[200px] opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
@@ -213,15 +214,15 @@ const Product = () => {
                   Shipping & Returns
                 </h2>
                 <IoIosArrowDown
-                  className={`transition-transform duration-300 ${
-                    openIndex === 2 ? "rotate-180" : ""
+                  className={`transition-transform duration-300 text-black ${
+                    openSections.includes(2) ? "rotate-180" : ""
                   }`}
                 />
               </div>
 
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === 2
+                  openSections.includes(2)
                     ? "max-h-[200px] opacity-100"
                     : "max-h-0 opacity-0"
                 }`}

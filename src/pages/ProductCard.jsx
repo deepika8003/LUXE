@@ -33,10 +33,10 @@ const products = [
 
 const ProductCard = () => {
   return (
-    <section className="w-full bg-[#f9fafb] py-28">
+    <section className="w-full bg-[#f9fafb] py-24">
       <div className="mx-auto max-w-7xl px-6">
         {/* TITLE */}
-        <h2 className="mb-10 text-center font-serif text-3xl text-black">
+        <h2 className="mb-10 text-center font-serif text-4xl text-black">
           Complete the Look
         </h2>
 
