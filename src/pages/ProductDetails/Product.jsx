@@ -77,8 +77,9 @@ const Product = () => {
                   className="w-full h-full object-cover"
                   alt="Product"
                 />
+                {/* HEART ICON */}
                 <div className="absolute top-4 right-4 w-10 h-12 flex items-center justify-center rounded-full bg-white shadow">
-                  <IoMdHeartEmpty className="text-xl" />
+                  <IoMdHeartEmpty className="text-xl text-black" />
                 </div>
               </div>
 
