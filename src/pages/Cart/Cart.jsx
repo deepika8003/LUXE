@@ -100,8 +100,10 @@ const Cart = () => {
         <div className="w-full md:w-[70%]">
           {/* ADDRESS */}
           <div className="flex justify-between items-center bg-white p-4 mb-3">
-            <h3 className="text-black">From Saved Addresses</h3>
-            <button className="text-[#155dfc] font-medium">
+            <h3 className="text-black text-sm md:text-md">
+              From Saved Addresses
+            </h3>
+            <button className="text-[#155dfc] font-medium text-sm md:text-md">
               Enter Delivery Pincode
             </button>
           </div>
@@ -113,7 +115,9 @@ const Cart = () => {
               <div key={item.id} className="bg-white mb-3">
                 <div className="p-4 flex justify-between gap-5">
                   <div className="flex-1">
-                    <h2 className="text-xl text-black">{item.name}</h2>
+                    <h2 className="text-md md:text-xl text-black">
+                      {item.name}
+                    </h2>
                     <p className="text-xs text-gray-500 mt-2 mb-4">
                       {item.description}
                     </p>
@@ -148,7 +152,7 @@ const Cart = () => {
                     {/* QTY */}
                     <div className="relative">
                       <div
-                        className="border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
+                        className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
                         onClick={() =>
                           setOpenQty(openQty === item.id ? null : item.id)
                         }
@@ -232,7 +236,7 @@ const Cart = () => {
                   Price ({cart.length} items){" "}
                   <MdErrorOutline className="text-[#878787]" />
                 </h4>
-                <p className="font-medium">
+                <p className="font-medium text-black">
                   ${totalOriginalPrice.toLocaleString()}
                 </p>
               </div>
@@ -254,7 +258,9 @@ const Cart = () => {
               </div>
 
               <div className="flex justify-between border-t pt-4 border-[#e0e0e0] border-dashed">
-                <h4 className="text-sm font-medium">Total Customer Price</h4>
+                <h4 className="text-sm font-medium text-black">
+                  Total Customer Price
+                </h4>
                 <p className="font-bold text-lg">
                   ${totalCustomerPrice.toLocaleString()}
                 </p>
@@ -273,7 +279,7 @@ const Cart = () => {
           {/* SECURE */}
           <div className="my-4 p-4 bg-white rounded">
             <p className="text-[#878787] text-sm flex items-center gap-3">
-              <IoShieldCheckmarkSharp className="text-xl text-green-600" />
+              <IoShieldCheckmarkSharp className="text-xl text-[#878787]" />
               Safe and secure payments. Easy returns. 100% Authentic products.
             </p>
           </div>
