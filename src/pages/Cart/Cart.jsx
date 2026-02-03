@@ -150,7 +150,7 @@ const Cart = () => {
                       />
                     </div>
                     {/* QTY */}
-                    <div className="relative">
+                    <div className="relative w-32">
                       <div
                         className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
                         onClick={() =>
@@ -261,7 +261,7 @@ const Cart = () => {
                 <h4 className="text-sm font-medium text-black">
                   Total Customer Price
                 </h4>
-                <p className="font-bold text-lg">
+                <p className="font-bold text-lg text-black">
                   ${totalCustomerPrice.toLocaleString()}
                 </p>
               </div>
@@ -315,11 +315,13 @@ const Cart = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
-              <h3 className="text-lg font-medium mb-4">Enter Quantity</h3>
+              <h3 className="text-lg font-medium mb-4 text-black">
+                Enter Quantity
+              </h3>
               <input
                 type="number"
                 min="1"
-                className="outline-none text-base w-full py-3 px-4 border border-gray-300 rounded-lg mb-2"
+                className="outline-none text-base w-full py-3 px-4 border text-black border-gray-300 rounded-lg mb-2"
                 placeholder="Enter quantity"
                 value={customQty}
                 onChange={(e) => {
@@ -372,7 +374,9 @@ const Cart = () => {
           >
             {/* CONTENT */}
             <div className="p-6">
-              <h3 className="text-lg font-medium mb-2">Remove Item</h3>
+              <h3 className="text-lg font-medium mb-2 text-black">
+                Remove Item
+              </h3>
               <p className="text-gray-600 mb-6">
                 Are you sure you want to remove this item from your cart?
               </p>
