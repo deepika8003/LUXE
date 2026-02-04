@@ -311,7 +311,7 @@ const Cart = () => {
           onClick={() => setShowQtyModal(false)}
         >
           <div
-            className="bg-white w-[90%] max-w-sm rounded-xl shadow-lg"
+            className="bg-white w-[90%] max-w-lg rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
@@ -320,8 +320,7 @@ const Cart = () => {
               </h3>
               <input
                 type="number"
-                min="1"
-                className="outline-none text-base w-full py-3 px-4 border text-black border-gray-300 rounded-lg mb-2"
+                className="outline-none text-base w-full py-3 px-4  text-black  rounded-lg mb-2"
                 placeholder="Enter quantity"
                 value={customQty}
                 onChange={(e) => {
@@ -369,7 +368,7 @@ const Cart = () => {
           onClick={() => setShowDeleteModal(false)}
         >
           <div
-            className="bg-white w-[90%] max-w-sm rounded-xl shadow-lg"
+            className="bg-white w-[90%] max-w-lg rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* CONTENT */}
