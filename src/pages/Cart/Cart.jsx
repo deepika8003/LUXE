@@ -164,7 +164,7 @@ const Cart = () => {
 
                       {openQty === item.id && (
                         <div
-                          className="absolute top-full left-0 w-full bg-white border border-[#ababab] z-10"
+                          className="absolute top-0 left-0 w-full bg-white border border-[#ababab] z-10"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {[1, 2, 3].map((num) => (
