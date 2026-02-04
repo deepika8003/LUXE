@@ -113,16 +113,16 @@ const Cart = () => {
             const sellingPrice = calculateSellingPrice(item);
             return (
               <div key={item.id} className="bg-white mb-3">
-                <div className="p-4 flex justify-between gap-5">
+                <div className="p-4 flex justify-between gap-4">
                   <div className="flex-1">
-                    <h2 className="text-md md:text-xl text-black">
+                    <h2 className="text-sm md:text-xl text-black">
                       {item.name}
                     </h2>
                     <p className="text-xs text-gray-500 mt-2 mb-4">
                       {item.description}
                     </p>
 
-                    <p className="text-green-600 font-medium my-1">
+                    <p className="text-green-600 text-sm md:text-md font-medium my-1">
                       {item.discount}% off
                       <del className="text-gray-400 mx-2">
                         ${item.originalPrice}
@@ -142,7 +142,7 @@ const Cart = () => {
                   {/* IMAGE & QTY */}
                   <div className="flex flex-col items-end">
                     {/* IMG */}
-                    <div className="w-32 h-32 mb-2">
+                    <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
                       <img
                         src={item.img}
                         alt={item.name}
@@ -150,7 +150,7 @@ const Cart = () => {
                       />
                     </div>
                     {/* QTY */}
-                    <div className="relative w-32">
+                    <div className="relative w-full md:w-32">
                       <div
                         className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
                         onClick={() =>
@@ -202,13 +202,13 @@ const Cart = () => {
 
                 {/* BUTTONS */}
                 <div className="flex w-full border-t border-[#f0f0f0]">
-                  <button className="flex items-center justify-center gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50">
+                  <button className="flex items-center justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50">
                     <ImBoxAdd className="text-sm text-[#ababab]" /> Save For
                     Later
                   </button>
 
                   <button
-                    className="flex items-center justify-center gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
+                    className="flex items-center justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
                     onClick={() => {
                       setSelectedItem(item);
                       setShowDeleteModal(true);
@@ -224,7 +224,7 @@ const Cart = () => {
         </div>
 
         {/* RIGHT */}
-        <div className="w-full md:w-[30%] mt-6 md:mt-0">
+        <div className="w-full md:w-[30%] mt-6 md:mt-0 md:sticky md:top-23 self-start">
           <div className="bg-white rounded">
             <div className="space-y-4 p-4">
               <h2 className="text-black font-semibold text-lg">
@@ -257,11 +257,11 @@ const Cart = () => {
                 </p>
               </div>
 
-              <div className="flex justify-between border-t pt-4 border-[#e0e0e0] border-dashed">
+              <div className="flex justify-between items-center border-t pt-4 border-[#e0e0e0] border-dashed">
                 <h4 className="text-sm font-medium text-black">
                   Total Customer Price
                 </h4>
-                <p className="font-bold text-lg text-black">
+                <p className=" text-md text-black">
                   ${totalCustomerPrice.toLocaleString()}
                 </p>
               </div>
@@ -290,7 +290,7 @@ const Cart = () => {
               <del className="text-[#878787] text-sm block">
                 ${totalOriginalPrice.toLocaleString()}
               </del>
-              <p className="text-black text-lg font-semibold flex items-center gap-2">
+              <p className="text-black text-md md:text-lg font-semibold flex items-center gap-2">
                 ${totalCustomerPrice.toLocaleString()}
                 <MdErrorOutline className="text-[#878787] text-base" />
               </p>
