@@ -311,16 +311,16 @@ const Cart = () => {
           onClick={() => setShowQtyModal(false)}
         >
           <div
-            className="bg-white w-[90%] max-w-lg rounded-xl shadow-lg"
+            className="bg-white w-[80%]  rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6">
-              <h3 className="text-lg font-medium mb-4 text-black">
+            <div className="p-4">
+              <h3 className="text-md font-medium mb-4 text-black">
                 Enter Quantity
               </h3>
               <input
                 type="number"
-                className="outline-none text-base w-full py-3 px-4  text-black  rounded-lg mb-2"
+                className="outline-none text-base w-full  px-4  text-black  rounded-lg "
                 placeholder="Enter quantity"
                 value={customQty}
                 onChange={(e) => {
@@ -333,12 +333,12 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowQtyModal(false)}
-                className="text-black py-4 text-base font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
               <button
-                className="text-blue-600 text-base font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
+                className="text-blue-600 text-sm font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
                 onClick={() => {
                   if (!customQty) return;
 
@@ -368,15 +368,15 @@ const Cart = () => {
           onClick={() => setShowDeleteModal(false)}
         >
           <div
-            className="bg-white w-[90%] max-w-lg rounded-xl shadow-lg"
+            className="bg-white w-[80%]  rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* CONTENT */}
-            <div className="p-6">
-              <h3 className="text-lg font-medium mb-2 text-black">
+            <div className="p-4">
+              <h3 className="text-md font-medium mb-4 text-black">
                 Remove Item
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-black text-sm">
                 Are you sure you want to remove this item from your cart?
               </p>
             </div>
@@ -385,13 +385,13 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="text-black py-4 text-base font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
 
               <button
-                className="text-red-600 text-base font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
+                className="text-red-600 text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
                 onClick={() => {
                   setCart((prev) =>
                     prev.filter((c) => c.id !== selectedItem.id),
