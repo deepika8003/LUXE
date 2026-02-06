@@ -12,7 +12,7 @@ import { FiUsers } from "react-icons/fi";
 
 const SideBar = () => {
   return (
-    <aside className="h-screen w-64 flex-shrink-0 bg-white flex flex-col justify-between ">
+    <aside className="h-screen w-64 fixed flex-shrink-0 bg-white flex flex-col justify-between ">
       <div className="p-4">
         {/* TITLE */}
         <div className="flex items-center gap-2 mb-10">
