@@ -1,11 +1,12 @@
 import React from "react";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle, AiOutlineWarning } from "react-icons/ai";
 import { LuClipboardCheck } from "react-icons/lu";
 import { RiVerifiedBadgeLine } from "react-icons/ri";
 import { MdOutlineVisibility } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
 import { IoReorderThree } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { HiTrendingUp, HiOutlineRefresh } from "react-icons/hi";
 
 const products = [
   {
@@ -61,11 +62,13 @@ const AdminProduct = () => {
         {/* TOTAL INVENTORY */}
         <div className="bg-white rounded-xl border border-[#e0e0e0] p-6 flex justify-between items-center">
           <div>
-            <h2 className="text-sm text-gray-500 uppercase tracking-wide">
+            <h2 className=" text-sm text-gray-500 uppercase tracking-wide">
               Total Inventory
             </h2>
-            <p className="text-2xl font-semibold mt-1">12,450</p>
-            <p className="text-green-600 text-xs mt-1">+2% from last month</p>
+            <p className="text-2xl font-semibold mt-1 text-black">12,450</p>
+            <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
+              <HiTrendingUp /> +2% from last month
+            </p>
           </div>
           <div className="bg-[#e7ecf5] px-3 py-4 rounded-lg">
             <LuClipboardCheck className="text-2xl text-[#1241a0]" />
@@ -78,8 +81,10 @@ const AdminProduct = () => {
             <h2 className="text-sm text-gray-500 uppercase tracking-wide">
               New Arrivals
             </h2>
-            <p className="text-2xl font-semibold mt-1">328</p>
-            <p className="text-green-600 text-xs mt-1">+15% this month</p>
+            <p className="text-2xl font-semibold mt-1 text-black">328</p>
+            <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
+              <HiTrendingUp /> +15% this month
+            </p>
           </div>
           <div className="bg-[#d1fae5] px-3 py-4 rounded-lg">
             <RiVerifiedBadgeLine className="text-2xl text-[#059669]" />
@@ -92,8 +97,10 @@ const AdminProduct = () => {
             <h2 className="text-sm text-gray-500 uppercase tracking-wide">
               Active Listings
             </h2>
-            <p className="text-2xl font-semibold mt-1">1,084</p>
-            <p className="text-gray-400 text-xs mt-1">Current status</p>
+            <p className="text-2xl font-semibold mt-1 text-black">1,084</p>
+            <p className="text-gray-400 text-xs mt-1 flex items-center gap-1">
+              <HiOutlineRefresh /> Current status
+            </p>
           </div>
           <div className="bg-[#dbeafe] px-3 py-4 rounded-lg">
             <MdOutlineVisibility className="text-2xl text-[#2563eb]" />
@@ -106,8 +113,10 @@ const AdminProduct = () => {
             <h2 className="text-sm text-gray-500 uppercase tracking-wide">
               Out of Stock
             </h2>
-            <p className="text-2xl font-semibold mt-1">14</p>
-            <p className="text-red-500 text-xs mt-1">Needs attention</p>
+            <p className="text-2xl font-semibold mt-1 text-black">14</p>
+            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <AiOutlineWarning /> Needs attention
+            </p>
           </div>
           <div className="bg-[#ffe4e6] px-3 py-4 rounded-lg">
             <AiOutlineExclamationCircle className="text-2xl text-[#e11d48]" />
@@ -119,7 +128,9 @@ const AdminProduct = () => {
       <div className="bg-white rounded-xl border border-[#e0e0e0] overflow-hidden">
         <div className="flex justify-between p-6 border-b border-[#e0e0e0]">
           <div>
-            <h2 className="text-md font-semibold">Product Catalog</h2>
+            <h2 className="text-md font-semibold text-black">
+              Product Catalog
+            </h2>
           </div>
           <div className="flex justify-between gap-6 px-5">
             <IoReorderThree className="text-xl text-[#94a3b8]" />
@@ -219,33 +230,37 @@ const AdminProduct = () => {
                 </tr>
               ))}
             </tbody>
+            {/* TABLE FOOTER */}
+            <tfoot>
+              <tr>
+                <td colSpan="6" className="px-6 py-4 border-t border-[#e0e0e0]">
+                  <div className="flex justify-between items-center">
+                    <div className="text-sm text-gray-500">
+                      Showing 1 to 4 of 1,084 products
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button className="px-3 py-1.5 text-xs border border-[#e0e0e0] rounded-sm text-gray-400 hover:bg-gray-50">
+                        Previous
+                      </button>
+                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm bg-[#1241a1] text-white">
+                        1
+                      </button>
+                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-md hover:bg-gray-50">
+                        2
+                      </button>
+                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
+                        3
+                      </button>
+                      <button className="px-3 py-1.5 text-md border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
           </table>
-        </div>
-
-        {/* TABLE FOOTER */}
-        <div className="flex justify-between items-center px-6 py-4 border-t border-[#e0e0e0]">
-          <div className="text-sm text-gray-500">
-            Showing 1 to 4 of 1,084 products
-          </div>
-
-          {/* BUTTON GROUP */}
-          <div className="flex items-center gap-2">
-            <button className="px-3 py-1.5 text-xs border border-[#e0e0e0] rounded-sm text-gray-400 hover:bg-gray-50">
-              Previous
-            </button>
-            <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm bg-[#1241a1] text-white">
-              1
-            </button>
-            <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-md hover:bg-gray-50">
-              2
-            </button>
-            <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
-              3
-            </button>
-            <button className="px-3 py-1.5 text-md border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
-              Next
-            </button>
-          </div>
         </div>
       </div>
     </section>
