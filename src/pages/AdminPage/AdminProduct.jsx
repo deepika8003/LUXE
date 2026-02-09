@@ -4,10 +4,10 @@ import { LuClipboardCheck } from "react-icons/lu";
 import { RiVerifiedBadgeLine } from "react-icons/ri";
 import { MdOutlineVisibility } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
-import { IoReorderThree } from "react-icons/io5";
+import { IoFilterSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { HiTrendingUp, HiOutlineRefresh } from "react-icons/hi";
-
+import { useState } from "react";
 const products = [
   {
     id: 1,
@@ -53,11 +53,222 @@ const products = [
     price: 275,
     status: "Draft",
   },
+  {
+    id: 5,
+    name: "Leather Chelsea Boots",
+    sku: "LB-33421",
+    image: "https://picsum.photos/seed/p5/200",
+    category: "Footwear",
+    stock: 8,
+    price: 520,
+    status: "Live",
+  },
+  {
+    id: 6,
+    name: "Classic Wool Blazer",
+    sku: "WB-66412",
+    image: "https://picsum.photos/seed/p6/200",
+    category: "Apparel",
+    stock: 18,
+    price: 610,
+    status: "Live",
+  },
+  {
+    id: 7,
+    name: "Premium Denim Jacket",
+    sku: "DJ-77890",
+    image: "https://picsum.photos/seed/p7/200",
+    category: "Apparel",
+    stock: 22,
+    price: 480,
+    status: "Live",
+  },
+  {
+    id: 8,
+    name: "Minimal Leather Wallet",
+    sku: "LW-11234",
+    image: "https://picsum.photos/seed/p8/200",
+    category: "Accessories",
+    stock: 0,
+    price: 95,
+    status: "Sold Out",
+  },
+  {
+    id: 9,
+    name: "Tailored Cotton Trousers",
+    sku: "CT-55678",
+    image: "https://picsum.photos/seed/p9/200",
+    category: "Apparel",
+    stock: 14,
+    price: 340,
+    status: "Live",
+  },
+  {
+    id: 10,
+    name: "Suede Loafers",
+    sku: "SL-90876",
+    image: "https://picsum.photos/seed/p10/200",
+    category: "Footwear",
+    stock: 6,
+    price: 390,
+    status: "Draft",
+  },
+  {
+    id: 11,
+    name: "Merino Crewneck Sweater",
+    sku: "MC-33490",
+    image: "https://picsum.photos/seed/p11/200",
+    category: "Apparel",
+    stock: 25,
+    price: 260,
+    status: "Live",
+  },
+  {
+    id: 12,
+    name: "Structured Handbag",
+    sku: "HB-77812",
+    image: "https://picsum.photos/seed/p12/200",
+    category: "Accessories",
+    stock: 9,
+    price: 720,
+    status: "Live",
+  },
+  {
+    id: 13,
+    name: "Relaxed Fit Polo",
+    sku: "RP-44129",
+    image: "https://picsum.photos/seed/p13/200",
+    category: "Apparel",
+    stock: 30,
+    price: 180,
+    status: "Draft",
+  },
+  {
+    id: 14,
+    name: "Canvas Weekender Bag",
+    sku: "WB-99341",
+    image: "https://picsum.photos/seed/p14/200",
+    category: "Accessories",
+    stock: 4,
+    price: 560,
+    status: "Live",
+  },
+  {
+    id: 15,
+    name: "Formal Oxford Shirt",
+    sku: "OS-22345",
+    image: "https://picsum.photos/seed/p15/200",
+    category: "Apparel",
+    stock: 16,
+    price: 210,
+    status: "Live",
+  },
+  {
+    id: 16,
+    name: "Knitted Beanie",
+    sku: "KB-55443",
+    image: "https://picsum.photos/seed/p16/200",
+    category: "Accessories",
+    stock: 40,
+    price: 75,
+    status: "Live",
+  },
+  {
+    id: 17,
+    name: "Slim Fit Chinos",
+    sku: "SC-88990",
+    image: "https://picsum.photos/seed/p17/200",
+    category: "Apparel",
+    stock: 11,
+    price: 310,
+    status: "Draft",
+  },
+  {
+    id: 18,
+    name: "Luxury Silk Scarf",
+    sku: "LS-44567",
+    image: "https://picsum.photos/seed/p18/200",
+    category: "Accessories",
+    stock: 0,
+    price: 150,
+    status: "Sold Out",
+  },
+  {
+    id: 19,
+    name: "Running Sneakers",
+    sku: "RS-77654",
+    image: "https://picsum.photos/seed/p19/200",
+    category: "Footwear",
+    stock: 20,
+    price: 420,
+    status: "Live",
+  },
+  {
+    id: 20,
+    name: "Slim Leather Belt",
+    sku: "LB-90211",
+    image: "https://picsum.photos/seed/p20/200",
+    category: "Accessories",
+    stock: 27,
+    price: 120,
+    status: "Live",
+  },
+  {
+    id: 21,
+    name: "Quilted Winter Jacket",
+    sku: "QJ-67123",
+    image: "https://picsum.photos/seed/p21/200",
+    category: "Apparel",
+    stock: 7,
+    price: 850,
+    status: "Live",
+  },
+  {
+    id: 22,
+    name: "Everyday Canvas Backpack",
+    sku: "CB-44519",
+    image: "https://picsum.photos/seed/p22/200",
+    category: "Accessories",
+    stock: 0,
+    price: 460,
+    status: "Sold Out",
+  },
+  {
+    id: 23,
+    name: "Casual Slip-On Sneakers",
+    sku: "SS-33874",
+    image: "https://picsum.photos/seed/p23/200",
+    category: "Footwear",
+    stock: 19,
+    price: 390,
+    status: "Draft",
+  },
+  {
+    id: 24,
+    name: "Linen Summer Shorts",
+    sku: "LS-55890",
+    image: "https://picsum.photos/seed/p24/200",
+    category: "Apparel",
+    stock: 34,
+    price: 190,
+    status: "Live",
+  },
 ];
 
+// PAGINATION
+const itemsPerPage = 10;
+
 const AdminProduct = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentProducts = products.slice(startIndex, endIndex);
   return (
-    <section className="p-0">
+    <section className="px-2">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* TOTAL INVENTORY */}
         <div className="bg-white rounded-xl border border-[#e0e0e0] p-6 flex justify-between items-center">
@@ -133,32 +344,36 @@ const AdminProduct = () => {
             </h2>
           </div>
           <div className="flex justify-between gap-6 px-5">
-            <IoReorderThree className="text-xl text-[#94a3b8]" />
-            <FiDownload className="text-xl text-[#94a3b8]" />
+            <button>
+              <IoFilterSharp className="text-xl text-[#94a3b8] active:text-black" />
+            </button>
+            <button>
+              <FiDownload className="text-xl text-[#94a3b8] active:text-black" />
+            </button>
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-left">
             {/* TABLE HEADER */}
             <thead>
               <tr className="bg-[#f8fafc]">
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[32%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   PRODUCT
                 </th>
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[14%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   CATEGORY
                 </th>
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[14%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   STOCK
                 </th>
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[12%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   PRICE
                 </th>
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[14%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   STATUS
                 </th>
-                <th className="text-left py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest align-middle">
+                <th className="w-[14%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
                   ACTIONS
                 </th>
               </tr>
@@ -166,24 +381,24 @@ const AdminProduct = () => {
 
             {/* TABLE BODY  */}
             <tbody>
-              {products.map((item) => (
+              {currentProducts.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-[#e0e0e0] hover:bg-[#f8fafc]"
                 >
                   {/* PRODUCT */}
-                  <td className="py-4 px-6 align-middle">
+                  <td className="w-[32%] py-4 px-6 align-middle">
                     <div className="flex items-center gap-4">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-12 h-12 rounded-md object-cover"
+                        className="w-12 h-12 rounded-md object-cover flex-shrink-0"
                       />
-                      <div>
-                        <h2 className="text-md font-serif font-semibold text-black">
+                      <div className="min-w-0">
+                        <h2 className="text-sm md:text-md font-serif font-semibold text-black truncate">
                           {item.name}
                         </h2>
-                        <span className="text-xs text-[#64748b]">
+                        <span className="text-xs text-[#64748b] block truncate">
                           SKU: {item.sku}
                         </span>
                       </div>
@@ -191,37 +406,39 @@ const AdminProduct = () => {
                   </td>
 
                   {/* CATEGORY */}
-                  <td className="py-4 px-6 text-sm text-[#475569] align-middle">
+                  <td className="w-[14%] py-4 px-6 text-sm text-[#475569] align-middle">
                     {item.category}
                   </td>
 
                   {/* STOCK */}
                   <td
-                    className={`py-4 px-6 text-sm align-middle ${item.stock === 0 ? "text-red-500" : "text-[#475569]"}`}
+                    className={`w-[14%] py-4 px-6 text-sm align-middle ${
+                      item.stock === 0 ? "text-red-500" : "text-[#475569]"
+                    }`}
                   >
                     {item.stock} in stock
                   </td>
 
                   {/* PRICE */}
-                  <td className="py-4 px-6 text-sm font-medium text-black align-middle">
+                  <td className="w-[12%] py-4 px-6 text-sm font-medium text-black align-middle">
                     ${item.price}.00
                   </td>
 
                   {/* STATUS */}
-                  <td className="py-4 px-6 align-middle">
+                  <td className="w-[14%] py-4 px-6 align-middle">
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full
-                  ${item.status === "Live" && "bg-[#d1fae5] text-[#065f46]"}
-                  ${item.status === "Sold Out" && "bg-[#f1f5f9] text-[#334155]"}
-                  ${item.status === "Draft" && "bg-[#fef3c7] text-[#92400e]"}
-                `}
+                      className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full
+            ${item.status === "Live" && "bg-[#d1fae5] text-[#065f46]"}
+            ${item.status === "Sold Out" && "bg-[#f1f5f9] text-[#334155]"}
+            ${item.status === "Draft" && "bg-[#fef3c7] text-[#92400e]"}
+          `}
                     >
                       {item.status}
                     </span>
                   </td>
 
                   {/* ACTIONS */}
-                  <td className="py-4 px-6 align-middle">
+                  <td className="w-[14%] py-4 px-6 align-middle">
                     <div className="flex items-center gap-3 text-sm text-[#1241a1] cursor-pointer">
                       <span className="font-bold">Edit</span>
                       <BsThreeDotsVertical className="text-[#94a3b8]" />
@@ -230,29 +447,67 @@ const AdminProduct = () => {
                 </tr>
               ))}
             </tbody>
+
             {/* TABLE FOOTER */}
             <tfoot>
               <tr>
                 <td colSpan="6" className="px-6 py-4 border-t border-[#e0e0e0]">
                   <div className="flex justify-between items-center">
+                    {/* LEFT TEXT */}
                     <div className="text-sm text-gray-500">
-                      Showing 1 to 4 of 1,084 products
+                      Showing {startIndex + 1} to{" "}
+                      {Math.min(endIndex, products.length)} of {products.length}{" "}
+                      products
                     </div>
 
+                    {/* PAGINATION */}
                     <div className="flex items-center gap-2">
-                      <button className="px-3 py-1.5 text-xs border border-[#e0e0e0] rounded-sm text-gray-400 hover:bg-gray-50">
+                      {/* PREVIOUS */}
+                      <button
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                        className={`px-3 py-1.5 text-xs border rounded-sm
+              ${
+                currentPage === 1
+                  ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                  : "border-[#e0e0e0] hover:bg-gray-50"
+              }
+            `}
+                      >
                         Previous
                       </button>
-                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm bg-[#1241a1] text-white">
-                        1
-                      </button>
-                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-md hover:bg-gray-50">
-                        2
-                      </button>
-                      <button className="px-3 py-1.5 text-sm border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
-                        3
-                      </button>
-                      <button className="px-3 py-1.5 text-md border border-[#e0e0e0] rounded-sm hover:bg-gray-50">
+
+                      {/* PAGE NUMBERS */}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) => (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-3 py-1.5 text-sm border rounded-sm
+                  ${
+                    currentPage === page
+                      ? "bg-[#1241a1] text-white border-[#1241a1]"
+                      : "border-[#e0e0e0] hover:bg-gray-50"
+                  }
+                `}
+                          >
+                            {page}
+                          </button>
+                        ),
+                      )}
+
+                      {/* NEXT */}
+                      <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                        className={`px-3 py-1.5 text-xs border rounded-sm
+              ${
+                currentPage === totalPages
+                  ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                  : "border-[#e0e0e0] hover:bg-gray-50"
+              }
+            `}
+                      >
                         Next
                       </button>
                     </div>
