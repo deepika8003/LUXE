@@ -32,12 +32,12 @@ const TopBar = ({ onMenuClick }) => {
             <input
               type="search"
               placeholder="Search catalog..."
-              className="w-full px-8 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none"
+              className="w-full px-8 py-2 bg-white border text-black border-gray-200 rounded-lg text-sm outline-none"
             />
           </div>
 
           {/* ADD BUTTON */}
-          <button className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm w-full sm:w-auto justify-center">
+          <button className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm w-full sm:w-auto justify-center">
             <FiPlus />
             Add New Product
           </button>
