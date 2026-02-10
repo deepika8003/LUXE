@@ -1,7 +1,7 @@
 import React from "react";
 import { FiSearch, FiPlus, FiMenu } from "react-icons/fi";
 
-const TopBar = ({ onMenuClick }) => {
+const TopBar = ({ onMenuClick, onAddProductClick }) => {
   return (
     <div className="border-b border-gray-200 bg-gray-100/80 backdrop-blur-2xs sticky top-0 px-8 py-4 z-30">
       <div className="flex flex-wrap items-center justify-between gap-y-4">
@@ -37,7 +37,10 @@ const TopBar = ({ onMenuClick }) => {
           </div>
 
           {/* ADD BUTTON */}
-          <button className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm w-full sm:w-auto justify-center">
+          <button
+            onClick={onAddProductClick} 
+            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm w-full sm:w-auto justify-center"
+          >
             <FiPlus />
             Add New Product
           </button>

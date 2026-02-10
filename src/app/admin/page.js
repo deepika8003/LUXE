@@ -2,11 +2,24 @@
 
 import React, { useState } from "react";
 import AdminProduct from "@/pages/AdminPage/AdminProduct";
-import SideBar from "@/pages/AdminPage/SideBar";
-import TopBar from "@/pages/AdminPage/TopBar";
+import SideBar from "@/components/AdminPage/SideBar";
+import TopBar from "@/components/AdminPage/TopBar";
+import AddProduct from "@/pages/AdminPage/AddProduct";
+
 
 const Page = () => {
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [addProductModalOpen, setAddProductModalOpen] = useState(false);
+    const [products, setProducts] = useState([]);
+
+    const handleOpenAddProduct = () => {
+        setAddProductModalOpen(true);
+    };
+
+    const handleCloseAddProduct = () => {
+        setAddProductModalOpen(false);
+    };
 
     return (
         <div className="min-h-screen flex bg-gray-100">
@@ -30,14 +43,23 @@ const Page = () => {
             <div className="flex-1 flex flex-col lg:ml-64 h-screen overflow-hidden">
                 {/* TOP BAR */}
                 <div className="sticky top-0 z-30">
-                    <TopBar onMenuClick={() => setSidebarOpen(true)} />
+                    <TopBar
+                        onMenuClick={() => setSidebarOpen(true)}
+                        onAddProductClick={handleOpenAddProduct}
+                    />
                 </div>
 
                 {/* CONTENT AREA */}
                 <main className="flex-1 overflow-y-auto p-6">
-                    <AdminProduct />
+                    <AdminProduct products={products} />
                 </main>
             </div>
+
+            {/* ADD PRODUCT MODAL */}
+            {addProductModalOpen && (
+                <AddProduct onClose={handleCloseAddProduct}
+                    setProducts={setProducts} />
+            )}
         </div>
     );
 };

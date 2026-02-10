@@ -457,17 +457,17 @@ const AdminProduct = () => {
                     <p className="text-xs text-gray-500">
                       Showing
                       <span className="font-medium text-gray-900">
-                        {(currentPage - 1) * itemsPerPage + 1}
+                        {startIndex + 1}
                       </span>
                       to
                       <span className="font-medium text-gray-900">
                         {Math.min(currentPage * itemsPerPage, totalItems)}
-                      </span>{" "}
-                      of{" "}
+                      </span>
                       <span className="font-medium text-gray-900">
+                        of
                         {totalItems}
-                      </span>{" "}
-                      results
+                      </span>
+                      Products
                     </p>
 
                     {/* PAGINATION */}
