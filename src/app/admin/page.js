@@ -8,7 +8,7 @@ import TopBar from "@/components/AdminPage/TopBar";
 const Page = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // ✅ Initial products – this array will be shown when localStorage is empty
+
     const [products, setProducts] = useState([
         {
             id: 1,

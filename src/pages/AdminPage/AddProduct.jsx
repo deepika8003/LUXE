@@ -10,15 +10,15 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [image, setImage] = useState(""); // will store base64 string
+  const [image, setImage] = useState("");
 
-  // ✅ Convert uploaded file to Base64
+  //Img
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // this is a base64 string
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -33,7 +33,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       setPrice(productData.price || "");
       setStock(productData.stock || "");
       setStatus(productData.status || "Live");
-      setImage(productData.image || ""); // base64 string already stored
+      setImage(productData.image || "");
     }
     if (mode === "add") {
       setName("");
@@ -63,7 +63,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       price,
       stock,
       status,
-      image, // now contains base64 string
+      image,
     };
 
     if (onSave) {
