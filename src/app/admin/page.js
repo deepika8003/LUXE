@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminProduct from "@/pages/AdminPage/AdminProduct";
 import SideBar from "@/components/AdminPage/SideBar";
 import TopBar from "@/components/AdminPage/TopBar";
@@ -9,7 +9,7 @@ const Page = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
-    const [products, setProducts] = useState([
+    const defaultProducts = [
         {
             id: 1,
             name: "Cashmere Overcoat",
@@ -51,7 +51,18 @@ const Page = () => {
             status: "Draft",
         },
 
-    ]);
+    ]
+    const [products, setProducts] = useState(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("products");
+            return stored ? JSON.parse(stored) : defaultProducts;
+        }
+        return defaultProducts;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("products", JSON.stringify(products));
+    }, [products]);
 
     // AddProduct modal state
     const [showModal, setShowModal] = useState(false);
