@@ -10,18 +10,21 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(""); // will store base64 string
 
-  // IMG
+  // ✅ Convert uploaded file to Base64
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // this is a base64 string
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  // PREFILL DATA WHEN EDIT MODE
+  // Prefill data when editing
   useEffect(() => {
     if (mode === "edit" && productData) {
       setName(productData.name || "");
@@ -30,9 +33,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       setPrice(productData.price || "");
       setStock(productData.stock || "");
       setStatus(productData.status || "Live");
-      setImage(productData.image || "");
+      setImage(productData.image || ""); // base64 string already stored
     }
-
     if (mode === "add") {
       setName("");
       setSku("");
@@ -44,15 +46,11 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     }
   }, [mode, productData]);
 
-  // CLOSE WHEN CLICK OUTSIDE
+  // Close modal when clicking outside
   const outSideClose = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
-  };
-
-  const closeModal = () => {
-    onClose();
   };
 
   const handleSubmit = (e) => {
@@ -65,11 +63,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       price,
       stock,
       status,
-      image,
+      image, // now contains base64 string
     };
-
-    console.log(mode === "edit" ? "Updated Product" : "Created Product");
-    console.log(product);
 
     if (onSave) {
       onSave(product);
@@ -93,7 +88,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
             </p>
           </div>
           <button
-            onClick={closeModal}
+            onClick={onClose}
             className="text-gray-400 hover:text-black text-xl"
           >
             <IoClose />
@@ -117,7 +112,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               />
             </div>
 
-            {/* DESCRIPTION */}
+            {/* DESCRIPTION (optional) */}
             <div>
               <label className="block text-sm font-semibold mb-2">
                 Description <span className="text-gray-400">(Optional)</span>
@@ -142,7 +137,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   className="w-full border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   Category
@@ -178,7 +172,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   Stock
@@ -200,7 +193,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                 <label className="block text-sm font-semibold mb-2">
                   Status
                 </label>
-
                 <div className="grid grid-cols-3 gap-3 w-full">
                   <button
                     type="button"
@@ -215,7 +207,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   >
                     Live
                   </button>
-
                   <button
                     type="button"
                     onClick={() => setStatus("Sold Out")}
@@ -229,7 +220,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   >
                     Sold Out
                   </button>
-
                   <button
                     type="button"
                     onClick={() => setStatus("Draft")}
@@ -248,7 +238,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
 
               <div>
                 <label className="block text-sm font-semibold mb-2">
-                  Image URL
+                  Product Image
                 </label>
                 <input
                   type="file"
@@ -264,7 +254,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           <div className="flex justify-end items-center gap-8 px-6 py-4 border-t border-[#e0e0e0]">
             <button
               type="button"
-              onClick={closeModal}
+              onClick={onClose}
               className="text-sm text-gray-500 hover:text-black"
             >
               Cancel
