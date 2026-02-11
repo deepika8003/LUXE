@@ -8,61 +8,64 @@ import TopBar from "@/components/AdminPage/TopBar";
 const Page = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+    const [products, setProducts] = useState([{
+        id: 1,
+        name: "Cashmere Overcoat",
+        sku: "SG-10294",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCjefRmKh9Ku3PvgSntBasogV94LwdiqA8R9C2_2nlNFaJikk5taowM4bTHAvX6euda-KAUqoUf8a_6vdo_J4ge4DlguYCdXAEwKFpauu5mD0JNhYGz_G53winsOMhOOiJDyUxMkXLeaDGzT1p55sqZW-kwL9UU2hKOCf4VWN1hrGDylrRnaRMU0ngc2bIWnIPRuzfAEBXHs4ejePYOC48a4l-VJ5UgHA78nQw8drISg0KK1-0slJxAdB1pCBdt6jjnLl_vU5xFIkc",
+        category: "Apparel",
+        stock: 45,
+        price: 890,
+        status: "Live",
+    },
+    {
+        id: 2,
+        name: "Silk Maxi Dress",
+        sku: "WB-55210",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAffqwN00XAl1h8G56Fp3FL4FVgQq6265FlcgMp1XR4imu6kGs-sElH9ahoLEcgSwnBR3piVDMKMMtznRpocdlTmWhF0T9sZaCGZXR_mpWj7CBSmHem_96MI3-FJeqslO0lsqcHvxfxyzN2ypDXOO3v8IpQtYWB1A0tM06goZl8l1uj9RYt_hEO91TDXjqLp147XDhZA_gLlc0HfNzqnEagJcesiR8jRmDnqNCk8hxyiCgHLHGUikP5hdkdXPkCB5GHbNgtgpNRxv4",
+        category: "Apparel",
+        stock: 12,
+        price: 450,
+        status: "Live",
+    },
+    {
+        id: 3,
+        name: "Metier Tote Bag",
+        sku: "FB-88392",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCd-a8CTigA31Y7IXeIOsjLxTEQemi0DLysgX3O1VbppzoddGlcUoxBv9xppfgFWsZhbcoR6kg159PMhox7bOpZ03M5Iti5CAc9IauMza5nikPXFKUL9PG2BMPFrIdpRNrvqdaet-YArEeN_WmNLXMlhVQY2wc74BPkxyB5r9ldN4SZuMtFGo6ROrt9y3pBZgGr9jm0n3WRkiS4InS2EMPM7ULK8rg0VAvlrOm9Wx-kYYZq4ekPVPeDSBKDvCZyOJw7x-9LQgonDac",
+        category: "Footwear",
+        stock: 0,
+        price: 320,
+        status: "Sold Out",
+    },
+    {
+        id: 4,
+        name: "Relaxed Linen Shirt",
+        sku: "CS-22019",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCUtjfQ10jwehXkcpLnxXaE6TvnZFHvmgbhTqvN_SXmmdeSruS15OomGGFDe5led_XYN24rucRb1oWId0He6LcrfVvYzxIUrcOAJ3NqshUL4XHp82kgcMVVHvAld2rYu56qTFlUWPq0mHaj0Ify9TbNs4qOXhvSs4mMC9cYMnJzBkMUQ6e3GUZ58E2v0qfWFby2NFh1jX1MRFC8lbYnobMQBjhfP1NUnsXu7hLxfgwJunGkv4ItF-saIQpDZsY0t2xSRJvUL3UgP_E",
+        category: "Apparel",
+        stock: 28,
+        price: 275,
+        status: "Draft",
+    },]);
 
-    const defaultProducts = [
-        {
-            id: 1,
-            name: "Cashmere Overcoat",
-            sku: "SG-10294",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCjefRmKh9Ku3PvgSntBasogV94LwdiqA8R9C2_2nlNFaJikk5taowM4bTHAvX6euda-KAUqoUf8a_6vdo_J4ge4DlguYCdXAEwKFpauu5mD0JNhYGz_G53winsOMhOOiJDyUxMkXLeaDGzT1p55sqZW-kwL9UU2hKOCf4VWN1hrGDylrRnaRMU0ngc2bIWnIPRuzfAEBXHs4ejePYOC48a4l-VJ5UgHA78nQw8drISg0KK1-0slJxAdB1pCBdt6jjnLl_vU5xFIkc",
-            category: "Apparel",
-            stock: 45,
-            price: 890,
-            status: "Live",
-        },
-        {
-            id: 2,
-            name: "Silk Maxi Dress",
-            sku: "WB-55210",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAffqwN00XAl1h8G56Fp3FL4FVgQq6265FlcgMp1XR4imu6kGs-sElH9ahoLEcgSwnBR3piVDMKMMtznRpocdlTmWhF0T9sZaCGZXR_mpWj7CBSmHem_96MI3-FJeqslO0lsqcHvxfxyzN2ypDXOO3v8IpQtYWB1A0tM06goZl8l1uj9RYt_hEO91TDXjqLp147XDhZA_gLlc0HfNzqnEagJcesiR8jRmDnqNCk8hxyiCgHLHGUikP5hdkdXPkCB5GHbNgtgpNRxv4",
-            category: "Apparel",
-            stock: 12,
-            price: 450,
-            status: "Live",
-        },
-        {
-            id: 3,
-            name: "Metier Tote Bag",
-            sku: "FB-88392",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCd-a8CTigA31Y7IXeIOsjLxTEQemi0DLysgX3O1VbppzoddGlcUoxBv9xppfgFWsZhbcoR6kg159PMhox7bOpZ03M5Iti5CAc9IauMza5nikPXFKUL9PG2BMPFrIdpRNrvqdaet-YArEeN_WmNLXMlhVQY2wc74BPkxyB5r9ldN4SZuMtFGo6ROrt9y3pBZgGr9jm0n3WRkiS4InS2EMPM7ULK8rg0VAvlrOm9Wx-kYYZq4ekPVPeDSBKDvCZyOJw7x-9LQgonDac",
-            category: "Footwear",
-            stock: 0,
-            price: 320,
-            status: "Sold Out",
-        },
-        {
-            id: 4,
-            name: "Relaxed Linen Shirt",
-            sku: "CS-22019",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCUtjfQ10jwehXkcpLnxXaE6TvnZFHvmgbhTqvN_SXmmdeSruS15OomGGFDe5led_XYN24rucRb1oWId0He6LcrfVvYzxIUrcOAJ3NqshUL4XHp82kgcMVVHvAld2rYu56qTFlUWPq0mHaj0Ify9TbNs4qOXhvSs4mMC9cYMnJzBkMUQ6e3GUZ58E2v0qfWFby2NFh1jX1MRFC8lbYnobMQBjhfP1NUnsXu7hLxfgwJunGkv4ItF-saIQpDZsY0t2xSRJvUL3UgP_E",
-            category: "Apparel",
-            stock: 28,
-            price: 275,
-            status: "Draft",
-        },
-
-    ]
-    const [products, setProducts] = useState(() => {
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem("products");
-            return stored ? JSON.parse(stored) : defaultProducts;
-        }
-        return defaultProducts;
-    });
 
     useEffect(() => {
-        localStorage.setItem("products", JSON.stringify(products));
+        const stored = localStorage.getItem("products");
+
+        if (stored) {
+            setProducts(JSON.parse(stored));
+        } else {
+            setProducts(defaultProducts);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (products.length > 0) {
+            localStorage.setItem("products", JSON.stringify(products));
+        }
     }, [products]);
+
 
     // AddProduct modal state
     const [showModal, setShowModal] = useState(false);
