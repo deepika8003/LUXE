@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { AiOutlineExclamationCircle, AiOutlineWarning } from "react-icons/ai";
 import { LuClipboardCheck } from "react-icons/lu";
@@ -7,255 +9,20 @@ import { FiDownload } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { HiTrendingUp, HiOutlineRefresh } from "react-icons/hi";
+import AddProduct from "./AddProduct";
+import { AiFillCheckCircle } from "react-icons/ai";
 
-const products = [
-  {
-    id: 1,
-    name: "Cashmere Overcoat",
-    sku: "SG-10294",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCjefRmKh9Ku3PvgSntBasogV94LwdiqA8R9C2_2nlNFaJikk5taowM4bTHAvX6euda-KAUqoUf8a_6vdo_J4ge4DlguYCdXAEwKFpauu5mD0JNhYGz_G53winsOMhOOiJDyUxMkXLeaDGzT1p55sqZW-kwL9UU2hKOCf4VWN1hrGDylrRnaRMU0ngc2bIWnIPRuzfAEBXHs4ejePYOC48a4l-VJ5UgHA78nQw8drISg0KK1-0slJxAdB1pCBdt6jjnLl_vU5xFIkc",
-    category: "Apparel",
-    stock: 45,
-    price: 890,
-    status: "Live",
-  },
-  {
-    id: 2,
-    name: "Silk Maxi Dress",
-    sku: "WB-55210",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAffqwN00XAl1h8G56Fp3FL4FVgQq6265FlcgMp1XR4imu6kGs-sElH9ahoLEcgSwnBR3piVDMKMMtznRpocdlTmWhF0T9sZaCGZXR_mpWj7CBSmHem_96MI3-FJeqslO0lsqcHvxfxyzN2ypDXOO3v8IpQtYWB1A0tM06goZl8l1uj9RYt_hEO91TDXjqLp147XDhZA_gLlc0HfNzqnEagJcesiR8jRmDnqNCk8hxyiCgHLHGUikP5hdkdXPkCB5GHbNgtgpNRxv4",
-    category: "Apparel",
-    stock: 12,
-    price: 450,
-    status: "Live",
-  },
-  {
-    id: 3,
-    name: "Metier Tote Bag",
-    sku: "FB-88392",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCd-a8CTigA31Y7IXeIOsjLxTEQemi0DLysgX3O1VbppzoddGlcUoxBv9xppfgFWsZhbcoR6kg159PMhox7bOpZ03M5Iti5CAc9IauMza5nikPXFKUL9PG2BMPFrIdpRNrvqdaet-YArEeN_WmNLXMlhVQY2wc74BPkxyB5r9ldN4SZuMtFGo6ROrt9y3pBZgGr9jm0n3WRkiS4InS2EMPM7ULK8rg0VAvlrOm9Wx-kYYZq4ekPVPeDSBKDvCZyOJw7x-9LQgonDac",
-    category: "Footwear",
-    stock: 0,
-    price: 320,
-    status: "Sold Out",
-  },
-  {
-    id: 4,
-    name: "Relaxed Linen Shirt",
-    sku: "CS-22019",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCUtjfQ10jwehXkcpLnxXaE6TvnZFHvmgbhTqvN_SXmmdeSruS15OomGGFDe5led_XYN24rucRb1oWId0He6LcrfVvYzxIUrcOAJ3NqshUL4XHp82kgcMVVHvAld2rYu56qTFlUWPq0mHaj0Ify9TbNs4qOXhvSs4mMC9cYMnJzBkMUQ6e3GUZ58E2v0qfWFby2NFh1jX1MRFC8lbYnobMQBjhfP1NUnsXu7hLxfgwJunGkv4ItF-saIQpDZsY0t2xSRJvUL3UgP_E",
-    category: "Apparel",
-    stock: 28,
-    price: 275,
-    status: "Draft",
-  },
-  {
-    id: 5,
-    name: "Leather Chelsea Boots",
-    sku: "LB-33421",
-    image: "https://picsum.photos/seed/p5/200",
-    category: "Footwear",
-    stock: 8,
-    price: 520,
-    status: "Live",
-  },
-  {
-    id: 6,
-    name: "Classic Wool Blazer",
-    sku: "WB-66412",
-    image: "https://picsum.photos/seed/p6/200",
-    category: "Apparel",
-    stock: 18,
-    price: 610,
-    status: "Live",
-  },
-  {
-    id: 7,
-    name: "Premium Denim Jacket",
-    sku: "DJ-77890",
-    image: "https://picsum.photos/seed/p7/200",
-    category: "Apparel",
-    stock: 22,
-    price: 480,
-    status: "Live",
-  },
-  {
-    id: 8,
-    name: "Minimal Leather Wallet",
-    sku: "LW-11234",
-    image: "https://picsum.photos/seed/p8/200",
-    category: "Accessories",
-    stock: 0,
-    price: 95,
-    status: "Sold Out",
-  },
-  {
-    id: 9,
-    name: "Tailored Cotton Trousers",
-    sku: "CT-55678",
-    image: "https://picsum.photos/seed/p9/200",
-    category: "Apparel",
-    stock: 14,
-    price: 340,
-    status: "Live",
-  },
-  {
-    id: 10,
-    name: "Suede Loafers",
-    sku: "SL-90876",
-    image: "https://picsum.photos/seed/p10/200",
-    category: "Footwear",
-    stock: 6,
-    price: 390,
-    status: "Draft",
-  },
-  {
-    id: 11,
-    name: "Merino Crewneck Sweater",
-    sku: "MC-33490",
-    image: "https://picsum.photos/seed/p11/200",
-    category: "Apparel",
-    stock: 25,
-    price: 260,
-    status: "Live",
-  },
-  {
-    id: 12,
-    name: "Structured Handbag",
-    sku: "HB-77812",
-    image: "https://picsum.photos/seed/p12/200",
-    category: "Accessories",
-    stock: 9,
-    price: 720,
-    status: "Live",
-  },
-  {
-    id: 13,
-    name: "Relaxed Fit Polo",
-    sku: "RP-44129",
-    image: "https://picsum.photos/seed/p13/200",
-    category: "Apparel",
-    stock: 30,
-    price: 180,
-    status: "Draft",
-  },
-  {
-    id: 14,
-    name: "Canvas Weekender Bag",
-    sku: "WB-99341",
-    image: "https://picsum.photos/seed/p14/200",
-    category: "Accessories",
-    stock: 4,
-    price: 560,
-    status: "Live",
-  },
-  {
-    id: 15,
-    name: "Formal Oxford Shirt",
-    sku: "OS-22345",
-    image: "https://picsum.photos/seed/p15/200",
-    category: "Apparel",
-    stock: 16,
-    price: 210,
-    status: "Live",
-  },
-  {
-    id: 16,
-    name: "Knitted Beanie",
-    sku: "KB-55443",
-    image: "https://picsum.photos/seed/p16/200",
-    category: "Accessories",
-    stock: 40,
-    price: 75,
-    status: "Live",
-  },
-  {
-    id: 17,
-    name: "Slim Fit Chinos",
-    sku: "SC-88990",
-    image: "https://picsum.photos/seed/p17/200",
-    category: "Apparel",
-    stock: 11,
-    price: 310,
-    status: "Draft",
-  },
-  {
-    id: 18,
-    name: "Luxury Silk Scarf",
-    sku: "LS-44567",
-    image: "https://picsum.photos/seed/p18/200",
-    category: "Accessories",
-    stock: 0,
-    price: 150,
-    status: "Sold Out",
-  },
-  {
-    id: 19,
-    name: "Running Sneakers",
-    sku: "RS-77654",
-    image: "https://picsum.photos/seed/p19/200",
-    category: "Footwear",
-    stock: 20,
-    price: 420,
-    status: "Live",
-  },
-  {
-    id: 20,
-    name: "Slim Leather Belt",
-    sku: "LB-90211",
-    image: "https://picsum.photos/seed/p20/200",
-    category: "Accessories",
-    stock: 27,
-    price: 120,
-    status: "Live",
-  },
-  {
-    id: 21,
-    name: "Quilted Winter Jacket",
-    sku: "QJ-67123",
-    image: "https://picsum.photos/seed/p21/200",
-    category: "Apparel",
-    stock: 7,
-    price: 850,
-    status: "Live",
-  },
-  {
-    id: 22,
-    name: "Everyday Canvas Backpack",
-    sku: "CB-44519",
-    image: "https://picsum.photos/seed/p22/200",
-    category: "Accessories",
-    stock: 0,
-    price: 460,
-    status: "Sold Out",
-  },
-  {
-    id: 23,
-    name: "Casual Slip-On Sneakers",
-    sku: "SS-33874",
-    image: "https://picsum.photos/seed/p23/200",
-    category: "Footwear",
-    stock: 19,
-    price: 390,
-    status: "Draft",
-  },
-  {
-    id: 24,
-    name: "Linen Summer Shorts",
-    sku: "LS-55890",
-    image: "https://picsum.photos/seed/p24/200",
-    category: "Apparel",
-    stock: 34,
-    price: 190,
-    status: "Live",
-  },
-];
-
-const AdminProduct = () => {
+const AdminProduct = ({
+  products,
+  showModal,
+  setShowModal,
+  selectedProduct,
+  mode,
+  showSuccess,
+  onSaveProduct,
+  onEditClick,
+}) => {
+  // TABLE DATA LIMIT
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -269,6 +36,19 @@ const AdminProduct = () => {
 
   return (
     <section className="px-4">
+      {showSuccess && (
+        <div className="fixed top-5 right-5 z-[9999] transition-all duration-500 ease-in-out">
+          <div className="flex items-center gap-3 bg-[#0074eb] text-white px-5 py-3 rounded-lg shadow-xl animate-slideDown">
+            <AiFillCheckCircle className="text-lg" />
+            <span className="font-bold text-sm md:text-base">
+              {mode === "edit"
+                ? "Product updated successfully!"
+                : "Product added successfully!"}
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* TOTAL INVENTORY */}
         <div className="bg-white rounded-xl border border-[#e0e0e0] p-6 flex justify-between items-center">
@@ -438,7 +218,10 @@ const AdminProduct = () => {
                   </td>
 
                   {/* ACTIONS */}
-                  <td className="w-[14%] py-4 px-6 align-middle">
+                  <td
+                    className="w-[14%] py-4 px-6 align-middle"
+                    onClick={() => onEditClick(item)}
+                  >
                     <div className="flex items-center gap-3 text-sm text-[#1241a1] cursor-pointer">
                       <span className="font-bold">Edit</span>
                       <BsThreeDotsVertical className="text-[#94a3b8]" />
@@ -457,15 +240,18 @@ const AdminProduct = () => {
                     <p className="text-xs text-gray-500">
                       Showing
                       <span className="font-medium text-gray-900">
-                        {startIndex + 1}
+                        {" "}
+                        {startIndex + 1}{" "}
                       </span>
                       to
                       <span className="font-medium text-gray-900">
-                        {Math.min(currentPage * itemsPerPage, totalItems)}
+                        {" "}
+                        {Math.min(currentPage * itemsPerPage, totalItems)}{" "}
                       </span>
+                      of
                       <span className="font-medium text-gray-900">
-                        of
-                        {totalItems}
+                        {" "}
+                        {totalItems}{" "}
                       </span>
                       Products
                     </p>
@@ -531,6 +317,16 @@ const AdminProduct = () => {
               </tr>
             </tfoot>
           </table>
+
+          {/* RENDER MODAL */}
+          {showModal && (
+            <AddProduct
+              onClose={() => setShowModal(false)}
+              onSave={onSaveProduct}
+              mode={mode}
+              productData={selectedProduct}
+            />
+          )}
         </div>
       </div>
     </section>

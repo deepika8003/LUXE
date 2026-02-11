@@ -1,10 +1,48 @@
 "use client";
 
 import { IoClose } from "react-icons/io5";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const AddProduct = ({ onClose }) => {
+const AddProduct = ({ onClose, onSave, mode, productData }) => {
   const [status, setStatus] = useState("Live");
+  const [name, setName] = useState("");
+  const [sku, setSku] = useState("");
+  const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [image, setImage] = useState("");
+
+  // IMG
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  // PREFILL DATA WHEN EDIT MODE
+  useEffect(() => {
+    if (mode === "edit" && productData) {
+      setName(productData.name || "");
+      setSku(productData.sku || "");
+      setCategory(productData.category || "");
+      setPrice(productData.price || "");
+      setStock(productData.stock || "");
+      setStatus(productData.status || "Live");
+      setImage(productData.image || "");
+    }
+
+    if (mode === "add") {
+      setName("");
+      setSku("");
+      setCategory("");
+      setPrice("");
+      setStock("");
+      setStatus("Live");
+      setImage("");
+    }
+  }, [mode, productData]);
 
   // CLOSE WHEN CLICK OUTSIDE
   const outSideClose = (e) => {
@@ -13,20 +51,29 @@ const AddProduct = ({ onClose }) => {
     }
   };
 
-  // CLOSE BUTTON
   const closeModal = () => {
     onClose();
   };
 
-  // FORM SUBMIT
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Product Submitted");
-    console.log("Status:", status);
+    const product = {
+      name,
+      sku,
+      category,
+      price,
+      stock,
+      status,
+      image,
+    };
 
-    // later: send data to product list
-    onClose();
+    console.log(mode === "edit" ? "Updated Product" : "Created Product");
+    console.log(product);
+
+    if (onSave) {
+      onSave(product);
+    }
   };
 
   return (
@@ -34,13 +81,12 @@ const AddProduct = ({ onClose }) => {
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
       onClick={outSideClose}
     >
-      {/* MODAL */}
       <div className="bg-white w-[90%] max-w-2xl rounded-xl shadow-lg overflow-y-auto max-h-[calc(100vh-80px)]">
         {/* HEADER */}
         <div className="flex justify-between items-start px-6 py-5 border-b border-[#e0e0e0]">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-black">
-              Add New Product
+              {mode === "edit" ? "Edit Product" : "Add New Product"}
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">
               Fill in the details below to add a new product to the catalog.
@@ -55,7 +101,6 @@ const AddProduct = ({ onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* BODY */}
           <div className="px-6 py-6 space-y-5">
             {/* PRODUCT NAME */}
             <div>
@@ -64,6 +109,8 @@ const AddProduct = ({ onClose }) => {
               </label>
               <input
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Long skirt"
                 required
                 className="w-full border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
@@ -88,6 +135,8 @@ const AddProduct = ({ onClose }) => {
                 <label className="block text-sm font-semibold mb-2">SKU</label>
                 <input
                   type="text"
+                  value={sku}
+                  onChange={(e) => setSku(e.target.value)}
                   placeholder="WG-10882"
                   required
                   className="w-full border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
@@ -99,13 +148,17 @@ const AddProduct = ({ onClose }) => {
                   Category
                 </label>
                 <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   required
                   className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 >
+                  <option value="">Select Category</option>
                   <option>Footwear</option>
                   <option>Kitchen</option>
                   <option>Furnitures</option>
                   <option>Accessories</option>
+                  <option>Apparel</option>
                 </select>
               </div>
             </div>
@@ -118,7 +171,8 @@ const AddProduct = ({ onClose }) => {
                 </label>
                 <input
                   type="number"
-                  placeholder="999"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                   min={0}
                   required
                   className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
@@ -131,7 +185,8 @@ const AddProduct = ({ onClose }) => {
                 </label>
                 <input
                   type="number"
-                  placeholder="20"
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
                   min={0}
                   required
                   className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
@@ -141,14 +196,12 @@ const AddProduct = ({ onClose }) => {
 
             {/* STATUS & IMAGE */}
             <div className="grid md:grid-cols-2 gap-5">
-              {/* STATUS */}
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   Status
                 </label>
 
                 <div className="grid grid-cols-3 gap-3 w-full">
-                  {/* LIVE */}
                   <button
                     type="button"
                     onClick={() => setStatus("Live")}
@@ -163,7 +216,6 @@ const AddProduct = ({ onClose }) => {
                     Live
                   </button>
 
-                  {/* SOLD OUT */}
                   <button
                     type="button"
                     onClick={() => setStatus("Sold Out")}
@@ -178,7 +230,6 @@ const AddProduct = ({ onClose }) => {
                     Sold Out
                   </button>
 
-                  {/* DRAFT */}
                   <button
                     type="button"
                     onClick={() => setStatus("Draft")}
@@ -195,14 +246,14 @@ const AddProduct = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* IMAGE */}
               <div>
                 <label className="block text-sm font-semibold mb-2">
                   Image URL
                 </label>
                 <input
                   type="file"
-                  required
+                  accept="image/*"
+                  onChange={handleImageChange}
                   className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
@@ -222,7 +273,7 @@ const AddProduct = ({ onClose }) => {
               type="submit"
               className="bg-black hover:bg-gray-800 text-white px-7 py-2.5 rounded-lg text-sm font-medium"
             >
-              Create Product
+              {mode === "edit" ? "Update Product" : "Create Product"}
             </button>
           </div>
         </form>

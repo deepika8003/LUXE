@@ -15,8 +15,8 @@ const TopBar = ({ onMenuClick, onAddProductClick }) => {
             <FiMenu />
           </button>
 
-          <div className="text-center ">
-            <h1 className="text-xl md:text-2xl  font-serif font-semibold text-gray-900">
+          <div className="text-center">
+            <h1 className="text-xl md:text-2xl font-serif font-semibold text-gray-900">
               Product Management
             </h1>
             <p className="text-xs md:text-sm text-gray-500">
@@ -27,6 +27,7 @@ const TopBar = ({ onMenuClick, onAddProductClick }) => {
 
         {/* RIGHT */}
         <div className="flex w-full sm:w-auto flex-col sm:flex-row items-start md:items-center gap-3 md:gap-4">
+          {/* SEARCH */}
           <div className="relative w-full sm:w-50">
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
             <input
@@ -38,8 +39,8 @@ const TopBar = ({ onMenuClick, onAddProductClick }) => {
 
           {/* ADD BUTTON */}
           <button
-            onClick={onAddProductClick} 
-            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm w-full sm:w-auto justify-center"
+            onClick={onAddProductClick}
+            className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm"
           >
             <FiPlus />
             Add New Product
