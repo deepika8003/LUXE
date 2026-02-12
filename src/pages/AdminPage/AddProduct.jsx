@@ -12,7 +12,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
   const [stock, setStock] = useState("");
   const [image, setImage] = useState("");
 
-  //Img
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -24,7 +23,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     }
   };
 
-  // Prefill data when editing
   useEffect(() => {
     if (mode === "edit" && productData) {
       setName(productData.name || "");
@@ -35,6 +33,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       setStatus(productData.status || "Live");
       setImage(productData.image || "");
     }
+
     if (mode === "add") {
       setName("");
       setSku("");
@@ -46,7 +45,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     }
   }, [mode, productData]);
 
-  // Close modal when clicking outside
   const outSideClose = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -76,9 +74,10 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
       onClick={outSideClose}
     >
-      <div className="bg-white w-[90%] max-w-2xl rounded-xl shadow-lg overflow-y-auto max-h-[calc(100vh-80px)]">
+      {/* MODAL BOX */}
+      <div className="bg-white w-[90%] max-w-2xl rounded-xl shadow-lg max-h-[calc(100vh-80px)] flex flex-col">
         {/* HEADER */}
-        <div className="flex justify-between items-start px-6 py-5 border-b border-[#e0e0e0]">
+        <div className="sticky top-0 bg-white z-20 flex justify-between items-start px-6 py-5 border-b border-[#e0e0e0]">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-black">
               {mode === "edit" ? "Edit Product" : "Add New Product"}
@@ -95,8 +94,13 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="px-6 py-6 space-y-5">
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          {/* SCROLLABLE BODY */}
+          <div className="px-6 py-6 space-y-5 overflow-y-auto flex-1">
             {/* PRODUCT NAME */}
             <div>
               <label className="block text-sm text-black font-semibold mb-2">
@@ -112,7 +116,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               />
             </div>
 
-            {/* DESCRIPTION (optional) */}
+            {/* DESCRIPTION */}
             <div>
               <label className="block text-sm text-black font-semibold mb-2">
                 Description <span className="text-gray-400">(Optional)</span>
@@ -189,52 +193,26 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               </div>
             </div>
 
-            {/* STATUS & IMAGE */}
             <div className="grid md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-black text-sm font-semibold mb-2">
                   Status
                 </label>
                 <div className="grid grid-cols-3 gap-3 w-full">
-                  <button
-                    type="button"
-                    onClick={() => setStatus("Live")}
-                    className={`w-full py-2.5 rounded-lg text-sm font-semibold border transition
-                      ${
-                        status === "Live"
-                          ? "bg-[#1ed4a0] text-white"
-                          : "bg-[#d1fae5] text-[#065f46] border-[#a7f3d0] hover:bg-[#a7f3d0]"
-                      }
-                    `}
-                  >
-                    Live
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStatus("Sold Out")}
-                    className={`w-full py-2.5 rounded-lg text-sm font-semibold border transition
-                      ${
-                        status === "Sold Out"
-                          ? "bg-[#6498e0] text-white"
+                  {["Live", "Sold Out", "Draft"].map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setStatus(item)}
+                      className={`w-full py-2.5 rounded-lg text-sm font-semibold border transition ${
+                        status === item
+                          ? "bg-black text-white"
                           : "bg-[#f1f5f9] text-[#334155] border-[#cbd5e1] hover:bg-[#e2e8f0]"
-                      }
-                    `}
-                  >
-                    Sold Out
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStatus("Draft")}
-                    className={`w-full py-2.5 rounded-lg text-sm font-semibold border transition
-                      ${
-                        status === "Draft"
-                          ? "bg-[#d26826] text-white"
-                          : "bg-[#fef3c7] text-[#92400e] border-[#fde68a] hover:bg-[#fde68a]"
-                      }
-                    `}
-                  >
-                    Draft
-                  </button>
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -253,7 +231,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           </div>
 
           {/* FOOTER */}
-          <div className="flex justify-end items-center gap-8 px-6 py-4 border-t border-[#e0e0e0]">
+          <div className="sticky bottom-0 bg-white z-20 flex justify-end items-center gap-8 px-6 py-4 border-t border-[#e0e0e0]">
             <button
               type="button"
               onClick={onClose}
