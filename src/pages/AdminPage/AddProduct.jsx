@@ -99,7 +99,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           <div className="px-6 py-6 space-y-5">
             {/* PRODUCT NAME */}
             <div>
-              <label className="block text-sm font-semibold mb-2">
+              <label className="block text-sm text-black font-semibold mb-2">
                 Product Name
               </label>
               <input
@@ -108,44 +108,46 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Long skirt"
                 required
-                className="w-full border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                className="w-full border text-black outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
               />
             </div>
 
             {/* DESCRIPTION (optional) */}
             <div>
-              <label className="block text-sm font-semibold mb-2">
+              <label className="block text-sm text-black font-semibold mb-2">
                 Description <span className="text-gray-400">(Optional)</span>
               </label>
               <textarea
                 placeholder="Add product description..."
                 rows="3"
-                className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc] resize-none"
+                className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc] resize-none"
               />
             </div>
 
             {/* SKU & CATEGORY */}
             <div className="grid md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2">SKU</label>
+                <label className="block text-black text-sm font-semibold mb-2">
+                  SKU
+                </label>
                 <input
                   type="text"
                   value={sku}
                   onChange={(e) => setSku(e.target.value)}
                   placeholder="WG-10882"
                   required
-                  className="w-full border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                  className="w-full text-black border outline-0 border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-sm text-black font-semibold mb-2">
                   Category
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   required
-                  className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                  className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 >
                   <option value="">Select Category</option>
                   <option>Footwear</option>
@@ -160,7 +162,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
             {/* PRICE & STOCK */}
             <div className="grid md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-black text-sm font-semibold mb-2">
                   Price
                 </label>
                 <input
@@ -169,11 +171,11 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   onChange={(e) => setPrice(e.target.value)}
                   min={0}
                   required
-                  className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                  className="w-full text-black outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-black text-sm font-semibold mb-2">
                   Stock
                 </label>
                 <input
@@ -182,7 +184,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   onChange={(e) => setStock(e.target.value)}
                   min={0}
                   required
-                  className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                  className="w-full text-black outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
             </div>
@@ -190,7 +192,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
             {/* STATUS & IMAGE */}
             <div className="grid md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-black text-sm font-semibold mb-2">
                   Status
                 </label>
                 <div className="grid grid-cols-3 gap-3 w-full">
@@ -237,14 +239,14 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-black text-sm font-semibold mb-2">
                   Product Image
                 </label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full outline-0 border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
+                  className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
               </div>
             </div>
