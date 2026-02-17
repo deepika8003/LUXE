@@ -7,7 +7,7 @@ import { LuCreditCard } from "react-icons/lu";
 import { SiHackthebox } from "react-icons/si";
 import { BsTruck } from "react-icons/bs";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const TrackOrder = () => {
   const timelineSteps = [
@@ -86,9 +86,9 @@ const TrackOrder = () => {
           </p>
         </div>
         {/* FIND ORDER & SUMMARY */}
-        <div className="md:flex justify-between gap-5 w-full my-10">
+        <div className="lg:flex justify-between gap-5 w-full my-10">
           {/* FIND ORDER */}
-          <div className="p-5 md:w-[50%] bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div className="p-5 lg:w-[50%] bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="my-2">
               <h2 className="text-black font-bold text-lg mb-1">
                 Find Your Order
@@ -125,7 +125,7 @@ const TrackOrder = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="mt-5 md:mt-0 sm:flex justify-between items-center md:w-[50%] p-5 bg-white border shadow-sm border-gray-200 rounded-xl">
+          <div className="mt-5 lg:mt-0 sm:flex justify-between items-center lg:w-[50%] p-5 bg-white border shadow-sm border-gray-200 rounded-xl">
             <div>
               <div className="flex gap-4 items-center mb-1">
                 <h2 className="text-black font-bold">Order AG-2026-7808</h2>
@@ -139,13 +139,13 @@ const TrackOrder = () => {
             </div>
 
             <div className="flex gap-2 mt-5  sm:mt-0">
-              <button className="flex text-black items-center gap-2 py-1 border border-gray-200 px-4 rounded-md">
-                <MdOutlineFileDownload className="text-black" />
+              <button className="flex text-black items-center gap-2 py-1 border border-gray-200 px-4 rounded-md  active:bg-black active:text-white">
+                <MdOutlineFileDownload className="" />
                 Invoice
               </button>
 
-              <button className="flex items-center text-black gap-2 py-1 border border-gray-200 px-4 rounded-md">
-                <IoPrintOutline className="text-black" />
+              <button className="flex items-center text-black gap-2 py-1 border border-gray-200 px-4 rounded-md active:bg-black active:text-white">
+                <IoPrintOutline className="" />
                 Print
               </button>
             </div>
@@ -154,7 +154,7 @@ const TrackOrder = () => {
 
         {/* DELIVERY PROGRESS */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 -mt-5 mb-6  shadow-sm">
-          <h3 className="font-semibold text-black mb-1">Delivery Progress</h3>
+          <h3 className="font-bold text-black mb-1">Delivery Progress</h3>
           <p className="text-sm text-gray-500 mb-10">
             Estimated delivery: 2024-01-20
           </p>
@@ -258,7 +258,7 @@ const TrackOrder = () => {
         {/* TRACKINGN INFORMATION */}
 
         <div className="my-6 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-bold text-black mb-6">
+          <h2 className="text-md md:text-lg font-bold text-black mb-6">
             Tracking Information
           </h2>
 
@@ -271,7 +271,7 @@ const TrackOrder = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-black">FedEx</h4>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-xs md:text-sm text-gray-500 mt-1">
                     Tracking #: 7890867544678
                   </p>
                 </div>
@@ -288,7 +288,9 @@ const TrackOrder = () => {
                 <h4 className="text-sm font-semibold text-black">
                   Estimated Delivery
                 </h4>
-                <p className="text-sm text-gray-600 mt-1">February 20, 2026</p>
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
+                  February 20, 2026
+                </p>
               </div>
             </div>
 
@@ -298,7 +300,7 @@ const TrackOrder = () => {
                 <h4 className="text-sm font-semibold text-black">
                   Last Update
                 </h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   Package departed from facility in NEW YORK, NY
                 </p>
                 <span className="text-xs text-gray-400 block mt-1">
@@ -310,7 +312,9 @@ const TrackOrder = () => {
                 <h4 className="text-sm font-semibold text-black">
                   Last Location
                 </h4>
-                <p className="text-sm text-gray-600 mt-1">NEW YORK, NY</p>
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
+                  NEW YORK, NY
+                </p>
               </div>
             </div>
           </div>
@@ -318,7 +322,9 @@ const TrackOrder = () => {
 
         {/* ORDER ITEMS */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="text-lg font-semibold text-black mb-6">Order Items</h2>
+          <h2 className="text-md md:text-lg font-semibold text-black mb-6">
+            Order Items
+          </h2>
 
           {orderItems.map((item, index) => (
             <div
@@ -331,33 +337,33 @@ const TrackOrder = () => {
             >
               {/* LEFT SIDE */}
               <div className="flex gap-4">
-                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 ms:w-12 md:h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-12 h-12 object-contain"
+                    className="w-full h-full object-contain"
                   />
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold text-black">
+                  <h4 className=" text-xs md:text-sm font-semibold text-black">
                     {item.title}
                   </h4>
 
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-xs md:text-sm  text-gray-500 mt-1">
                     Color: {item.color}
                     {item.storage && `  Storage: ${item.storage}`}
-                    {"  "}Qty: {item.qty}
+                    Qty: {item.qty}
                   </p>
                 </div>
               </div>
 
               {/* RIGHT SIDE */}
               <div className="text-right">
-                <p className="text-sm font-semibold text-black">
+                <p className="text-xs md:text-sm  font-semibold text-black">
                   ${item.price.toFixed(2)}
                 </p>
-                <span className="text-sm text-gray-500">
+                <span className="text-xs md:text-sm  text-gray-500">
                   ${(item.price * item.qty).toFixed(2)} total
                 </span>
               </div>
@@ -366,9 +372,11 @@ const TrackOrder = () => {
 
           {/* FOOTER */}
           <div className="flex justify-between items-center pt-6 border-t border-[#e0e0e0]">
-            <p className="text-sm text-gray-500">{totalItems} items</p>
+            <p className="text-xs md:text-sm  text-gray-500">
+              {totalItems} items
+            </p>
 
-            <p className="text-sm font-semibold text-gray-500">
+            <p className="text-xs md:text-sm  font-semibold text-gray-500">
               Total: ${grandTotal.toFixed(2)}
             </p>
           </div>
@@ -377,12 +385,12 @@ const TrackOrder = () => {
         {/* SHIPPING & PAYMENT */}
         <div className="grid sm:grid-cols-2 gap-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 className="font-bold mb-4 flex items-center gap-3 text-black">
+            <h3 className="font-bold mb-4 flex items-center gap-3 text-md md:text-lg text-black">
               <IoLocationOutline className="font-bold text-black" />
               Shipping Address
             </h3>
-            <p className="text-sm tex-black  leading-6">
-              <span className="font-bold tex-black"> Shin chan</span> <br />
+            <p className="text-xs md:text-sm tex-black  leading-6">
+              <span className="font-bold text-black"> Shin chan</span> <br />
               kasukabe city
               <br />
               Saitama Prefecture <br />
@@ -392,12 +400,12 @@ const TrackOrder = () => {
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 className="font-bold mb-4 text-black  flex items-center gap-3">
+            <h3 className="font-bold mb-4 text-black text-md md:text-lg  flex items-center gap-3">
               <LuCreditCard className="font-bold" />
               Payment Method
             </h3>
             <p className="text-sm text-black font-bold">Credit Card</p>
-            <p className="text-gray-500 text-sm leading-6">
+            <p className="text-gray-500 text-xs md:text-sm leading-6">
               Ending in ****4242 <br />
               Total $8080.00
             </p>
@@ -406,10 +414,10 @@ const TrackOrder = () => {
 
         {/* HELP SECTION */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
-          <h3 className="font-bold text-lg mb-2 text-black">
+          <h3 className="font-bold text-md md:text-lg mb-2 text-black">
             Need Help with Your Order?
           </h3>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-gray-500 text-xs md:text-sm mb-6">
             Our support team is here to help you
           </p>
 
