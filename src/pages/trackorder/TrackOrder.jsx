@@ -78,7 +78,7 @@ const TrackOrder = () => {
       <div className=" max-w-7xl mx-auto px-6 ">
         {/* HEADER */}
         <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold text-black mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black mb-1">
             Track Your Order
           </h1>
           <p className="text-sm md:text-xl text-gray-500">
@@ -90,7 +90,7 @@ const TrackOrder = () => {
           {/* FIND ORDER */}
           <div className="p-5 lg:w-[50%] bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="my-2">
-              <h2 className="text-black font-bold text-lg mb-1">
+              <h2 className="text-black font-bold text-lg md:text-xl  mb-1">
                 Find Your Order
               </h2>
               <p className="text-gray-500 text-sm">
@@ -128,7 +128,9 @@ const TrackOrder = () => {
           <div className="mt-5 lg:mt-0 sm:flex justify-between items-center lg:w-[50%] p-5 bg-white border shadow-sm border-gray-200 rounded-xl">
             <div>
               <div className="flex gap-4 items-center mb-1">
-                <h2 className="text-black font-bold">Order AG-2026-7808</h2>
+                <h2 className="text-black text-lg md:text-xl font-bold">
+                  Order AG-2026-7808
+                </h2>
                 <span className="text-xs bg-orange-400 text-white px-2 py-1 rounded-md">
                   Shipped
                 </span>
@@ -154,7 +156,9 @@ const TrackOrder = () => {
 
         {/* DELIVERY PROGRESS */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 -mt-5 mb-6  shadow-sm">
-          <h3 className="font-bold text-black mb-1">Delivery Progress</h3>
+          <h3 className="font-bold text-lg md:text-xl text-black mb-1">
+            Delivery Progress
+          </h3>
           <p className="text-sm text-gray-500 mb-10">
             Estimated delivery: 2024-01-20
           </p>
@@ -188,7 +192,7 @@ const TrackOrder = () => {
                     </div>
                   )}
 
-                  <p className="text-xs sm:text-sm text-black mt-3">
+                  <p className="text-sm sm:text-md text-black mt-3">
                     {step.name}
                   </p>
 
@@ -231,7 +235,7 @@ const TrackOrder = () => {
 
                 <div className="flex items-center gap-2">
                   <h4
-                    className={`text-sm font-semibold ${
+                    className={`text-md md:text-lg font-bold ${
                       isCompleted ? "text-black" : "text-gray-500"
                     }`}
                   >
@@ -258,7 +262,7 @@ const TrackOrder = () => {
         {/* TRACKINGN INFORMATION */}
 
         <div className="my-6 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-          <h2 className="text-md md:text-lg font-bold text-black mb-6">
+          <h2 className=" text-lg md:text-xl font-bold text-black mb-6">
             Tracking Information
           </h2>
 
@@ -270,25 +274,25 @@ const TrackOrder = () => {
                   <BsTruck className="text-black text-xl" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-black">FedEx</h4>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1">
+                  <h4 className="text-md font-semibold text-black">FedEx</h4>
+                  <p className="text-sm md:text-sm text-gray-500 mt-1">
                     Tracking #: 7890867544678
                   </p>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold text-black">Status</h4>
+                <h4 className="text-md font-semibold text-black">Status</h4>
                 <span className="inline-block mt-2 text-xs font-medium bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
                   In transit
                 </span>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold text-black">
+                <h4 className="text-md font-semibold text-black">
                   Estimated Delivery
                 </h4>
-                <p className="text-xs md:text-sm text-gray-600 mt-1">
+                <p className="text-sm md:text-sm text-gray-600 mt-1">
                   February 20, 2026
                 </p>
               </div>
@@ -297,24 +301,22 @@ const TrackOrder = () => {
             {/* RIGHT SIDE */}
             <div className="space-y-6 w-[50%]">
               <div>
-                <h4 className="text-sm font-semibold text-black">
+                <h4 className="text-md font-semibold text-black">
                   Last Update
                 </h4>
-                <p className="text-xs md:text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   Package departed from facility in NEW YORK, NY
                 </p>
-                <span className="text-xs text-gray-400 block mt-1">
+                <span className="text-sm text-gray-400 block mt-1">
                   1/17/2026, 2:30:00 PM
                 </span>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold text-black">
+                <h4 className="text-md font-semibold text-black">
                   Last Location
                 </h4>
-                <p className="text-xs md:text-sm text-gray-600 mt-1">
-                  NEW YORK, NY
-                </p>
+                <p className="text-sm text-gray-600 mt-1">NEW YORK, NY</p>
               </div>
             </div>
           </div>
@@ -322,7 +324,7 @@ const TrackOrder = () => {
 
         {/* ORDER ITEMS */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="text-md md:text-lg font-semibold text-black mb-6">
+          <h2 className="text-lg md:text-xl font-bold text-black mb-6">
             Order Items
           </h2>
 
@@ -337,7 +339,7 @@ const TrackOrder = () => {
             >
               {/* LEFT SIDE */}
               <div className="flex gap-4">
-                <div className="w-10 h-10 ms:w-12 md:h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.title}
@@ -346,11 +348,11 @@ const TrackOrder = () => {
                 </div>
 
                 <div>
-                  <h4 className=" text-xs md:text-sm font-semibold text-black">
+                  <h4 className=" text-md md:text-lg font-semibold text-black">
                     {item.title}
                   </h4>
 
-                  <p className="text-xs md:text-sm  text-gray-500 mt-1">
+                  <p className="text-sm md:text-md  text-gray-500 mt-1">
                     Color: {item.color}
                     {item.storage && `  Storage: ${item.storage}`}
                     Qty: {item.qty}
@@ -360,10 +362,10 @@ const TrackOrder = () => {
 
               {/* RIGHT SIDE */}
               <div className="text-right">
-                <p className="text-xs md:text-sm  font-semibold text-black">
+                <p className="text-sm md:text-md  font-semibold text-black">
                   ${item.price.toFixed(2)}
                 </p>
-                <span className="text-xs md:text-sm  text-gray-500">
+                <span className="text-sm md:text-md  text-gray-500">
                   ${(item.price * item.qty).toFixed(2)} total
                 </span>
               </div>
@@ -372,11 +374,11 @@ const TrackOrder = () => {
 
           {/* FOOTER */}
           <div className="flex justify-between items-center pt-6 border-t border-[#e0e0e0]">
-            <p className="text-xs md:text-sm  text-gray-500">
+            <p className="text-sm md:text-md  text-gray-500">
               {totalItems} items
             </p>
 
-            <p className="text-xs md:text-sm  font-semibold text-gray-500">
+            <p className="text-sm md:text-md  font-semibold text-gray-500">
               Total: ${grandTotal.toFixed(2)}
             </p>
           </div>
@@ -385,11 +387,11 @@ const TrackOrder = () => {
         {/* SHIPPING & PAYMENT */}
         <div className="grid sm:grid-cols-2 gap-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 className="font-bold mb-4 flex items-center gap-3 text-md md:text-lg text-black">
+            <h3 className="font-bold mb-4 flex items-center gap-3 text-lg md:text-xl text-black">
               <IoLocationOutline className="font-bold text-black" />
               Shipping Address
             </h3>
-            <p className="text-xs md:text-sm tex-black  leading-6">
+            <p className="text-sm md:text-md text-black  leading-6">
               <span className="font-bold text-black"> Shin chan</span> <br />
               kasukabe city
               <br />
@@ -400,12 +402,12 @@ const TrackOrder = () => {
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 className="font-bold mb-4 text-black text-md md:text-lg  flex items-center gap-3">
+            <h3 className="font-bold mb-4 text-black text-lg md:text-xl  flex items-center gap-3">
               <LuCreditCard className="font-bold" />
               Payment Method
             </h3>
-            <p className="text-sm text-black font-bold">Credit Card</p>
-            <p className="text-gray-500 text-xs md:text-sm leading-6">
+            <p className="text-md text-black font-bold">Credit Card</p>
+            <p className="text-gray-500 text-sm md:text-md leading-6">
               Ending in ****4242 <br />
               Total $8080.00
             </p>
@@ -414,10 +416,10 @@ const TrackOrder = () => {
 
         {/* HELP SECTION */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
-          <h3 className="font-bold text-md md:text-lg mb-2 text-black">
+          <h3 className="font-bold text-lg md:text-xl mb-2 text-black">
             Need Help with Your Order?
           </h3>
-          <p className="text-gray-500 text-xs md:text-sm mb-6">
+          <p className="text-gray-500 text-sm md:text-md mb-6">
             Our support team is here to help you
           </p>
 
