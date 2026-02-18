@@ -5,7 +5,7 @@ import Featured from "@/pages/HomePage/Featured";
 import Mainpage from "@/pages/HomePage/Mainpage";
 import Signup from "@/pages/HomePage/Signup";
 import Trending from "@/pages/HomePage/Trending";
-import { FaOtter } from "react-icons/fa6";
+
 
 
 export default function Home() {

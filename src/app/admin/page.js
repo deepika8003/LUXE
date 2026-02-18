@@ -1,14 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import AdminProduct from "@/pages/AdminPage/AdminProduct";
-import SideBar from "@/components/AdminPage/SideBar";
 import TopBar from "@/components/AdminPage/TopBar";
+import AdminProduct from "@/pages/AdminPage/AdminProduct";
+import React, { useState, useEffect } from "react";
 
-const Page = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
-
+export default function Page() {
     const [products, setProducts] = useState([
         {
             id: 1,
@@ -51,16 +47,18 @@ const Page = () => {
             status: "Draft",
         },
     ]);
-
+    // AddProduct modal state
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [mode, setMode] = useState("add");
+    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         const stored = localStorage.getItem("products");
         if (stored) {
             setProducts(JSON.parse(stored));
         }
-
     }, []);
-
 
     useEffect(() => {
         if (products.length > 0) {
@@ -68,23 +66,16 @@ const Page = () => {
         }
     }, [products]);
 
-    // AddProduct modal state
-    const [showModal, setShowModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [mode, setMode] = useState("add");
-    const [showSuccess, setShowSuccess] = useState(false);
-
-    // Product save function
     const handleSaveProduct = (newProduct) => {
         if (mode === "edit") {
             setProducts((prev) =>
                 prev.map((item) =>
                     item.id === selectedProduct.id
                         ? {
-                            ...item,                   // keep existing product info
-                            ...newProduct,             // overwrite with new fields
-                            id: selectedProduct.id,    // keep the same ID
-                            image: newProduct.image || item.image, // keep old image if no new one
+                            ...item,
+                            ...newProduct,
+                            id: selectedProduct.id,
+                            image: newProduct.image || item.image,
                         }
                         : item
                 )
@@ -107,72 +98,35 @@ const Page = () => {
             });
         }
 
-        // show success toast
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
 
-        // close modal
         setShowModal(false);
         setSelectedProduct(null);
     };
 
-
-    // TopBar Add Product button click
-    const handleAddClick = () => {
-        setSelectedProduct(null);
-        setMode("add");
-        setShowModal(true);
-    };
-
-    // Edit button click
     const handleEditClick = (product) => {
         setSelectedProduct(product);
         setMode("edit");
         setShowModal(true);
     };
 
+
+
     return (
-        <div className="min-h-screen flex bg-gray-100">
-            {sidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-                    onClick={() => setSidebarOpen(false)}
-                />
-            )}
+        <>
 
-            {/* SIDE BAR */}
-            <div
-                className={`fixed z-50 inset-y-0 left-0 w-64 bg-white transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
-            >
-                <SideBar />
-            </div>
 
-            <div className="flex-1 flex flex-col lg:ml-64 h-screen overflow-hidden">
-                {/* TOP BAR */}
-                <div className="sticky top-0 z-30">
-                    <TopBar
-                        onMenuClick={() => setSidebarOpen(true)}
-                        onAddProductClick={handleAddClick}
-                    />
-                </div>
-
-                {/* CONTENT AREA */}
-                <main className="flex-1 overflow-y-auto p-6">
-                    <AdminProduct
-                        products={products}
-                        showModal={showModal}
-                        setShowModal={setShowModal}
-                        selectedProduct={selectedProduct}
-                        mode={mode}
-                        showSuccess={showSuccess}
-                        onSaveProduct={handleSaveProduct}
-                        onEditClick={handleEditClick}
-                    />
-                </main>
-            </div>
-        </div>
+            <AdminProduct
+                products={products}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                selectedProduct={selectedProduct}
+                mode={mode}
+                showSuccess={showSuccess}
+                onSaveProduct={handleSaveProduct}
+                onEditClick={handleEditClick}
+            />
+        </>
     );
-};
-
-export default Page;
+}

@@ -55,6 +55,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     e.preventDefault();
 
     const product = {
+      id: mode === "edit" ? productData.id : undefined,
       name,
       sku,
       category,
@@ -67,6 +68,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     if (onSave) {
       onSave(product);
     }
+    onClose();
   };
 
   return (
