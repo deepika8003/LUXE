@@ -5,7 +5,8 @@ import { FaArrowUp, FaArrowDown, FaArrowRight } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { IoCloudUploadOutline, IoCreateOutline } from "react-icons/io5";
-
+import { LuMapPin } from "react-icons/lu";
+import { TbDots } from "react-icons/tb";
 const OrderList = () => {
   const orders = [
     {
@@ -94,9 +95,9 @@ const OrderList = () => {
   ];
 
   return (
-    <section className="px-4 py-5">
+    <section className=" py-2">
       {/* CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {cardData.map((card, index) => {
           const isPositive = card.percentage >= 0;
 
@@ -115,12 +116,12 @@ const OrderList = () => {
                   </p>
                 </div>
                 <button className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center hover:bg-gray-100">
-                  <HiOutlineDotsHorizontal />
+                  <HiOutlineDotsHorizontal className="text-black" />
                 </button>
               </div>
 
               <div className="mt-6 flex items-center gap-3">
-                <p className="text-3xl font-bold">
+                <p className="text-xl sm:text-2xl text-black font-bold">
                   {card.title.includes("Sales") || card.title.includes("Refund")
                     ? `$${card.value.toLocaleString()}`
                     : card.value.toLocaleString()}
@@ -140,8 +141,8 @@ const OrderList = () => {
 
               <div className="mt-6 flex justify-between items-center bg-gray-50 px-4 py-3 rounded-xl">
                 <p className="text-xs text-gray-500">From last month</p>
-                <button className="text-xs font-medium flex items-center gap-1 hover:text-black">
-                  See detail <FaArrowRight className="text-[10px]" />
+                <button className="text-xs font-medium text-black flex items-center gap-1 hover:text-black">
+                  See detail <FaArrowRight className="text-[10px] text-black" />
                 </button>
               </div>
             </div>
@@ -151,7 +152,9 @@ const OrderList = () => {
 
       {/* TABLE */}
       <div className="bg-white mt-5 rounded-xl border border-[#e0e0e0] overflow-hidden">
-        <div className="flex justify-between p-6 border-b border-[#e0e0e0]">
+        {/* TABLE TITLES */}
+
+        <div className=" md:flex justify-between p-6">
           <div>
             <h2 className="text-md font-semibold text-black">
               Product Transaction
@@ -160,24 +163,27 @@ const OrderList = () => {
               Latest Transaction sales in real time.
             </p>
           </div>
-          <div className="flex justify-between gap-3">
-            <button className="flex items-center gap-3 border my-1 border-[#e0e0e0] px-4 rounded-md text-sm text-black hover:bg-black hover:text-white">
-              <HiOutlineAdjustmentsHorizontal className="text-lg" /> Filter
-            </button>
-            <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 rounded-md text-sm text-black hover:bg-black hover:text-white">
-              <IoCreateOutline className="text-lg" /> Customize
-            </button>
-            <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 rounded-md text-sm text-black hover:bg-black hover:text-white">
-              <IoCloudUploadOutline className="text-lg" /> Export
-            </button>
+          <div className=" mt-2 md:mt-0">
+            <div className="flex justify-start gap-3">
+              <button className="flex items-center gap-3 border my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+                <HiOutlineAdjustmentsHorizontal className="text-lg" /> Filter
+              </button>
+              <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+                <IoCreateOutline className="text-lg" /> Customize
+              </button>
+              <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+                <IoCloudUploadOutline className="text-lg" /> Export
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
+        {/* MAIN TABLE */}
+        <div className="overflow-x-auto  px-6">
+          <table className="w-[1150] text-left mx-auto ">
+            {/* TABLE HEADER */}
+            <thead className=" border-y border-[#e0e0e0]">
               <tr className="bg-[#f8fafc]">
-                <th className="py-3 px-4 w-12">
+                <th className="w-[40px] py-3 px-2">
                   <input
                     type="checkbox"
                     onChange={handleSelectAll}
@@ -187,46 +193,57 @@ const OrderList = () => {
                     }
                   />
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[100px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Order ID
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[250px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Product Name
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[120px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Order Date
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[140px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Customer Name
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[100px] py-3 px-2 text-center text-sm font-bold text-[#64748b]">
                   Payment
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[130px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Payment Status
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[100px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Total Price
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[80px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Quantity
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[130px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Order Status
                 </th>
-                <th className="py-3 px-4 text-xs font-bold text-[#64748b]">
+
+                <th className="w-[80px] py-3 px-2 text-sm font-bold text-[#64748b]">
                   Action
                 </th>
               </tr>
             </thead>
 
+            {/* TABLE BODY */}
             <tbody>
               {currentOrders.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-[#e0e0e0] hover:bg-[#f8fafc]"
                 >
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-2 mx-2">
                     <input
                       type="checkbox"
                       checked={selected.includes(item.id)}
@@ -234,34 +251,34 @@ const OrderList = () => {
                     />
                   </td>
 
-                  <td className="py-4 px-4 text-sm font-medium">
+                  <td className="py-4 px-2 mx-2 text-black text-sm font-medium ">
                     {item.orderId}
                   </td>
 
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-2 mx-2 ">
                     <div className="flex items-center gap-3">
                       <img
                         src={item.image || "https://via.placeholder.com/40"}
                         alt={item.product}
-                        className="w-10 h-10 rounded-md object-cover"
+                        className="w-8 h-8 rounded-md object-cover"
                       />
-                      <span className="text-sm">{item.product}</span>
+                      <span className="text-sm text-black">{item.product}</span>
                     </div>
                   </td>
 
-                  <td className="py-4 px-4 text-sm text-gray-600">
+                  <td className="py-4 px-2 mx-2  text-sm text-black">
                     {item.date}
                   </td>
 
-                  <td className="py-4 px-4 text-sm text-gray-600">
+                  <td className="py-4 px-2 mx-2  text-sm text-black">
                     {item.customer}
                   </td>
 
-                  <td className="py-4 px-4 text-sm text-gray-600">
+                  <td className="py-4 px-2 mx-2  text-sm text-center text-black">
                     {item.payment}
                   </td>
 
-                  <td className="py-4 px-4">
+                  <td className="py-4  px-2 mx-2 ">
                     <span
                       className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg min-w-[110px] justify-center
   ${item.paymentStatus === "Paid" && "bg-green-100 text-green-600"}
@@ -274,40 +291,40 @@ const OrderList = () => {
                     </span>
                   </td>
 
-                  <td className="py-4 px-4 text-sm font-medium">
+                  <td className="py-4 px-2 mx-2 text-black  text-sm text-center font-medium">
                     ${item.total}
                   </td>
 
-                  <td className="py-4 px-4 text-sm font-medium">
+                  <td className="py-4 px-2 mx-2  text-black text-sm text-center font-medium">
                     {item.quantity}
                   </td>
 
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-2 mx-2 ">
                     <span
-                      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg min-w-[120px] justify-center
-  ${item.status === "Delivered" && "bg-green-100 text-green-600"}
-  ${item.status === "Processing" && "bg-blue-100 text-blue-600"}
-  ${item.status === "Shipped" && "bg-purple-100 text-purple-600"}
+                      className={`inline-flex items-center text-white gap-2 px-4 py-2 text-sm font-medium rounded-lg min-w-[120px] justify-center
+  ${item.status === "Delivered" && "bg-[#403fe8]"}
+  ${item.status === "Processing" && "bg-[#42afcf]"}
+  ${item.status === "Shipped" && "bg-[#ad94f6]"}
 `}
                     >
-                      <span className="w-2 h-2 rounded-full bg-current"></span>
+                      <span className="w-2 h-2 rounded-full bg-white"></span>
                       {item.status}
                     </span>
                   </td>
 
-                  <td className="py-4 px-4 text-blue-600 cursor-pointer text-sm">
-                    Edit
+                  <td className="py-4 px-2 mx-2  flex  justify-center items-center   gap-2 text-black cursor-pointer text-sm">
+                    <LuMapPin /> <TbDots />
                   </td>
                 </tr>
               ))}
             </tbody>
 
-            {/* TABLE FOOTER - now correctly placed inside table */}
+            {/* TABLE FOOTER  */}
             <tfoot>
               <tr>
                 <td
                   colSpan="11"
-                  className="px-6 py-4 border-t border-[#e0e0e0] bg-white"
+                  className=" py-4 border-t border-[#e0e0e0] bg-white"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-500">
