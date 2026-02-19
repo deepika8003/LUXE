@@ -79,7 +79,7 @@ export default function AdminLayout({ children }) {
                 </main>
             </div>
 
-            {/* MODAL (ONLY HERE) */}
+            {/* MODAL  */}
             {showModal && (
                 <AddProduct
                     onClose={() => setShowModal(false)}

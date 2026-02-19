@@ -262,19 +262,21 @@ const OrderList = () => {
                         alt={item.product}
                         className="w-8 h-8 rounded-md object-cover"
                       />
-                      <span className="text-sm text-black">{item.product}</span>
+                      <span className="text-xs sm:text-sm text-black">
+                        {item.product}
+                      </span>
                     </div>
                   </td>
 
-                  <td className="py-4 px-2 mx-2  text-sm text-black">
+                  <td className="py-4 px-2 mx-2  text-xs sm:text-sm text-black">
                     {item.date}
                   </td>
 
-                  <td className="py-4 px-2 mx-2  text-sm text-black">
+                  <td className="py-4 px-2 mx-2 text-xs sm:text-sm text-black">
                     {item.customer}
                   </td>
 
-                  <td className="py-4 px-2 mx-2  text-sm text-center text-black">
+                  <td className="py-4 px-2 mx-2  text-xs sm:text-sm text-center text-black">
                     {item.payment}
                   </td>
 
@@ -291,11 +293,11 @@ const OrderList = () => {
                     </span>
                   </td>
 
-                  <td className="py-4 px-2 mx-2 text-black  text-sm text-center font-medium">
+                  <td className="py-4 px-2 mx-2 text-black text-xs sm:text-sm text-center font-medium">
                     ${item.total}
                   </td>
 
-                  <td className="py-4 px-2 mx-2  text-black text-sm text-center font-medium">
+                  <td className="py-4 px-2 mx-2  text-black text-xs sm:text-sm text-center font-medium">
                     {item.quantity}
                   </td>
 
