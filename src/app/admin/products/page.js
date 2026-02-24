@@ -1,8 +1,9 @@
+import AdminLayout from '@/components/layout/AdminLayout'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>page</div>
+        <AdminLayout>page</AdminLayout>
     )
 }
 

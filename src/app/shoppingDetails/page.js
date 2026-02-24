@@ -1,17 +1,17 @@
 import Product from '@/pages/ProductDetails/Product'
-import ProductCard from '@/components/ProductCard'
+
 import React from 'react'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
+
+import HomeLayout from '@/components/layout/HomeLayout'
 
 const page = () => {
     return (
-        <div>
-            <Nav />
-            <Product />
-            <Footer />
+        <HomeLayout>
 
-        </div >
+            <Product />
+
+
+        </HomeLayout >
     )
 }
 

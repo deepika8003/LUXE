@@ -53,7 +53,7 @@ const Settings = () => {
                 />
               </div>
             </div>
-            {/* Email & Phone */}
+            {/* Email + Phone */}
             <div className="sm:grid grid-cols-2 space-y-6 sm:space-y-0 gap-6">
               {/* Email */}
               <div>

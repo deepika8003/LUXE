@@ -1,9 +1,10 @@
+import AdminLayout from '@/components/layout/AdminLayout'
 import Settings from '@/pages/AdminPage/Settings'
 import React from 'react'
 
 const page = () => {
     return (
-        <div><Settings /></div>
+        <AdminLayout><Settings /></AdminLayout>
     )
 }
 

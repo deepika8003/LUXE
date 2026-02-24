@@ -1,15 +1,15 @@
-import Footer from '@/components/Footer'
-import Nav from '@/components/Nav'
+
+import HomeLayout from '@/components/layout/HomeLayout'
 import TrackOrder from '@/pages/trackorder/TrackOrder'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>
-            <Nav />
+        <HomeLayout>
+
             <TrackOrder />
-            <Footer />
-        </div>
+
+        </HomeLayout>
     )
 }
 

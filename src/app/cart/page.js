@@ -1,15 +1,15 @@
-import Footer from '@/components/Footer'
-import Nav from '@/components/Nav'
+
+import HomeLayout from '@/components/layout/HomeLayout'
 import Cart from '@/pages/Cart/Cart'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>
-            <Nav />
+        <HomeLayout>
+
             <Cart />
-            <Footer />
-        </div>
+
+        </HomeLayout>
     )
 }
 
