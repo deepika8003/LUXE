@@ -7,7 +7,7 @@ const Settings = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-gray-800 mb-4">Settings</h1>
 
-        <div className="flex gap-6">
+        <div className="flex flex-wrap md:flex-nowrap gap-4 mt-4">
           <button className="px-4 py-2 bg-[#155dfc] text-white rounded-md text-sm font-medium">
             Edit Profile
           </button>
@@ -40,7 +40,7 @@ const Settings = () => {
                 <input
                   type="text"
                   placeholder="Mystery"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
 
@@ -49,7 +49,7 @@ const Settings = () => {
                 <input
                   type="text"
                   placeholder="bubu"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
             </div>
@@ -61,7 +61,7 @@ const Settings = () => {
                 <input
                   type="email"
                   placeholder="Mysterybubu@gmail.com"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
 
@@ -74,7 +74,7 @@ const Settings = () => {
                   min={10}
                   max={10}
                   required
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
             </div>
@@ -91,7 +91,7 @@ const Settings = () => {
                 <input
                   type="text"
                   placeholder="Inida"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
 
@@ -100,7 +100,7 @@ const Settings = () => {
                 <input
                   type="text"
                   placeholder="Dharmapuri"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
             </div>
@@ -112,7 +112,7 @@ const Settings = () => {
                 <input
                   type="text"
                   placeholder="RS Street"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
 
@@ -121,7 +121,7 @@ const Settings = () => {
                 <input
                   type="tell"
                   placeholder="635112"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
+                  className="w-full mt-1 text-black  px-4 py-2 border rounded-lg focus:outline-none focus:ring-1"
                 />
               </div>
             </div>

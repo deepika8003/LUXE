@@ -141,7 +141,7 @@ const Analytics = () => {
 
               {/* Amount + Percentage */}
               <div className="flex items-center gap-3 mb-3">
-                <p className="text-2xl font-semibold text-black">
+                <p className="text-xl md:text-2xl font-semibold text-black">
                   ${card.amount.toLocaleString()}
                 </p>
 
@@ -203,22 +203,22 @@ const Analytics = () => {
             </div>
 
             <div className="overflow-x-auto px-6">
-              <table className="w-full text-left">
+              <table className="min-w-[700px] w-full text-left">
                 <thead className="border-b border-[#e0e0e0] bg-[#f8fafc]">
                   <tr>
-                    <th className="py-3 text-sm font-bold text-[#64748b]">
+                    <th className="py-3 text-sm font-bold text-[#64748b] w-[140px] whitespace-nowrap">
                       Order No.
                     </th>
-                    <th className="py-3 text-sm font-bold text-[#64748b]">
+                    <th className="py-3 text-sm font-bold text-[#64748b] w-[180px] whitespace-nowrap">
                       Item
                     </th>
-                    <th className="py-3 text-sm font-bold text-[#64748b]">
+                    <th className="py-3 text-sm font-bold text-[#64748b] w-[180px] whitespace-nowrap">
                       Customer
                     </th>
-                    <th className="py-3 text-sm font-bold text-[#64748b]">
+                    <th className="py-3 text-sm font-bold text-[#64748b] w-[120px] whitespace-nowrap">
                       Price
                     </th>
-                    <th className="py-3 text-sm font-bold text-[#64748b]">
+                    <th className="py-3 text-sm font-bold text-[#64748b] w-[140px] whitespace-nowrap">
                       Status
                     </th>
                   </tr>
@@ -230,19 +230,23 @@ const Analytics = () => {
                       key={order.id}
                       className="border-b border-[#e0e0e0] hover:bg-[#f8fafc]"
                     >
-                      <td className="py-4 text-sm font-medium text-black">
+                      <td className="py-4 text-sm font-medium text-black whitespace-nowrap">
                         {order.orderNo}
                       </td>
-                      <td className="py-4 text-sm text-black">{order.item}</td>
-                      <td className="py-4 text-sm text-black">
+                      <td className="py-4 text-sm text-black whitespace-nowrap">
+                        {order.item}
+                      </td>
+                      <td className="py-4 text-sm text-black whitespace-nowrap">
                         {order.customer}
                       </td>
-                      <td className="py-4 text-sm text-black">
+                      <td className="py-4 text-sm text-black whitespace-nowrap">
                         ${order.price.toLocaleString()}
                       </td>
-                      <td className="py-4">
+                      <td className="py-4 whitespace-nowrap">
                         <span
-                          className={`px-4 py-1 text-xs font-medium rounded-full ${statusStyle(order.status)}`}
+                          className={`px-4 py-1 text-xs font-medium rounded-full ${statusStyle(
+                            order.status,
+                          )}`}
                         >
                           {order.status}
                         </span>
@@ -250,82 +254,6 @@ const Analytics = () => {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td
-                      colSpan="11"
-                      className=" py-4 border-t border-[#e0e0e0] bg-white"
-                    >
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs text-gray-500">
-                          Showing{" "}
-                          <span className="font-medium text-gray-900">
-                            {totalItems > 0 ? startIndex + 1 : 0}
-                          </span>{" "}
-                          to{" "}
-                          <span className="font-medium text-gray-900">
-                            {Math.min(endIndex, totalItems)}
-                          </span>{" "}
-                          of{" "}
-                          <span className="font-medium text-gray-900">
-                            {totalItems}
-                          </span>{" "}
-                          Products
-                        </p>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            disabled={currentPage === 1}
-                            onClick={() =>
-                              setCurrentPage((p) => Math.max(p - 1, 1))
-                            }
-                            className={`px-3 py-1.5 text-xs border rounded-sm transition
-                        ${
-                          currentPage === 1
-                            ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
-                        }`}
-                          >
-                            Previous
-                          </button>
-
-                          {[...Array(totalPages)].map((_, index) => {
-                            const page = index + 1;
-                            return (
-                              <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`px-3 py-1.5 text-xs border rounded-sm transition
-                            ${
-                              currentPage === page
-                                ? "bg-gray-900 text-white border-gray-900"
-                                : "border-[#e0e0e0] text-black hover:bg-gray-50"
-                            }`}
-                              >
-                                {page}
-                              </button>
-                            );
-                          })}
-
-                          <button
-                            disabled={currentPage === totalPages}
-                            onClick={() =>
-                              setCurrentPage((p) => Math.min(p + 1, totalPages))
-                            }
-                            className={`px-3 py-1.5 text-xs border rounded-sm transition
-                        ${
-                          currentPage === totalPages
-                            ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
-                        }`}
-                          >
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>
@@ -343,7 +271,7 @@ const Analytics = () => {
                   <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-sm">
                     <BsBarChartFill className="text-black text-sm" />
                   </div>
-                  <span className="text-black font-medium">
+                  <span className="text-black text-md font-medium">
                     Order complete ratio
                   </span>
                 </div>
@@ -357,7 +285,7 @@ const Analytics = () => {
                   <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-sm">
                     <PiFilesBold className="text-black text-sm" />
                   </div>
-                  <span className="text-black font-medium">
+                  <span className="text-black text-md  font-medium">
                     Invoice analysis
                   </span>
                 </div>
@@ -366,8 +294,8 @@ const Analytics = () => {
               </button>
             </div>
 
-            <p className="mt-4 flex gap-3">
-              Insight craeted by{" "}
+            <p className="mt-4 text-black flex gap-3">
+              Insight craeted by
               <span className="w-7 h-7 flex items-center justify-center bg-green-300 rounded-full">
                 <TiUser className="text-black" />
               </span>
