@@ -11,7 +11,7 @@ const TopBar = ({ onMenuClick, onAddProductClick }) => {
             onClick={onMenuClick}
             className="lg:hidden text-xl text-gray-700"
           >
-            <FiMenu />
+            <FiMenu className="cursor-pointer" />
           </button>
           <div className="text-center">
             <h1 className="text-xl md:text-2xl font-serif font-semibold text-gray-900">
