@@ -1,5 +1,7 @@
 "use client";
 
+import { useDispatch, useSelector } from "react-redux";
+
 import React, { useState, useEffect } from "react";
 import { AiOutlineExclamationCircle, AiOutlineWarning } from "react-icons/ai";
 import { LuClipboardCheck } from "react-icons/lu";
@@ -13,7 +15,6 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import AddProduct from "./AddProduct";
 
 const AdminProduct = ({
-  products = [],
   showModal,
   setShowModal,
   selectedProduct,
@@ -21,7 +22,9 @@ const AdminProduct = ({
   showSuccess,
   onSaveProduct,
   onEditClick,
+  onDeleteClick,
 }) => {
+  const products = useSelector((state) => state.product.products);
   const dashboardCards = [
     {
       title: "Total Inventory",
@@ -214,13 +217,20 @@ const AdminProduct = ({
                       </span>
                     </td>
 
-                    <td
-                      className="w-[14%] py-4 px-6 align-middle"
-                      onClick={() => onEditClick(item)}
-                    >
+                    <td className="w-[14%] py-4 px-6 align-middle">
                       <div className="flex items-center gap-3 text-sm text-[#1241a1] cursor-pointer">
-                        <span className="font-bold">Edit</span>
-                        <BsThreeDotsVertical className="text-[#94a3b8]" />
+                        <span
+                          className="font-bold"
+                          onClick={() => onEditClick(item)}
+                        >
+                          Edit
+                        </span>
+                        <span
+                          className="text-red-600 font-semibold"
+                          onClick={() => onDeleteClick(item.id)}
+                        >
+                          Delete
+                        </span>
                       </div>
                     </td>
                   </tr>

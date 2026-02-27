@@ -1,5 +1,6 @@
 "use client";
-
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, updateProduct, deleteProduct } from "@/redux/productSlice";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@/app/components/layout/AdminLayout";
 import AdminProduct from "@/app/components/AdminPage/AdminProduct";
@@ -13,7 +14,7 @@ const defaultProducts = [
         stock: 15,
         price: 120,
         status: "Live",
-        image: "https://via.placeholder.com/50",
+        image: "/images/Classic Leather Watch.jpg",
     },
     {
         id: 2,
@@ -23,7 +24,7 @@ const defaultProducts = [
         stock: 8,
         price: 90,
         status: "Live",
-        image: "https://via.placeholder.com/50",
+        image: "/images/shoe.jpg",
     },
     {
         id: 3,
@@ -33,7 +34,7 @@ const defaultProducts = [
         stock: 0,
         price: 150,
         status: "Sold Out",
-        image: "https://via.placeholder.com/50",
+        image: "/images/denimjacket.jpg",
     },
     {
         id: 4,
@@ -43,35 +44,27 @@ const defaultProducts = [
         stock: 20,
         price: 35,
         status: "Draft",
-        image: "https://via.placeholder.com/50",
+        image: "/images/summerhat.jpg",
     },
 ];
 
 export default function AdminPage() {
-    const [products, setProducts] = useState([]);
+
+    const dispatch = useDispatch();
+    const products = useSelector((state) => state.product.products);
+
     const [showModal, setShowModal] = useState(false);
     const [mode, setMode] = useState("add");
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);
 
-    // LOAD FROM LOCAL STORAGE
     useEffect(() => {
-        const stored = localStorage.getItem("products");
-
-        if (stored) {
-            setProducts(JSON.parse(stored));
-        } else {
-            setProducts(defaultProducts);
-            localStorage.setItem("products", JSON.stringify(defaultProducts));
+        if (products.length === 0) {
+            defaultProducts.forEach((item) => {
+                dispatch(addProduct(item));
+            });
         }
-    }, []);
-
-    // SAVE TO LOCAL STORAGE
-    useEffect(() => {
-        if (products.length > 0) {
-            localStorage.setItem("products", JSON.stringify(products));
-        }
-    }, [products]);
+    }, [products, dispatch]);
 
     // ADD BUTTON CLICK
     const handleAddClick = () => {
@@ -90,16 +83,9 @@ export default function AdminPage() {
     // SAVE PRODUCT
     const handleSaveProduct = (data) => {
         if (mode === "edit") {
-            const updated = products.map((item) =>
-                item.id === data.id ? data : item
-            );
-            setProducts(updated);
+            dispatch(updateProduct(data));
         } else {
-            const newProduct = {
-                ...data,
-                id: Date.now(),
-            };
-            setProducts([...products, newProduct]);
+            dispatch(addProduct(data));
         }
 
         setShowModal(false);
@@ -109,19 +95,18 @@ export default function AdminPage() {
             setShowSuccess(false);
         }, 2000);
     };
+
+    // DELETE PRODUCT 
     const handleDelete = (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete?");
         if (confirmDelete) {
-            setProducts((prev) =>
-                prev.filter((product) => product.id !== id)
-            );
+            dispatch(deleteProduct(id));
         }
     };
 
     return (
         <AdminLayout onAddProductClick={handleAddClick}>
             <AdminProduct
-                products={products}
                 showModal={showModal}
                 setShowModal={setShowModal}
                 selectedProduct={selectedProduct}

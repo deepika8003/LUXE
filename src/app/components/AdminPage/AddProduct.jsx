@@ -59,8 +59,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       name,
       sku,
       category,
-      price,
-      stock,
+      price: Number(price),
+      stock: Number(stock),
       status,
       image,
     };
@@ -70,8 +70,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     }
     onClose();
   };
-
- 
 
   return (
     <div
