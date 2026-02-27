@@ -1,4 +1,4 @@
-import AdminLayout from '@/components/layout/AdminLayout'
+import AdminLayout from '@/app/components/layout/AdminLayout'
 import Analytics from '@/pages/AdminPage/Analytics'
 import React from 'react'
 

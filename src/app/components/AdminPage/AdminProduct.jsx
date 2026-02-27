@@ -22,6 +22,40 @@ const AdminProduct = ({
   onSaveProduct,
   onEditClick,
 }) => {
+  const dashboardCards = [
+    {
+      title: "Total Inventory",
+      value: "12,450",
+      subText: "+2% from last month",
+      subTextColor: "text-green-600",
+      icon: <LuClipboardCheck className="text-2xl text-[#1241a0]" />,
+      iconBg: "bg-[#e7ecf5]",
+    },
+    {
+      title: "New Arrivals",
+      value: "328",
+      subText: "+15% this month",
+      subTextColor: "text-green-600",
+      icon: <RiVerifiedBadgeLine className="text-2xl text-[#059669]" />,
+      iconBg: "bg-[#d1fae5]",
+    },
+    {
+      title: "Active Listings",
+      value: "1,084",
+      subText: "Current status",
+      subTextColor: "text-gray-400",
+      icon: <MdOutlineVisibility className="text-2xl text-[#2563eb]" />,
+      iconBg: "bg-[#dbeafe]",
+    },
+    {
+      title: "Out of Stock",
+      value: "14",
+      subText: "Needs attention",
+      subTextColor: "text-red-500",
+      icon: <AiOutlineExclamationCircle className="text-2xl text-[#e11d48]" />,
+      iconBg: "bg-[#ffe4e6]",
+    },
+  ];
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -56,6 +90,32 @@ const AdminProduct = ({
         </div>
       )}
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {dashboardCards.map((card, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl border border-[#e0e0e0] p-6 flex justify-between items-center"
+          >
+            <div>
+              <h2 className="text-sm text-gray-500 uppercase tracking-wide">
+                {card.title}
+              </h2>
+              <p className="text-2xl font-semibold mt-1 text-black">
+                {card.value}
+              </p>
+              <p
+                className={`${card.subTextColor} text-xs mt-1 flex items-center gap-1`}
+              >
+                {card.subText}
+              </p>
+            </div>
+
+            <div className={`${card.iconBg} px-3 py-4 rounded-lg`}>
+              {card.icon}
+            </div>
+          </div>
+        ))}
+      </div>
       {/*  TABLE SECTION  */}
 
       <div className="bg-white rounded-xl border border-[#e0e0e0] overflow-hidden">

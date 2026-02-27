@@ -2,7 +2,7 @@ import Product from '@/pages/ProductDetails/Product'
 
 import React from 'react'
 
-import HomeLayout from '@/components/layout/HomeLayout'
+import HomeLayout from '@/app/components/layout/HomeLayout'
 
 const page = () => {
     return (

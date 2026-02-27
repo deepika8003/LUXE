@@ -8,7 +8,7 @@ import { SiHackthebox } from "react-icons/si";
 import { BsTruck } from "react-icons/bs";
 
 import { useState } from "react";
-import HomeLayout from "@/components/layout/HomeLayout";
+import HomeLayout from "@/app/components/layout/HomeLayout";
 
 const TrackOrder = () => {
   const timelineSteps = [

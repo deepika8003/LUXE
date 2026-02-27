@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import AdminLayout from "@/components/layout/AdminLayout";
-import AdminProduct from "@/components/AdminPage/AdminProduct";
+import AdminLayout from "@/app/components/layout/AdminLayout";
+import AdminProduct from "@/app/components/AdminPage/AdminProduct";
 
 const defaultProducts = [
     {
@@ -109,6 +109,14 @@ export default function AdminPage() {
             setShowSuccess(false);
         }, 2000);
     };
+    const handleDelete = (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete?");
+        if (confirmDelete) {
+            setProducts((prev) =>
+                prev.filter((product) => product.id !== id)
+            );
+        }
+    };
 
     return (
         <AdminLayout onAddProductClick={handleAddClick}>
@@ -121,6 +129,7 @@ export default function AdminPage() {
                 showSuccess={showSuccess}
                 onSaveProduct={handleSaveProduct}
                 onEditClick={handleEditClick}
+                onDeleteClick={handleDelete}
             />
         </AdminLayout>
     );

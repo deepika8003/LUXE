@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react"; // 👈 import useState
+import React, { useState } from "react";
 import { IoMdTrendingUp } from "react-icons/io";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { FaClipboardList } from "react-icons/fa";
@@ -254,6 +254,82 @@ const Analytics = () => {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan="100%">
+                      <div className="flex items-center justify-between px-6 py-4 border-t border-[#e0e0e0] bg-white">
+                        <p className="text-xs text-gray-500">
+                          Showing
+                          <span className="font-medium text-gray-900">
+                            {" "}
+                            {totalItems === 0 ? 0 : startIndex + 1}{" "}
+                          </span>
+                          to
+                          <span className="font-medium text-gray-900">
+                            {" "}
+                            {Math.min(endIndex, totalItems)}{" "}
+                          </span>
+                          of
+                          <span className="font-medium text-gray-900">
+                            {" "}
+                            {totalItems}{" "}
+                          </span>
+                          Products
+                        </p>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled={currentPage === 1}
+                            onClick={() =>
+                              setCurrentPage((p) => Math.max(p - 1, 1))
+                            }
+                            className={`px-3 py-1.5 text-xs border rounded-sm transition
+                        ${
+                          currentPage === 1
+                            ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                        }`}
+                          >
+                            Previous
+                          </button>
+
+                          {[...Array(totalPages)].map((_, index) => {
+                            const page = index + 1;
+                            return (
+                              <button
+                                key={page}
+                                onClick={() => setCurrentPage(page)}
+                                className={`px-3 py-1.5 text-xs border rounded-sm transition
+                            ${
+                              currentPage === page
+                                ? "bg-gray-900 text-white border-gray-900"
+                                : "border-[#e0e0e0] text-black hover:bg-gray-50"
+                            }`}
+                              >
+                                {page}
+                              </button>
+                            );
+                          })}
+
+                          <button
+                            disabled={currentPage === totalPages}
+                            onClick={() =>
+                              setCurrentPage((p) => Math.min(p + 1, totalPages))
+                            }
+                            className={`px-3 py-1.5 text-xs border rounded-sm transition
+                        ${
+                          currentPage === totalPages
+                            ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                        }`}
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </div>

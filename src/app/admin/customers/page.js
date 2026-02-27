@@ -1,4 +1,4 @@
-import AdminLayout from '@/components/layout/AdminLayout'
+import AdminLayout from '@/app/components/layout/AdminLayout'
 import React from 'react'
 
 const page = () => {

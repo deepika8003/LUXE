@@ -71,6 +71,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     onClose();
   };
 
+ 
+
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"

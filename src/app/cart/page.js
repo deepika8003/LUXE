@@ -1,5 +1,5 @@
 
-import HomeLayout from '@/components/layout/HomeLayout'
+import HomeLayout from '@/app/components/layout/HomeLayout'
 import Cart from '@/pages/Cart/Cart'
 import React from 'react'
 

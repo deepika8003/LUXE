@@ -1,5 +1,5 @@
 
-import HomeLayout from '@/components/layout/HomeLayout'
+import HomeLayout from '@/app/components/layout/HomeLayout'
 import TrackOrder from '@/pages/trackorder/TrackOrder'
 import React from 'react'
 

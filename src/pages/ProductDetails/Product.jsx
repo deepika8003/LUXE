@@ -5,7 +5,7 @@ import { BsTruck } from "react-icons/bs";
 import { FaBoxArchive } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../app/components/ProductCard";
 
 const Product = () => {
   const [openSections, setOpenSections] = useState([]);
