@@ -120,7 +120,7 @@ const TrackOrder = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-black text-white py-2.5 mt-5 rounded-md flex items-center justify-center gap-2">
+              <button className="w-full cursor-pointer bg-black text-white py-2.5 mt-5 rounded-md flex items-center justify-center gap-2">
                 <IoMdSearch />
                 Track Order
               </button>
@@ -143,12 +143,12 @@ const TrackOrder = () => {
               </div>
 
               <div className="flex gap-2 mt-5  sm:mt-0">
-                <button className="flex text-black items-center gap-2 py-1 border border-gray-200 px-4 rounded-md  active:bg-black active:text-white">
+                <button className="flex cursor-pointer hover:bg-gray-200 text-black items-center gap-2 py-1 border border-gray-200 px-4 rounded-md  active:bg-black active:text-white">
                   <MdOutlineFileDownload className="" />
                   Invoice
                 </button>
 
-                <button className="flex items-center text-black gap-2 py-1 border border-gray-200 px-4 rounded-md active:bg-black active:text-white">
+                <button className="flex cursor-pointer hover:bg-gray-200 items-center text-black gap-2 py-1 border border-gray-200 px-4 rounded-md active:bg-black active:text-white">
                   <IoPrintOutline className="" />
                   Print
                 </button>
@@ -427,11 +427,11 @@ const TrackOrder = () => {
               Our support team is here to help you
             </p>
 
-            <div className="flex flex-col sm:flex-row  sm:flex justify-center gap-4">
-              <button className="border text-black text-sm sm:text-md border-gray-300 px-5 py-2 rounded-md active:bg-black active:text-white">
+            <div className="flex flex-col  sm:flex-row  sm:flex justify-center gap-4">
+              <button className="border cursor-pointer hover:bg-gray-200 text-black text-sm sm:text-md border-gray-300 px-5 py-2 rounded-md active:bg-black active:text-white">
                 Contact Support
               </button>
-              <button className="border text-black text-sm sm:text-md border-gray-300 px-5 py-2 rounded-md  active:bg-black active:text-white">
+              <button className="border cursor-pointer hover:bg-gray-200 text-black text-sm sm:text-md border-gray-300 px-5 py-2 rounded-md  active:bg-black active:text-white">
                 View Order Details
               </button>
             </div>

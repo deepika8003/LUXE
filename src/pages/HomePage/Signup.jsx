@@ -27,7 +27,7 @@ const Signup = () => {
             />
 
             {/* BUTTON */}
-            <button className="whitespace-nowrap text-black py-4 text-xs tracking-widest hover:text-[#155dfc]">
+            <button className="whitespace-nowrap cursor-pointer text-black py-4 text-xs tracking-widest hover:text-[#155dfc]">
               SIGN UP
             </button>
           </div>

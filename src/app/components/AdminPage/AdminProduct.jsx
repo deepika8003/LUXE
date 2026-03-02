@@ -1,16 +1,13 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-
+import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
-import { AiOutlineExclamationCircle, AiOutlineWarning } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { LuClipboardCheck } from "react-icons/lu";
 import { RiVerifiedBadgeLine } from "react-icons/ri";
 import { MdOutlineVisibility } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { HiTrendingUp, HiOutlineRefresh } from "react-icons/hi";
 import { AiFillCheckCircle } from "react-icons/ai";
 import AddProduct from "./AddProduct";
 
@@ -129,10 +126,10 @@ const AdminProduct = ({
             </h2>
           </div>
           <div className="flex justify-between gap-6 px-5">
-            <button>
+            <button className="cursor-pointer">
               <IoFilterSharp className="text-xl text-[#94a3b8] active:text-black" />
             </button>
-            <button>
+            <button className="cursor-pointer">
               <FiDownload className="text-xl text-[#94a3b8] active:text-black" />
             </button>
           </div>
@@ -218,15 +215,15 @@ const AdminProduct = ({
                     </td>
 
                     <td className="w-[14%] py-4 px-6 align-middle">
-                      <div className="flex items-center gap-3 text-sm text-[#1241a1] cursor-pointer">
+                      <div className="flex items-center gap-3 text-sm  cursor-pointer">
                         <span
-                          className="font-bold"
+                          className="font-bold text-[#1241a1] hover:text-blue-950"
                           onClick={() => onEditClick(item)}
                         >
                           Edit
                         </span>
                         <span
-                          className="text-red-600 font-semibold"
+                          className="text-red-600 hover:text-red-900 font-semibold"
                           onClick={() => onDeleteClick(item.id)}
                         >
                           Delete
@@ -280,7 +277,7 @@ const AdminProduct = ({
                         ${
                           currentPage === 1
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer hover:bg-gray-50"
                         }`}
                       >
                         Previous
@@ -292,11 +289,11 @@ const AdminProduct = ({
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1.5 text-xs border rounded-sm transition
+                            className={`px-3 py-1.5 text-xs border cursor-pointer rounded-sm transition
                             ${
                               currentPage === page
                                 ? "bg-gray-900 text-white border-gray-900"
-                                : "border-[#e0e0e0] text-black hover:bg-gray-50"
+                                : "border-[#e0e0e0] text-black  hover:bg-gray-50"
                             }`}
                           >
                             {page}
@@ -309,11 +306,11 @@ const AdminProduct = ({
                         onClick={() =>
                           setCurrentPage((p) => Math.min(p + 1, totalPages))
                         }
-                        className={`px-3 py-1.5 text-xs border rounded-sm transition
+                        className={`px-3 py-1.5  text-xs border rounded-sm transition
                         ${
                           currentPage === totalPages
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer hover:bg-gray-50"
                         }`}
                       >
                         Next

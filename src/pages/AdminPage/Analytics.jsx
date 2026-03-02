@@ -287,7 +287,7 @@ const Analytics = () => {
                         ${
                           currentPage === 1
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer  hover:bg-gray-50"
                         }`}
                           >
                             Previous
@@ -299,7 +299,7 @@ const Analytics = () => {
                               <button
                                 key={page}
                                 onClick={() => setCurrentPage(page)}
-                                className={`px-3 py-1.5 text-xs border rounded-sm transition
+                                className={`px-3 py-1.5 text-xs cursor-pointer border rounded-sm transition
                             ${
                               currentPage === page
                                 ? "bg-gray-900 text-white border-gray-900"
@@ -320,7 +320,7 @@ const Analytics = () => {
                         ${
                           currentPage === totalPages
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer hover:bg-gray-50"
                         }`}
                           >
                             Next
@@ -342,7 +342,7 @@ const Analytics = () => {
             <p className="text-sm text-gray-500"> There are more to view</p>
             <div className="mt-5 space-y-4">
               {/* Order Complete Ratio */}
-              <button className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-3">
+              <button className="w-full flex items-center cursor-pointer justify-between bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-3">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-sm">
                     <BsBarChartFill className="text-black text-sm" />
@@ -356,7 +356,7 @@ const Analytics = () => {
               </button>
 
               {/* Invoice Analysis */}
-              <button className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-3">
+              <button className="w-full flex items-center cursor-pointer justify-between bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-3">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-sm">
                     <PiFilesBold className="text-black text-sm" />
@@ -395,7 +395,7 @@ const Analytics = () => {
                 ahead in revenue generation, team optimization, and project
                 delivery
               </p>
-              <button className="bg-black hover:bg-gray-800 text-white w-1/2 md:w-full py-1.5 rounded-sm mt-5">
+              <button className="bg-black cursor-pointer hover:bg-gray-800 text-white w-1/2 md:w-full py-1.5 rounded-sm mt-5">
                 Upgrade
               </button>
             </div>

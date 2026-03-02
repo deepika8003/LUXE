@@ -44,7 +44,7 @@ const Featured = () => {
                 Featured Collection
               </p>
               <h3 className="font-serif text-4xl mb-4">The Winter Edit</h3>
-              <button className="border border-white px-6 py-2 text-xs tracking-widest uppercase hover:bg-white hover:text-black">
+              <button className="border border-white cursor-pointer px-6 py-2 text-xs tracking-widest uppercase hover:bg-white hover:text-black">
                 Explore
               </button>
             </div>
@@ -62,7 +62,7 @@ const Featured = () => {
               {/* TEXT */}
               <div className="absolute bottom-8 left-8 text-white">
                 <h4 className="font-serif text-2xl mb-5">Essential Knits</h4>
-                <a className="text-xs py-1 border-b tracking-widest uppercase ">
+                <a className="text-xs py-1 border-b cursor-pointer tracking-widest uppercase ">
                   Shop Now
                 </a>
               </div>
@@ -78,7 +78,7 @@ const Featured = () => {
               {/* TEXT */}
               <div className="absolute bottom-8 left-8 text-white">
                 <h4 className="font-serif text-2xl mb-5"> Occasion Wear</h4>
-                <a className="text-xs py-1 border-b tracking-widest uppercase ">
+                <a className="text-xs py-1 border-b cursor-pointer tracking-widest uppercase ">
                   Shop Now
                 </a>
               </div>

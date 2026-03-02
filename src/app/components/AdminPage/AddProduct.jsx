@@ -90,7 +90,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-black text-xl"
+            className="text-gray-400 cursor-pointer hover:text-black text-xl"
           >
             <IoClose />
           </button>
@@ -206,7 +206,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                       key={item}
                       type="button"
                       onClick={() => setStatus(item)}
-                      className={`w-full py-2.5 rounded-lg text-sm font-semibold border transition ${
+                      className={`w-full py-2.5 rounded-lg cursor-pointer text-sm font-semibold border transition ${
                         status === item
                           ? "bg-black text-white"
                           : "bg-[#f1f5f9] text-[#334155] border-[#cbd5e1] hover:bg-[#e2e8f0]"
@@ -237,13 +237,13 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="text-sm text-gray-500 hover:text-black"
+              className="text-sm text-gray-500 cursor-pointer hover:text-black"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-black hover:bg-gray-800 text-white px-7 py-2.5 rounded-lg text-sm font-medium"
+              className="bg-black hover:bg-gray-800 cursor-pointer text-white px-7 py-2.5 rounded-lg text-sm font-medium"
             >
               {mode === "edit" ? "Update Product" : "Create Product"}
             </button>

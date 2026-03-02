@@ -115,7 +115,7 @@ const OrderList = () => {
                     {card.description}
                   </p>
                 </div>
-                <button className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center hover:bg-gray-100">
+                <button className="w-8 h-8 rounded-md border cursor-pointer border-gray-200 flex items-center justify-center hover:bg-gray-100">
                   <HiOutlineDotsHorizontal className="text-black" />
                 </button>
               </div>
@@ -141,7 +141,7 @@ const OrderList = () => {
 
               <div className="mt-6 flex justify-between items-center bg-gray-50 px-4 py-3 rounded-xl">
                 <p className="text-xs text-gray-500">From last month</p>
-                <button className="text-xs font-medium text-black flex items-center gap-1 hover:text-black">
+                <button className="text-xs cursor-pointer font-medium text-black flex items-center gap-1 hover:text-black">
                   See detail <FaArrowRight className="text-[10px] text-black" />
                 </button>
               </div>
@@ -165,13 +165,13 @@ const OrderList = () => {
           </div>
           <div className=" mt-2 md:mt-0">
             <div className="flex justify-start gap-3">
-              <button className="flex items-center gap-3 border my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+              <button className="flex items-center cursor-pointer gap-3 border my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
                 <HiOutlineAdjustmentsHorizontal className="text-lg" /> Filter
               </button>
-              <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+              <button className="flex items-center cursor-pointer gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
                 <IoCreateOutline className="text-lg" /> Customize
               </button>
-              <button className="flex items-center gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
+              <button className="flex items-center cursor-pointer gap-3 border  my-1 border-[#e0e0e0] px-4 py-1.5 rounded-md text-sm text-black hover:bg-black hover:text-white">
                 <IoCloudUploadOutline className="text-lg" /> Export
               </button>
             </div>
@@ -187,6 +187,7 @@ const OrderList = () => {
                   <input
                     type="checkbox"
                     onChange={handleSelectAll}
+                    className="w-4 h-4"
                     checked={
                       currentOrders.length > 0 &&
                       selected.length === currentOrders.length
@@ -246,6 +247,7 @@ const OrderList = () => {
                   <td className="py-4 px-2 mx-2">
                     <input
                       type="checkbox"
+                      className="w-4 h-4"
                       checked={selected.includes(item.id)}
                       onChange={() => handleSelect(item.id)}
                     />
@@ -314,8 +316,8 @@ const OrderList = () => {
                     </span>
                   </td>
 
-                  <td className="py-4 px-2 mx-2  flex  justify-center items-center   gap-2 text-black cursor-pointer text-sm">
-                    <LuMapPin /> <TbDots />
+                  <td className="py-4 px-2 mx-2  px-6   gap-2 text-black cursor-pointer text-sm">
+                    <TbDots />
                   </td>
                 </tr>
               ))}
@@ -355,7 +357,7 @@ const OrderList = () => {
                         ${
                           currentPage === 1
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer hover:bg-gray-50"
                         }`}
                       >
                         Previous
@@ -367,11 +369,11 @@ const OrderList = () => {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1.5 text-xs border rounded-sm transition
+                            className={`px-3 py-1.5 text-xs border cursor-pointer rounded-sm transition
                             ${
                               currentPage === page
                                 ? "bg-gray-900 text-white border-gray-900"
-                                : "border-[#e0e0e0] text-black hover:bg-gray-50"
+                                : "border-[#e0e0e0] text-black  hover:bg-gray-50"
                             }`}
                           >
                             {page}
@@ -388,7 +390,7 @@ const OrderList = () => {
                         ${
                           currentPage === totalPages
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                            : "text-black border-[#e0e0e0] hover:bg-gray-50"
+                            : "text-black border-[#e0e0e0] cursor-pointer hover:bg-gray-50"
                         }`}
                       >
                         Next

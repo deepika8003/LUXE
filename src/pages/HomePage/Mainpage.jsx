@@ -23,11 +23,11 @@ const Mainpage = () => {
         </h1>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-6">
-          <button className="bg-white px-8 py-4 text-md  tracking-widest rounded-xs text-black hover:text-white hover:bg-[#1152d4] transition">
+          <button className="bg-white px-8 py-4 text-md cursor-pointer  tracking-widest rounded-xs text-black hover:text-white hover:bg-[#1152d4] transition">
             SHOP MEN
           </button>
 
-          <button className="bg-white px-8 py-4 text-md  tracking-widest rounded-xs text-black hover:text-white hover:bg-[#1152d4] transition">
+          <button className="bg-white px-8 py-4 text-md cursor-pointer tracking-widest rounded-xs text-black hover:text-white hover:bg-[#1152d4] transition">
             SHOP WOMEN
           </button>
         </div>

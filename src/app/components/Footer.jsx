@@ -20,13 +20,13 @@ const Footer = () => {
           </p>
 
           <div className="flex gap-4">
-            <div className="border text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
+            <div className="border cursor-pointer text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
               <BiWorld />
             </div>
-            <div className="border text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
+            <div className="border cursor-pointer text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
               <FiCamera />
             </div>
-            <div className="border text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
+            <div className="border cursor-pointer text-[#9ca3af] border-white p-2.5 text-sm rounded-full hover:bg-white hover:text-black">
               <CiAt />
             </div>
           </div>

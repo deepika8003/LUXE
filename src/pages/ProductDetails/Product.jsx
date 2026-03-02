@@ -78,7 +78,7 @@ const Product = () => {
                   alt="Product"
                 />
                 {/* HEART ICON */}
-                <div className="absolute top-4 right-4 w-10 h-12 flex items-center justify-center rounded-full bg-white shadow">
+                <div className="absolute cursor-pointer top-4 right-4 w-10 h-12 flex items-center justify-center rounded-full bg-white shadow">
                   <IoMdHeartEmpty className="text-xl text-black" />
                 </div>
               </div>
@@ -155,7 +155,7 @@ const Product = () => {
               {/* ADD TO BAG  */}
 
               <div className="w-full mt-10 mb-5">
-                <button className="text-white tracking-[5] text-sm bg-black hover:bg-gray-800 w-full py-4.5 uppercase text">
+                <button className="text-white cursor-pointer tracking-[5] text-sm bg-black hover:bg-gray-800 w-full py-4.5 uppercase text">
                   add to bag
                 </button>
               </div>
