@@ -1,4 +1,6 @@
 "use client";
+
+export const dynamic = "force-dynamic";
 import React from "react";
 import Mainpage from "../app/components/HomePage/Mainpage";
 import Featured from "../app/components/HomePage/Featured";
