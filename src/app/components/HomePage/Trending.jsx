@@ -2,22 +2,43 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/cartSlice";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
 
 const Trending = () => {
   const dispatch = useDispatch();
-
   const products = useSelector((state) => state.product.products);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // This runs only after hydration
+    setIsMounted(true);
+  }, []);
+
+  // During SSR and initial client render, show nothing (or a skeleton)
+  if (!isMounted) {
+    return (
+      <section className="bg-white py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-black text-4xl mb-10 text-center font-serif">
+            Trending Now
+          </h2>
+          <div className="flex gap-6 overflow-x-auto pb-10">
+            {/* Optional: render skeleton cards here to prevent layout shift */}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // After hydration, render the real products
   return (
     <section className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-6">
-        {/* HEADING */}
         <h2 className="text-black text-4xl mb-10 text-center font-serif">
           Trending Now
         </h2>
-        {/* SCROLL DIV */}
-        <div className="flex gap-6 overflow-x-auto  pb-10 ">
+        <div className="flex gap-6 overflow-x-auto pb-10">
           {products.map((item) => (
             <div
               key={item.id}
