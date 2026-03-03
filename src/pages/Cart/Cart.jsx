@@ -1,8 +1,8 @@
 "use client";
-
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQty } from "@/redux/cartSlice";
-import React, { useState } from "react";
+
 import { ImBoxAdd } from "react-icons/im";
 import { MdDelete, MdErrorOutline } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";

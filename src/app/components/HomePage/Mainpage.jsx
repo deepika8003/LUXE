@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { HiChevronDown } from "react-icons/hi";
 
