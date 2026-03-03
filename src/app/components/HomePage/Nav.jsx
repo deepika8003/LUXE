@@ -6,6 +6,7 @@ import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import Link from "next/link";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -67,7 +68,10 @@ const Nav = () => {
                 </div>
 
                 <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-                  <MdOutlineShoppingBag className="text-xl text-black" />
+                  <a href="/cart">
+                    {" "}
+                    <MdOutlineShoppingBag className="text-xl text-black" />
+                  </a>
                   <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
                     2
                   </span>
@@ -136,9 +140,12 @@ const Nav = () => {
               </a>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href="/cart"
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 Cart
-              </a>
+              </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <a className="block px-4 py-3 text-black hover:text-blue-600">

@@ -1,6 +1,6 @@
 import React from "react";
-import Nav from "../Nav";
-import Footer from "../Footer";
+import Nav from "../HomePage/Nav";
+import Footer from "../HomePage/Footer";
 
 const HomeLayout = ({ children }) => {
   return (

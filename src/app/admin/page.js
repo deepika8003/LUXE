@@ -85,7 +85,10 @@ export default function AdminPage() {
         if (mode === "edit") {
             dispatch(updateProduct(data));
         } else {
-            dispatch(addProduct(data));
+            const maxId = products.length
+                ? Math.max(...products.map(p => p.id))
+                : 0;
+            dispatch(addProduct({ ...data, id: maxId + 1 }));
         }
 
         setShowModal(false);
@@ -93,7 +96,7 @@ export default function AdminPage() {
 
         setTimeout(() => {
             setShowSuccess(false);
-        }, 2000);
+        }, 3000);
     };
 
     // DELETE PRODUCT 

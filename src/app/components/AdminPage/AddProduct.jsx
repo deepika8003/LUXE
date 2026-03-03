@@ -11,6 +11,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -32,6 +33,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       setStock(productData.stock || "");
       setStatus(productData.status || "Live");
       setImage(productData.image || "");
+      setDescription(productData.description || "");
     }
 
     if (mode === "add") {
@@ -42,6 +44,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       setStock("");
       setStatus("Live");
       setImage("");
+      setDescription("");
     }
   }, [mode, productData]);
 
@@ -55,7 +58,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     e.preventDefault();
 
     const product = {
-      id: mode === "edit" ? productData.id : undefined,
+      id: mode === "edit" ? productData.id : Date.now(),
       name,
       sku,
       category,
@@ -63,6 +66,11 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       stock: Number(stock),
       status,
       image,
+      description: description || "No description",
+      originalPrice: Number(price),
+      discount: 5,
+      offerCount: 0,
+      delivery: "Estimated 5-7 days",
     };
 
     if (onSave) {
@@ -124,6 +132,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                 Description <span className="text-gray-400">(Optional)</span>
               </label>
               <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add product description..."
                 rows="3"
                 className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc] resize-none"
