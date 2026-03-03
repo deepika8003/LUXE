@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Nav from "../HomePage/Nav";
 import Footer from "../HomePage/Footer";

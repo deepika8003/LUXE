@@ -1,15 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const loadProducts = () => {
-    if (typeof window !== "undefined") {
-        const data = localStorage.getItem("products");
-        return data ? JSON.parse(data) : [];
-    }
-    return [];
-};
-
 const initialState = {
-    products: loadProducts(),
+    products: [],
 };
 
 const productSlice = createSlice({
@@ -17,6 +9,12 @@ const productSlice = createSlice({
     initialState,
     reducers: {
 
+        //  Set products 
+        setProducts: (state, action) => {
+            state.products = action.payload;
+        },
+
+        //  Add Product
         addProduct: (state, action) => {
             const maxId = state.products.length
                 ? Math.max(...state.products.map(p => p.id))
@@ -28,26 +26,45 @@ const productSlice = createSlice({
             };
 
             state.products.push(newProduct);
-            localStorage.setItem("products", JSON.stringify(state.products));
-        },
-        updateProduct: (state, action) => {
-            const index = state.products.findIndex(
-                (p) => p.id === action.payload.id
-            );
-            if (index !== -1) {
-                state.products[index] = action.payload;
+
+            if (typeof window !== "undefined") {
                 localStorage.setItem("products", JSON.stringify(state.products));
             }
         },
 
+        //  Update Product
+        updateProduct: (state, action) => {
+            const index = state.products.findIndex(
+                (p) => p.id === action.payload.id
+            );
+
+            if (index !== -1) {
+                state.products[index] = action.payload;
+
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("products", JSON.stringify(state.products));
+                }
+            }
+        },
+
+        //  Delete Product
         deleteProduct: (state, action) => {
             state.products = state.products.filter(
                 (p) => p.id !== action.payload
             );
-            localStorage.setItem("products", JSON.stringify(state.products));
+
+            if (typeof window !== "undefined") {
+                localStorage.setItem("products", JSON.stringify(state.products));
+            }
         },
     },
 });
 
-export const { addProduct, updateProduct, deleteProduct } = productSlice.actions;
+export const {
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    setProducts
+} = productSlice.actions;
+
 export default productSlice.reducer;

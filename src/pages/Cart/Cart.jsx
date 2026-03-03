@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQty } from "@/redux/cartSlice";
-
+import { setCart } from "@/redux/cartSlice";
 import { ImBoxAdd } from "react-icons/im";
 import { MdDelete, MdErrorOutline } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
@@ -11,12 +11,21 @@ import { IoShieldCheckmarkSharp } from "react-icons/io5";
 const Cart = () => {
   const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
   const [openQty, setOpenQty] = useState(null);
   const [customQty, setCustomQty] = useState("");
   const [showQtyModal, setShowQtyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(500);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      dispatch(setCart(JSON.parse(savedCart)));
+    }
+    setIsMounted(true);
+  }, [dispatch]);
 
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;
@@ -77,9 +86,7 @@ const Cart = () => {
                       {item.offerCount} offers available
                     </p>
 
-                    <p className="text-xs text-black mt-5 mb-3">
-                      Delivery by {item.delivery}
-                    </p>
+                    <p className="text-xs text-black mt-5 mb-3">Delivery by</p>
                   </div>
 
                   {/* IMAGE & QTY */}
