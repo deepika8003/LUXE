@@ -11,21 +11,12 @@ import { IoShieldCheckmarkSharp } from "react-icons/io5";
 const Cart = () => {
   const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
-  const [isMounted, setIsMounted] = useState(false);
   const [openQty, setOpenQty] = useState(null);
   const [customQty, setCustomQty] = useState("");
   const [showQtyModal, setShowQtyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(500);
-
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      dispatch(setCart(JSON.parse(savedCart)));
-    }
-    setIsMounted(true);
-  }, [dispatch]);
 
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;

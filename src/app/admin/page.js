@@ -59,12 +59,14 @@ export default function AdminPage() {
     const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
-        if (products.length === 0) {
+        const savedProducts = localStorage.getItem("products");
+
+        if (!savedProducts) {
             defaultProducts.forEach((item) => {
                 dispatch(addProduct(item));
             });
         }
-    }, [products, dispatch]);
+    }, [dispatch]);
 
     // ADD BUTTON CLICK
     const handleAddClick = () => {

@@ -1,5 +1,5 @@
 "use client";
-
+import { setProducts } from "@/redux/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/cartSlice";
 import React, { useEffect, useState } from "react";
@@ -8,13 +8,6 @@ import { BsPlusLg } from "react-icons/bs";
 const Trending = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   return (
     <section className="bg-white py-24">
