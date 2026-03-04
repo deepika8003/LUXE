@@ -1,5 +1,5 @@
 "use client";
-
+import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
@@ -10,7 +10,9 @@ import Link from "next/link";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
+  const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
   return (
     <>
       {/* HEADER */}
@@ -72,9 +74,11 @@ const Nav = () => {
                     {" "}
                     <MdOutlineShoppingBag className="text-xl text-black" />
                   </a>
-                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
-                    2
-                  </span>
+                  {totalQty > 0 && (
+                    <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
+                      {totalQty}
+                    </span>
+                  )}
                 </div>
 
                 <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">

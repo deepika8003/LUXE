@@ -9,8 +9,10 @@ import { FaCaretDown } from "react-icons/fa";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const products = useSelector((state) => state.product.products);
+  const [isMounted, setIsMounted] = useState(false);
   const [openQty, setOpenQty] = useState(null);
   const [customQty, setCustomQty] = useState("");
   const [showQtyModal, setShowQtyModal] = useState(false);
@@ -18,6 +20,18 @@ const Cart = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(500);
 
+  const cart = cartItems
+    .map((cartItem) => {
+      const product = products.find((p) => p.id === cartItem.id);
+      if (!product) return null;
+
+      return {
+        ...product,
+        qty: cartItem.qty,
+      };
+    })
+
+    .filter(Boolean);
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;
     const originalPrice = item.originalPrice ?? item.price ?? 0;

@@ -8,6 +8,7 @@ import { BsPlusLg } from "react-icons/bs";
 const Trending = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
+  console.log(products);
 
   return (
     <section className="bg-white py-24">
@@ -22,10 +23,13 @@ const Trending = () => {
               className="min-w-[300px] md:min-w-[350px] group cursor-pointer"
             >
               <div className="relative overflow-hidden mb-4 aspect-[3/4]">
-                <div
-                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
-                  style={{ backgroundImage: `url("${item.image}")` }}
-                ></div>
+                <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105 bg-cover bg-center">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
 
                 <div className="absolute bottom-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <button

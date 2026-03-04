@@ -15,13 +15,13 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   useEffect(() => {
@@ -49,33 +49,46 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
   }, [mode, productData]);
 
   const outSideClose = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+    if (e.target === e.currentTarget) onClose();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const product = {
-      id: mode === "edit" ? productData.id : Date.now(),
-      name,
-      sku,
-      category,
-      price: Number(price),
-      stock: Number(stock),
-      status,
-      image,
-      description: description || "No description",
-      originalPrice: Number(price),
-      discount: 5,
-      offerCount: 0,
-      delivery: "Estimated 5-7 days",
-    };
+    let product;
 
-    if (onSave) {
-      onSave(product);
+    if (mode === "edit") {
+      // Preserve all existing fields (including discount, offerCount, delivery)
+      product = {
+        ...productData,
+        name,
+        sku,
+        category,
+        price: Number(price),
+        stock: Number(stock),
+        status,
+        image,
+        description: description || "No description",
+      };
+    } else {
+      // Add mode: no id (slice will generate), set defaults
+      product = {
+        name,
+        sku,
+        category,
+        price: Number(price),
+        stock: Number(stock),
+        status,
+        image,
+        description: description || "No description",
+        originalPrice: Number(price),
+        discount: 5,
+        offerCount: 0,
+        delivery: "Estimated 5-7 days",
+      };
     }
+
+    if (onSave) onSave(product);
     onClose();
   };
 
@@ -84,7 +97,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
       onClick={outSideClose}
     >
-      {/* MODAL BOX */}
       <div className="bg-white w-[90%] max-w-2xl rounded-xl shadow-lg max-h-[calc(100vh-80px)] flex flex-col">
         {/* HEADER */}
         <div className="sticky top-0 bg-white z-20 flex justify-between items-start px-6 py-5 border-b border-[#e0e0e0]">
@@ -93,7 +105,8 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               {mode === "edit" ? "Edit Product" : "Add New Product"}
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">
-              Fill in the details below to add a new product to the catalog.
+              Fill in the details below to {mode === "edit" ? "update" : "add"}{" "}
+              a product.
             </p>
           </div>
           <button
@@ -109,7 +122,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
           onSubmit={handleSubmit}
           className="flex flex-col flex-1 overflow-hidden"
         >
-          {/* SCROLLABLE BODY */}
           <div className="px-6 py-6 space-y-5 overflow-y-auto flex-1">
             {/* PRODUCT NAME */}
             <div>
@@ -205,6 +217,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
               </div>
             </div>
 
+            {/* STATUS & IMAGE */}
             <div className="grid md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-black text-sm font-semibold mb-2">
@@ -238,6 +251,13 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   onChange={handleImageChange}
                   className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
+                {image && (
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="mt-3 w-full h-40 object-contain border border-gray-300 rounded-md"
+                  />
+                )}
               </div>
             </div>
           </div>

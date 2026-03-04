@@ -62,7 +62,6 @@ const AdminProduct = ({
   const totalItems = products.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
-  // Reset page if products change
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
@@ -116,7 +115,6 @@ const AdminProduct = ({
           </div>
         ))}
       </div>
-      {/*  TABLE SECTION  */}
 
       <div className="bg-white rounded-xl border border-[#e0e0e0] overflow-hidden">
         <div className="flex justify-between p-6 border-b border-[#e0e0e0]">
@@ -137,7 +135,6 @@ const AdminProduct = ({
 
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            {/* table header */}
             <thead>
               <tr className="bg-[#f8fafc]">
                 <th className="w-[32%] py-3 px-6 text-xs font-bold text-[#64748b] tracking-widest">
@@ -160,7 +157,6 @@ const AdminProduct = ({
                 </th>
               </tr>
             </thead>
-            {/* table body */}
             <tbody>
               {currentProducts.length > 0 ? (
                 currentProducts.map((item) => (
@@ -174,6 +170,10 @@ const AdminProduct = ({
                           src={item.image || "https://via.placeholder.com/50"}
                           alt={item.name}
                           className="w-12 h-12 rounded-md object-cover flex-shrink-0"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/50";
+                          }}
                         />
                         <div className="min-w-0">
                           <h2 className="text-sm md:text-md font-serif font-semibold text-black truncate">
@@ -215,7 +215,7 @@ const AdminProduct = ({
                     </td>
 
                     <td className="w-[14%] py-4 px-6 align-middle">
-                      <div className="flex items-center gap-3 text-sm  cursor-pointer">
+                      <div className="flex items-center gap-3 text-sm cursor-pointer">
                         <span
                           className="font-bold text-[#1241a1] hover:text-blue-950"
                           onClick={() => onEditClick(item)}
@@ -243,7 +243,6 @@ const AdminProduct = ({
                 </tr>
               )}
             </tbody>
-            {/* table footer */}
             <tfoot>
               <tr>
                 <td colSpan="100%">
@@ -293,7 +292,7 @@ const AdminProduct = ({
                             ${
                               currentPage === page
                                 ? "bg-gray-900 text-white border-gray-900"
-                                : "border-[#e0e0e0] text-black  hover:bg-gray-50"
+                                : "border-[#e0e0e0] text-black hover:bg-gray-50"
                             }`}
                           >
                             {page}
@@ -306,7 +305,7 @@ const AdminProduct = ({
                         onClick={() =>
                           setCurrentPage((p) => Math.min(p + 1, totalPages))
                         }
-                        className={`px-3 py-1.5  text-xs border rounded-sm transition
+                        className={`px-3 py-1.5 text-xs border rounded-sm transition
                         ${
                           currentPage === totalPages
                             ? "text-gray-300 border-gray-200 cursor-not-allowed"
