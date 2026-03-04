@@ -8,11 +8,14 @@ import { setProducts } from "@/redux/productSlice";
 
 function PersistLoader({ children }) {
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart.cartItems);
-    const products = useSelector((state) => state.product.products);
 
-    //  Load once
+    const cart = useSelector((state) => state?.cart?.cartItems || []);
+    const products = useSelector((state) => state?.product?.products || []);
+
+    // Load saved data from localStorage (only in browser)
     useEffect(() => {
+        if (typeof window === "undefined") return;
+
         const savedCart = localStorage.getItem("cart");
         const savedProducts = localStorage.getItem("products");
 
@@ -25,13 +28,18 @@ function PersistLoader({ children }) {
         }
     }, [dispatch]);
 
-    //  Save automatically
+    // Save cart automatically
     useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart));
+        if (typeof window !== "undefined") {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
     }, [cart]);
 
+    // Save products automatically
     useEffect(() => {
-        localStorage.setItem("products", JSON.stringify(products));
+        if (typeof window !== "undefined") {
+            localStorage.setItem("products", JSON.stringify(products));
+        }
     }, [products]);
 
     return children;
