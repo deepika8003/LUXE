@@ -1,4 +1,4 @@
-import Product from '@/pages/ProductDetails/Product'
+import Product from '@/app/shoppingDetails/Product'
 
 import React from 'react'
 

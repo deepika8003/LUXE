@@ -1,7 +1,7 @@
 
 import HomeLayout from "@/app/components/layout/HomeLayout";
 
-import HomePage from "@/pages/HomePage";
+import HomePage from "@/app/components/HomePage/HomePage";
 
 
 

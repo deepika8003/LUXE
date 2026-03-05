@@ -71,7 +71,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
         description: description || "No description",
       };
     } else {
-      
       product = {
         name,
         sku,

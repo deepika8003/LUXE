@@ -171,7 +171,7 @@ const Analytics = () => {
             <p className="text-sm text-gray-500">
               You can see monthly sales volume form here
             </p>
-            <div className="w-full h-[300px]  mt-5">
+            {/* <div className="w-full h-80   mt-5">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={salesData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -188,7 +188,7 @@ const Analytics = () => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
           </div>
 
           {/* Recent Orders */}
@@ -371,7 +371,7 @@ const Analytics = () => {
             </div>
 
             <p className="mt-4 text-black flex gap-3">
-              Insight craeted by
+              Insight created by
               <span className="w-7 h-7 flex items-center justify-center bg-green-300 rounded-full">
                 <TiUser className="text-black" />
               </span>

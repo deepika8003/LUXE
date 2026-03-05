@@ -1,6 +1,6 @@
 "use client"
 import HomeLayout from '@/app/components/layout/HomeLayout'
-import TrackOrder from '@/pages/trackorder/TrackOrder'
+import TrackOrder from '@/app/trackorder/TrackOrder'
 import React from 'react'
 
 const page = () => {

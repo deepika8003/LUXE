@@ -1,5 +1,5 @@
 import AdminLayout from '@/app/components/layout/AdminLayout'
-import Analytics from '@/pages/AdminPage/Analytics'
+import Analytics from '@/app/admin/analytics/Analytics'
 import React from 'react'
 
 const page = () => {
