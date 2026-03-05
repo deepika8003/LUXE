@@ -1,6 +1,6 @@
 "use client"
 import HomeLayout from '@/app/components/layout/HomeLayout'
-import Cart from '@/app/components/Cart/Cart'
+import Cart from '@/pages/Cart/Cart'
 import React from 'react'
 
 const page = () => {

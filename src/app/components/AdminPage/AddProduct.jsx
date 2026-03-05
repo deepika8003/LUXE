@@ -71,7 +71,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
         description: description || "No description",
       };
     } else {
-      // Add mode: no id (slice will generate), set defaults
+      
       product = {
         name,
         sku,

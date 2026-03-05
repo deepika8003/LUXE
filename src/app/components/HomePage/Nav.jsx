@@ -31,10 +31,10 @@ const Nav = () => {
             {/* LAPTOP LEFT MENU */}
             <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold">
               <li className="cursor-pointer hover:text-[#1152d4]">
-                <a href="#">New Arrivals</a>
+                <Link href="#">New Arrivals</Link>
               </li>
               <li className="cursor-pointer hover:text-[#1152d4]">
-                <a href="#">Collections</a>
+                <Link href="#">Collections</Link>
               </li>
             </ul>
           </div>
@@ -56,10 +56,10 @@ const Nav = () => {
             <div className="hidden lg:flex items-center gap-12">
               <ul className="text-black font-semibold flex gap-12 text-[12px]">
                 <li className="cursor-pointer hover:text-[#1152d4]">
-                  <a href="#">Men</a>
+                  <Link href="#">Men</Link>
                 </li>
                 <li className="cursor-pointer hover:text-[#1152d4]">
-                  <a href="#">Women</a>
+                  <Link href="#">Women</Link>
                 </li>
               </ul>
 
@@ -70,10 +70,10 @@ const Nav = () => {
                 </div>
 
                 <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-                  <a href="/cart">
+                  <Link href="/cart">
                     {" "}
                     <MdOutlineShoppingBag className="text-xl text-black" />
-                  </a>
+                  </Link>
                   {totalQty > 0 && (
                     <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
                       {totalQty}
@@ -124,24 +124,44 @@ const Nav = () => {
           {/* Sidebar Links */}
           <ul className="space-y-2 text-sm font-medium">
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href="/"
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
+                Home
+              </Link>
+            </li>
+            <li className="rounded-lg hover:bg-blue-50">
+              <Link
+                href=""
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 New Arrivals
-              </a>
+              </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href=""
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 Collections
-              </a>
+              </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href=""
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 Men
-              </a>
+              </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href=""
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 Women
-              </a>
+              </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
@@ -152,9 +172,12 @@ const Nav = () => {
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <a className="block px-4 py-3 text-black hover:text-blue-600">
+              <Link
+                href=""
+                className="block px-4 py-3 text-black hover:text-blue-600"
+              >
                 Login
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import { setProducts } from "@/redux/productSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/cartSlice";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { BsPlusLg } from "react-icons/bs";
 const Trending = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
-
+  console.log(products);
   return (
     <section className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -29,7 +29,7 @@ const Trending = () => {
 
                 <div className="absolute bottom-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <button
-                    onClick={() => dispatch(addToCart(item))}
+                    onClick={() => dispatch(addToCart({ id: item.id, qty: 1 }))}
                     className="w-full flex justify-center items-center gap-2 bg-gray-950 active:bg-gray-800 text-white py-4 text-xs font-bold uppercase tracking-widest"
                   >
                     <BsPlusLg />

@@ -10,6 +10,9 @@ import { IoShieldCheckmarkSharp } from "react-icons/io5";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart.cartItems);
+  const products = useSelector((state) => state.product.products);
+  console.log("All Products:", products);
+  console.log("Cart Items:", cart);
   const dispatch = useDispatch();
   const [openQty, setOpenQty] = useState(null);
   const [customQty, setCustomQty] = useState("");
@@ -24,15 +27,17 @@ const Cart = () => {
     return Math.round((originalPrice * (100 - discount)) / 100);
   };
 
-  const totalOriginalPrice = cart.reduce(
-    (sum, item) => sum + (item.originalPrice ?? item.price ?? 0) * item.qty,
-    0,
-  );
+  const totalOriginalPrice = cart.reduce((sum, item) => {
+    const product = products.find((p) => p.id === item.id);
+    if (!product) return sum;
+    return sum + (product.originalPrice ?? product.price ?? 0) * item.qty;
+  }, 0);
 
-  const totalSellingPrice = cart.reduce(
-    (sum, item) => sum + calculateSellingPrice(item) * item.qty,
-    0,
-  );
+  const totalSellingPrice = cart.reduce((sum, item) => {
+    const product = products.find((p) => p.id === item.id);
+    if (!product) return sum;
+    return sum + calculateSellingPrice(product) * item.qty;
+  }, 0);
 
   const totalDiscount = totalOriginalPrice - totalSellingPrice;
   const totalCustomerPrice = totalSellingPrice - (couponDiscount ?? 0);
@@ -53,31 +58,36 @@ const Cart = () => {
 
           {/* PRODUCT LIST */}
           {cart.map((item) => {
-            const sellingPrice = calculateSellingPrice(item);
+            const product = products.find((p) => p.id === item.id);
+
+            if (!product) return null;
+            const sellingPrice = calculateSellingPrice(product);
+            console.log(item);
             return (
-              <div key={item.id} className="bg-white mb-3">
+              <div key={product.id} className="bg-white mb-3">
                 <div className="p-4 flex justify-between gap-4">
                   <div className="flex-1">
                     <h2 className="text-sm md:text-xl text-black">
-                      {item.name}
+                      {product.name}
                     </h2>
                     <p className="text-xs text-gray-500 mt-2 mb-4">
-                      {item.description}
+                      {product.description}
                     </p>
 
                     <p className="text-green-600 text-sm md:text-md font-medium my-1">
-                      {item.discount}0 % off
+                      {product.discount ?? 0}% off
                       <del className="text-gray-400 mx-2">
-                        {item.originalPrice}
+                        ${product.originalPrice ?? product.price}
                       </del>
                       ${sellingPrice}
                     </p>
 
                     <p className="text-xs text-green-600">
-                      {item.offerCount} offers available
+                      {product.offerCount ?? 0} offers available
                     </p>
-
-                    <p className="text-xs text-black mt-5 mb-3">Delivery by</p>
+                    <p className="text-xs text-black mt-5 mb-3">
+                      Delivery by 5 - 7 days
+                    </p>
                   </div>
 
                   {/* IMAGE & QTY */}
@@ -85,8 +95,8 @@ const Cart = () => {
                     {/* IMG */}
                     <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
                       <img
-                        src={item.image}
-                        alt={item.name}
+                        src={product.image}
+                        alt={product.name}
                         className="w-full h-full object-contain"
                       />
                     </div>

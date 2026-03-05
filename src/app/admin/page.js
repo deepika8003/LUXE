@@ -5,51 +5,8 @@ import React, { useState, useEffect } from "react";
 import AdminLayout from "@/app/components/layout/AdminLayout";
 import AdminProduct from "@/app/components/AdminPage/AdminProduct";
 
-const defaultProducts = [
-    {
-        id: 1,
-        name: "Classic Leather Watch",
-        sku: "CLW-001",
-        category: "Accessories",
-        stock: 15,
-        price: 120,
-        status: "Live",
-        image: "/images/Classic Leather Watch.jpg",
-    },
-    {
-        id: 2,
-        name: "Minimal Sneakers",
-        sku: "MS-002",
-        category: "Footwear",
-        stock: 8,
-        price: 90,
-        status: "Live",
-        image: "/images/shoe.jpg",
-    },
-    {
-        id: 3,
-        name: "Denim Jacket",
-        sku: "DJ-003",
-        category: "Clothing",
-        stock: 0,
-        price: 150,
-        status: "Sold Out",
-        image: "/images/denimjacket.jpg",
-    },
-    {
-        id: 4,
-        name: "Summer Hat",
-        sku: "SH-004",
-        category: "Accessories",
-        stock: 20,
-        price: 35,
-        status: "Draft",
-        image: "/images/summerhat.jpg",
-    },
-];
 
 export default function AdminPage() {
-
     const dispatch = useDispatch();
     const products = useSelector((state) => state.product.products);
 
@@ -58,15 +15,6 @@ export default function AdminPage() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showSuccess, setShowSuccess] = useState(false);
 
-    useEffect(() => {
-        const savedProducts = localStorage.getItem("products");
-
-        if (!savedProducts) {
-            defaultProducts.forEach((item) => {
-                dispatch(addProduct(item));
-            });
-        }
-    }, [dispatch]);
 
     // ADD BUTTON CLICK
     const handleAddClick = () => {
@@ -87,15 +35,12 @@ export default function AdminPage() {
         if (mode === "edit") {
             dispatch(updateProduct(data));
         } else {
-            const maxId = products.length
-                ? Math.max(...products.map(p => p.id))
-                : 0;
-            dispatch(addProduct({ ...data, id: maxId + 1 }));
+            // id slice-லேயே add பண்ணும் (addProduct-ல் id generate ஆகும்)
+            dispatch(addProduct(data));
         }
 
         setShowModal(false);
         setShowSuccess(true);
-
         setTimeout(() => {
             setShowSuccess(false);
         }, 3000);
