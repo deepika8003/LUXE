@@ -1,16 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQty } from "@/redux/cartSlice";
-import { setCart } from "@/redux/cartSlice";
 import { ImBoxAdd } from "react-icons/im";
-import { MdDelete, MdErrorOutline } from "react-icons/md";
+import { MdDelete, MdErrorOutline, MdEdit } from "react-icons/md";
 import { FaCaretDown } from "react-icons/fa";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { deleteAddress, setEditAddress } from "@/redux/addressSlice";
+import Link from "next/link";
 
 const Cart = () => {
+  const router = useRouter();
   const cart = useSelector((state) => state.cart.cartItems);
   const products = useSelector((state) => state.product.products);
+  const addresses = useSelector((state) => state.address.addresses);
   console.log("All Products:", products);
   console.log("Cart Items:", cart);
   const dispatch = useDispatch();
@@ -19,7 +23,7 @@ const Cart = () => {
   const [showQtyModal, setShowQtyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [couponDiscount, setCouponDiscount] = useState(500);
+  const [couponDiscount, setCouponDiscount] = useState(0);
 
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;
@@ -47,13 +51,54 @@ const Cart = () => {
         {/* LEFT */}
         <div className="w-full md:w-[70%]">
           {/* ADDRESS */}
-          <div className="flex justify-between items-center bg-white p-4 mb-3">
-            <h3 className="text-black text-sm md:text-md">
-              From Saved Addresses
-            </h3>
-            <button className="text-[#155dfc] font-medium cursor-pointer text-sm md:text-md">
-              Enter Delivery Pincode
-            </button>
+          <div className="flex justify-between items-start bg-white p-4 mb-3">
+            <div className=" p-4 mb-3">
+              <h3 className="text-black text-md font-bold md:text-md mb-3">
+                From Saved Addresses
+              </h3>
+
+              {addresses.length > 0 ? (
+                addresses.map((addr) => (
+                  <div
+                    key={addr.id}
+                    className="text-sm text-black space-y-1 border-b border-gray-300 pb-3 mb-3"
+                  >
+                    <p className="font-medium">{addr.name}</p>
+                    <p>{addr.street}</p>
+                    <p>
+                      {addr.city}, {addr.region}
+                    </p>
+                    <p>
+                      {addr.country} - {addr.postal}
+                    </p>
+                    <p>Phone: {addr.phone}</p>
+
+                    <div className="flex gap-4 mt-2">
+                      <MdEdit
+                        className="cursor-pointer text-blue-600 text-lg"
+                        onClick={() => {
+                          dispatch(setEditAddress(addr));
+                          router.push("/shippingDetails");
+                        }}
+                      />
+
+                      <MdDelete
+                        className="cursor-pointer text-red-600 text-lg"
+                        onClick={() => dispatch(deleteAddress(addr.id))}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm">No address added yet</p>
+              )}
+            </div>
+            <Link
+              href="/shippingDetails"
+              className="text-[#155dfc] p-4  font-medium cursor-pointer text-sm md:text-md"
+            >
+              Add Delivery Address
+            </Link>
           </div>
 
           {/* PRODUCT LIST */}
@@ -180,7 +225,7 @@ const Cart = () => {
 
               <div className="flex justify-between">
                 <h4 className="flex items-center gap-2 text-sm text-gray-600">
-                  Price ({cart.length} items){" "}
+                  Price ({cart.length} items)
                   <MdErrorOutline className="text-[#878787]" />
                 </h4>
                 <p className="font-medium text-black">
@@ -243,7 +288,10 @@ const Cart = () => {
               </p>
             </div>
             <div>
-              <button className="bg-black cursor-pointer text-white px-10 py-3 rounded-sm hover:bg-gray-800 font-medium">
+              <button
+                onClick={() => router.push("/shippingDetails")}
+                className="bg-black cursor-pointer text-white px-10 py-3 rounded-sm hover:bg-gray-800 font-medium"
+              >
                 Continue
               </button>
             </div>
