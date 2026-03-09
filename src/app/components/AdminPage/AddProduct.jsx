@@ -58,7 +58,6 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
     let product;
 
     if (mode === "edit") {
-      // Preserve all existing fields (including discount, offerCount, delivery)
       product = {
         ...productData,
         name,
@@ -72,6 +71,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       };
     } else {
       product = {
+        id: Date.now() + Math.floor(Math.random() * 1000),
         name,
         sku,
         category,
@@ -87,8 +87,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
       };
     }
 
-    if (onSave) onSave(product);
-    onClose();
+    onSave(product);
   };
 
   return (
@@ -248,6 +247,7 @@ const AddProduct = ({ onClose, onSave, mode, productData }) => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
+                  required={mode === "add"}
                   className="w-full outline-0 text-black border border-[#e0e0e0] rounded-lg px-4 py-2.5 text-sm bg-[#f8fafc]"
                 />
                 {image && (

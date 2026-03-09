@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const getSavedProducts = () => {
+    if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("products");
+        return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+};
+
 const initialState = {
-    products: [],
+    products: getSavedProducts(),
 };
 
 const productSlice = createSlice({

@@ -31,7 +31,7 @@ const Nav = () => {
             {/* LAPTOP LEFT MENU */}
             <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold">
               <li className="cursor-pointer hover:text-[#1152d4]">
-                <Link href="#">New Arrivals</Link>
+                <Link href="#">Home</Link>
               </li>
               <li className="cursor-pointer hover:text-[#1152d4]">
                 <Link href="#">Collections</Link>

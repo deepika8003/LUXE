@@ -83,7 +83,9 @@ const AdminProduct = ({
             <span className="font-bold text-sm md:text-base">
               {mode === "edit"
                 ? "Product updated successfully!"
-                : "Product added successfully!"}
+                : mode === "delete"
+                  ? "Product deleted successfully!"
+                  : "Product added successfully!"}
             </span>
           </div>
         </div>

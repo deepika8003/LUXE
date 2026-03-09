@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQty } from "@/redux/cartSlice";
 import { ImBoxAdd } from "react-icons/im";
@@ -24,6 +24,8 @@ const Cart = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;
@@ -31,20 +33,77 @@ const Cart = () => {
     return Math.round((originalPrice * (100 - discount)) / 100);
   };
 
-  const totalOriginalPrice = cart.reduce((sum, item) => {
+  const selectedCart =
+    selectedItems.length === 0
+      ? cart
+      : cart.filter((item) => selectedItems.includes(item.id));
+
+  // total orginal price
+  const totalOriginalPrice = selectedCart.reduce((sum, item) => {
     const product = products.find((p) => p.id === item.id);
     if (!product) return sum;
-    return sum + (product.originalPrice ?? product.price ?? 0) * item.qty;
+    const price = product.originalPrice ?? product.price ?? 0;
+    return sum + price * item.qty;
   }, 0);
 
-  const totalSellingPrice = cart.reduce((sum, item) => {
+  // total selling price
+  const totalSellingPrice = selectedCart.reduce((sum, item) => {
     const product = products.find((p) => p.id === item.id);
     if (!product) return sum;
-    return sum + calculateSellingPrice(product) * item.qty;
+    const selling = calculateSellingPrice(product);
+    return sum + selling * item.qty;
   }, 0);
 
   const totalDiscount = totalOriginalPrice - totalSellingPrice;
   const totalCustomerPrice = totalSellingPrice - (couponDiscount ?? 0);
+  // toggle select
+  const toggleSelect = (id) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  };
+
+  // toggle select all
+  const toggleSelectAll = () => {
+    if (selectedItems.length === cart.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cart.map((item) => item.id));
+    }
+  };
+  const handleContinue = () => {
+    if (!selectedAddress) {
+      alert("Please select an address");
+      return;
+    }
+
+    if (selectedItems.length === 0) {
+      alert("Please select products");
+      return;
+    }
+
+    localStorage.setItem("checkoutItems", JSON.stringify(selectedCart));
+    localStorage.setItem("selectedAddress", selectedAddress);
+
+    router.push("/payment");
+  };
+  const [cartChecked, setCartChecked] = useState(false);
+
+  useEffect(() => {
+    if (cartChecked) return;
+
+    if (cart.length === 0) {
+      alert("Your cart is empty. Add your products");
+      router.push("/");
+    }
+
+    setCartChecked(true);
+  }, [cart]);
+
+  useEffect(() => {
+    setSelectedItems(cart.map((item) => item.id));
+  }, [cart]);
+
   return (
     <section className="w-full bg-[#f6f6f8] pt-17">
       <div className="max-w-7xl mx-auto sm:px-6 py-6 md:flex gap-4">
@@ -59,33 +118,42 @@ const Cart = () => {
 
               {addresses.length > 0 ? (
                 addresses.map((addr) => (
-                  <div
-                    key={addr.id}
-                    className="text-sm text-black space-y-1 border-b border-gray-300 pb-3 mb-3"
-                  >
-                    <p className="font-medium">{addr.name}</p>
-                    <p>{addr.street}</p>
-                    <p>
-                      {addr.city}, {addr.region}
-                    </p>
-                    <p>
-                      {addr.country} - {addr.postal}
-                    </p>
-                    <p>Phone: {addr.phone}</p>
+                  <div key={addr.id} className="flex gap-2 items-start">
+                    <input
+                      type="radio"
+                      name="selectedAddress"
+                      checked={selectedAddress === addr.id}
+                      onChange={() => setSelectedAddress(addr.id)}
+                    />
 
-                    <div className="flex gap-4 mt-2">
-                      <MdEdit
-                        className="cursor-pointer text-blue-600 text-lg"
-                        onClick={() => {
-                          dispatch(setEditAddress(addr));
-                          router.push("/shippingDetails");
-                        }}
-                      />
+                    <div
+                      key={addr.id}
+                      className="text-sm text-black space-y-1 border-b border-gray-300 pb-3 mb-3"
+                    >
+                      <p className="font-medium">{addr.name}</p>
+                      <p>{addr.street}</p>
+                      <p>
+                        {addr.city}, {addr.region}
+                      </p>
+                      <p>
+                        {addr.country} - {addr.postal}
+                      </p>
+                      <p>Phone: {addr.phone}</p>
 
-                      <MdDelete
-                        className="cursor-pointer text-red-600 text-lg"
-                        onClick={() => dispatch(deleteAddress(addr.id))}
-                      />
+                      <div className="flex gap-4 mt-2">
+                        <MdEdit
+                          className="cursor-pointer text-blue-600 text-lg"
+                          onClick={() => {
+                            dispatch(setEditAddress(addr));
+                            router.push("/shippingDetails");
+                          }}
+                        />
+
+                        <MdDelete
+                          className="cursor-pointer text-red-600 text-lg"
+                          onClick={() => dispatch(deleteAddress(addr.id))}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))
@@ -102,19 +170,37 @@ const Cart = () => {
           </div>
 
           {/* PRODUCT LIST */}
+          <div className="bg-white p-4 mb-3 flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={selectedItems.length === cart.length}
+              onChange={toggleSelectAll}
+            />
+            <p className="text-sm text-black font-medium">Select All</p>
+          </div>
           {cart.map((item) => {
             const product = products.find((p) => p.id === item.id);
 
             if (!product) return null;
             const sellingPrice = calculateSellingPrice(product);
-            console.log(item);
+
             return (
               <div key={product.id} className="bg-white mb-3">
                 <div className="p-4 flex justify-between gap-4">
+                  {/* CHECKBOX */}
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={() => toggleSelect(item.id)}
+                    className="mt-2 mr-3"
+                  />
+
+                  {/* PRODUCT DETAILS */}
                   <div className="flex-1">
                     <h2 className="text-sm md:text-xl text-black">
                       {product.name}
                     </h2>
+
                     <p className="text-xs text-gray-500 mt-2 mb-4">
                       {product.description}
                     </p>
@@ -130,6 +216,7 @@ const Cart = () => {
                     <p className="text-xs text-green-600">
                       {product.offerCount ?? 0} offers available
                     </p>
+
                     <p className="text-xs text-black mt-5 mb-3">
                       Delivery by 5 - 7 days
                     </p>
@@ -137,7 +224,7 @@ const Cart = () => {
 
                   {/* IMAGE & QTY */}
                   <div className="flex flex-col items-end">
-                    {/* IMG */}
+                    {/* IMAGE */}
                     <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
                       <img
                         src={product.image}
@@ -145,6 +232,7 @@ const Cart = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
+
                     {/* QTY */}
                     <div className="relative w-full md:w-32">
                       <div
@@ -180,6 +268,7 @@ const Cart = () => {
                             className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm border-t border-gray-200"
                             onClick={() => {
                               setSelectedItem(item);
+                              setCustomQty(item.qty.toString());
                               setShowQtyModal(true);
                               setOpenQty(null);
                             }}
@@ -195,8 +284,8 @@ const Cart = () => {
                 {/* BUTTONS */}
                 <div className="flex w-full border-t border-[#f0f0f0]">
                   <button className="flex items-center cursor-pointer justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50">
-                    <ImBoxAdd className="text-sm text-[#ababab]" /> Save For
-                    Later
+                    <ImBoxAdd className="text-sm text-[#ababab]" />
+                    Save For Later
                   </button>
 
                   <button
@@ -206,7 +295,7 @@ const Cart = () => {
                       setShowDeleteModal(true);
                     }}
                   >
-                    <MdDelete className="text-[#ababab]  text-xl" />
+                    <MdDelete className="text-[#ababab] text-xl" />
                     Remove
                   </button>
                 </div>
@@ -225,7 +314,8 @@ const Cart = () => {
 
               <div className="flex justify-between">
                 <h4 className="flex items-center gap-2 text-sm text-gray-600">
-                  Price ({cart.length} items)
+                  Price ({selectedCart.reduce((sum, item) => sum + item.qty, 0)}{" "}
+                  items)
                   <MdErrorOutline className="text-[#878787]" />
                 </h4>
                 <p className="font-medium text-black">
@@ -289,7 +379,7 @@ const Cart = () => {
             </div>
             <div>
               <button
-                onClick={() => router.push("/shippingDetails")}
+                onClick={handleContinue}
                 className="bg-black cursor-pointer text-white px-10 py-3 rounded-sm hover:bg-gray-800 font-medium"
               >
                 Continue
@@ -382,6 +472,10 @@ const Cart = () => {
               <button
                 className="text-red-600 text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
                 onClick={() => {
+                  setSelectedItems((prev) =>
+                    prev.filter((id) => id !== selectedItem.id),
+                  );
+
                   dispatch(removeFromCart(selectedItem.id));
                   setShowDeleteModal(false);
                 }}

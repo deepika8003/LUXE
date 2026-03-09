@@ -4,18 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "./productSlice";
 
 export default function ProductPersistence({ children }) {
+
     const dispatch = useDispatch();
     const products = useSelector((state) => state.product.products);
 
-
+    // LOAD products from localStorage
     useEffect(() => {
-        const saved = localStorage.getItem("products");
-        if (saved) {
-            dispatch(setProducts(JSON.parse(saved)));
+        const savedProducts = localStorage.getItem("products");
+
+        if (savedProducts) {
+            dispatch(setProducts(JSON.parse(savedProducts)));
         }
     }, [dispatch]);
 
-
+    // SAVE products to localStorage
     useEffect(() => {
         localStorage.setItem("products", JSON.stringify(products));
     }, [products]);

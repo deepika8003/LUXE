@@ -35,7 +35,7 @@ export default function AdminPage() {
         if (mode === "edit") {
             dispatch(updateProduct(data));
         } else {
-            // id slice-லேயே add பண்ணும் (addProduct-ல் id generate ஆகும்)
+
             dispatch(addProduct(data));
         }
 
@@ -51,9 +51,15 @@ export default function AdminPage() {
         const confirmDelete = window.confirm("Are you sure you want to delete?");
         if (confirmDelete) {
             dispatch(deleteProduct(id));
+
+            setMode("delete");
+            setShowSuccess(true);
+
+            setTimeout(() => {
+                setShowSuccess(false);
+            }, 3000);
         }
     };
-
     return (
         <AdminLayout onAddProductClick={handleAddClick}>
             <AdminProduct
