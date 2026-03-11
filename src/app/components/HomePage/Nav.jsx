@@ -131,14 +131,7 @@ const Nav = () => {
                 Home
               </Link>
             </li>
-            <li className="rounded-lg hover:bg-blue-50">
-              <Link
-                href=""
-                className="block px-4 py-3 text-black hover:text-blue-600"
-              >
-                New Arrivals
-              </Link>
-            </li>
+
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/collections"
