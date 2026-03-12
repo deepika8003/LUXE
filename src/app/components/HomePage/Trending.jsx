@@ -4,11 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/cartSlice";
 import React, { useEffect, useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
+import { getAllProducts } from "@/api/productApi";
 
 const Trending = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
   console.log(products);
+  const [apiProducts, setApiProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const data = await getAllProducts();
+      setApiProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+  const allProducts = [...products, ...apiProducts];
   return (
     <section className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -16,7 +27,7 @@ const Trending = () => {
           Trending Now
         </h2>
         <div className="flex gap-6 overflow-x-auto pb-10">
-          {products.map((item) => (
+          {allProducts?.slice(0, 8).map((item) => (
             <div
               key={item.id}
               className="min-w-[300px] md:min-w-[350px] group cursor-pointer"
@@ -29,7 +40,21 @@ const Trending = () => {
 
                 <div className="absolute bottom-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <button
-                    onClick={() => dispatch(addToCart({ id: item.id, qty: 1 }))}
+                    onClick={() =>
+                      dispatch(
+                        addToCart({
+                          id: item.id,
+                          name: item.name,
+                          price: item.price,
+                          image: item.image,
+                          description: item.description,
+                          discount: item.discount,
+                          originalPrice: item.originalPrice,
+                          offerCount: item.offerCount,
+                          qty: 1,
+                        }),
+                      )
+                    }
                     className="w-full flex justify-center items-center gap-2 bg-gray-950 active:bg-gray-800 text-white py-4 text-xs font-bold uppercase tracking-widest"
                   >
                     <BsPlusLg />

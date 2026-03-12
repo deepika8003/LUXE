@@ -12,8 +12,8 @@ import Link from "next/link";
 
 const Cart = () => {
   const router = useRouter();
-  const cart = useSelector((state) => state.cart.cartItems);
   const products = useSelector((state) => state.product.products);
+  const cart = useSelector((state) => state.cart.cartItems);
   const addresses = useSelector((state) => state.address.addresses);
   console.log("All Products:", products);
   console.log("Cart Items:", cart);
@@ -40,7 +40,7 @@ const Cart = () => {
 
   // total orginal price
   const totalOriginalPrice = selectedCart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
+    const product = item;
     if (!product) return sum;
     const price = product.originalPrice ?? product.price ?? 0;
     return sum + price * item.qty;
@@ -48,7 +48,7 @@ const Cart = () => {
 
   // total selling price
   const totalSellingPrice = selectedCart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
+    const product = item;
     if (!product) return sum;
     const selling = calculateSellingPrice(product);
     return sum + selling * item.qty;
@@ -179,11 +179,8 @@ const Cart = () => {
             <p className="text-sm text-black font-medium">Select All</p>
           </div>
           {cart.map((item) => {
-            const product = products.find((p) => p.id === item.id);
-
-            if (!product) return null;
+            const product = item;
             const sellingPrice = calculateSellingPrice(product);
-
             return (
               <div key={product.id} className="bg-white mb-3">
                 <div className="p-4 flex justify-between gap-4">
@@ -396,7 +393,7 @@ const Cart = () => {
           onClick={() => setShowQtyModal(false)}
         >
           <div
-            className="bg-white w-[80%] rounded-xl shadow-lg"
+            className="bg-white w-[70%] md:w-[40%] rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4">
@@ -447,7 +444,7 @@ const Cart = () => {
           onClick={() => setShowDeleteModal(false)}
         >
           <div
-            className="bg-white w-[80%] rounded-xl shadow-lg"
+            className="bg-white w-[80%] sm:w-[50%] rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* CONTENT */}

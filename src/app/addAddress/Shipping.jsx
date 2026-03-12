@@ -63,15 +63,12 @@ const Shipping = () => {
   };
 
   const totalOriginalPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + (product.originalPrice ?? product.price ?? 0) * item.qty;
+    const price = item.originalPrice ?? item.price ?? 0;
+    return sum + price * item.qty;
   }, 0);
 
   const totalSellingPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + calculateSellingPrice(product) * item.qty;
+    return sum + calculateSellingPrice(item) * item.qty;
   }, 0);
 
   const totalDiscount = totalOriginalPrice - totalSellingPrice;

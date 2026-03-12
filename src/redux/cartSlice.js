@@ -25,7 +25,7 @@ const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action) => {
             const existing = state.cartItems.find(
-                (i) => i.id === action.payload.id
+                (item) => item.id.toString() === action.payload.id.toString()
             );
 
             if (existing) {
@@ -33,13 +33,19 @@ const cartSlice = createSlice({
             } else {
                 state.cartItems.push({
                     id: action.payload.id,
+                    name: action.payload.name,
+                    price: action.payload.price,
+                    image: action.payload.image,
+                    description: action.payload.description,
+                    discount: action.payload.discount,
+                    originalPrice: action.payload.originalPrice,
+                    offerCount: action.payload.offerCount,
                     qty: action.payload.qty || 1,
                 });
             }
 
             saveCart(state.cartItems);
         },
-
         removeFromCart: (state, action) => {
             state.cartItems = state.cartItems.filter(
                 (item) => item.id !== action.payload

@@ -6,6 +6,10 @@ import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaHome, FaRegUserCircle } from "react-icons/fa";
+import { IoIosMan, IoIosWoman } from "react-icons/io";
+import { AiOutlineProduct } from "react-icons/ai";
 import Link from "next/link";
 
 const Nav = () => {
@@ -126,8 +130,9 @@ const Nav = () => {
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/"
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
               >
+                <FaHome className="text-lg" />
                 Home
               </Link>
             </li>
@@ -135,40 +140,45 @@ const Nav = () => {
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/collections"
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
               >
+                <AiOutlineProduct className="text-lg" />
                 Collections
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href=""
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
               >
+                <IoIosMan className="text-lg" />
                 Men
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href=""
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
               >
+                <IoIosWoman className="text-lg" />
                 Women
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/cart"
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
               >
+                <FaShoppingCart className="text-lg" />
                 Cart
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href=""
-                className="block px-4 py-3 text-black hover:text-blue-600"
+                className="  flex  items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
+                <FaRegUserCircle className="text-lg" />
                 Login
               </Link>
             </li>

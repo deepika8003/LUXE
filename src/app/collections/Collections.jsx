@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 // api
 import { getAllProducts } from "@/api/productApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "@/redux/productSlice";
 
 // react icons
 import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import { addToCart } from "@/redux/cartSlice";
+
 const normalizeProduct = (item) => {
   return {
     id: item.id,
@@ -20,13 +21,16 @@ const normalizeProduct = (item) => {
     image: item.image,
     stock: item.stock ?? 100,
     status: "Live",
+    originalPrice: item.price,
+    discount: item.discount ?? 5,
+    offerCount: item.offerCount ?? 0,
   };
 };
 const Collections = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [apiProducts, setApiProducts] = useState([]);
-
+  const [likedProducts, setLikedProducts] = useState([]);
   // get products
   const dispatch = useDispatch();
   const adminProducts = useSelector((state) => state.product.products);
@@ -43,7 +47,7 @@ const Collections = () => {
         console.log(error);
       }
     };
-
+    // fetch api
     fetchProducts();
   }, []);
   const categories = ["MEN", "WOMEN", "ACCESSORIES", "NEW ARRIVALS"];
@@ -62,6 +66,7 @@ const Collections = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [images.length]);
+
   // mobile view filter
 
   useEffect(() => {
@@ -76,6 +81,26 @@ const Collections = () => {
 
   const [visibleProducts, setVisibleProducts] = useState(8);
   const allProducts = [...adminProducts, ...apiProducts];
+
+  // liked products
+  const toggleLike = (id) => {
+    setLikedProducts((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  };
+
+  // add to cart
+  const handleAddToCart = (product) => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        qty: 1,
+      }),
+    );
+  };
   return (
     <>
       {/* Header section */}
@@ -140,14 +165,14 @@ const Collections = () => {
         <div className="hidden md:flex max-w-7xl mx-auto px-6 py-4 flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-3">
             <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option>Category</option>
+              <option className="texe-black">Category</option>
               <option>Men</option>
               <option>Women</option>
               <option>Accessories</option>
             </select>
 
             <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option>Price Range</option>
+              <option className="texe-black">Price Range</option>
               <option>Under $50</option>
               <option>$50 – $100</option>
               <option>$100 – $200</option>
@@ -155,13 +180,13 @@ const Collections = () => {
             </select>
 
             <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option>Discount</option>
+              <option className="texe-black">Discount</option>
               <option>10%+</option>
               <option>20%+</option>
               <option>30%+</option>
             </select>
             <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option>Brand</option>
+              <option className="texe-black">Brand</option>
               <option>Nike</option>
               <option>Zara</option>
               <option>H&M</option>
@@ -169,7 +194,7 @@ const Collections = () => {
             </select>
 
             <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option>Rating</option>
+              <option className="texe-black">Rating</option>
               <option>4 ★ & above</option>
               <option>3 ★ & above</option>
               <option>2 ★ & above</option>
@@ -216,41 +241,41 @@ const Collections = () => {
 
           {/* CHECKBOX FILTERS */}
           <div className="space-y-6 text-sm">
-            <div>
-              <p className="font-semibold mb-2">Category</p>
+            <div className="text-gray-700">
+              <p className="font-semibold mb-2 text-black">Category</p>
 
-              <label className="flex items-center gap-2">
+              <label className="flex items-center  gap-2">
                 <input type="checkbox" /> Men
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center  gap-2">
                 <input type="checkbox" /> Women
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center  gap-2">
                 <input type="checkbox" /> Accessories
               </label>
             </div>
 
-            <div>
-              <p className="font-semibold mb-2">Price</p>
+            <div className="text-gray-700">
+              <p className="font-semibold text-black mb-2">Price</p>
 
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> Under $50
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> $50 - $100
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> $100 - $200
               </label>
             </div>
 
-            <div>
-              <p className="font-semibold mb-2">Discount</p>
+            <div className="text-gray-700">
+              <p className="font-semibold text-black mb-2">Discount</p>
 
               <label className="flex items-center gap-2">
                 <input type="checkbox" /> 10%+
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> 20%+
               </label>
               <label className="flex items-center gap-2">
@@ -258,16 +283,16 @@ const Collections = () => {
               </label>
             </div>
             {/* BRAND */}
-            <div>
-              <p className="font-semibold mb-2">Brand</p>
+            <div className="text-gray-700">
+              <p className="font-semibold text-black mb-2">Brand</p>
 
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> Nike
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> Zara
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> H&M
               </label>
               <label className="flex items-center gap-2">
@@ -276,13 +301,13 @@ const Collections = () => {
             </div>
 
             {/* RATING */}
-            <div>
-              <p className="font-semibold mb-2">Rating</p>
+            <div className="text-gray-700">
+              <p className="font-semibold text-black mb-2">Rating</p>
 
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> 4★ & above
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex  items-center gap-2">
                 <input type="checkbox" /> 3★ & above
               </label>
               <label className="flex items-center gap-2">
@@ -323,8 +348,15 @@ const Collections = () => {
                       {product.badge}
                     </span>
                   )}
-
-                  <button className="absolute top-2 right-2 bg-white p-1.5 md:p-2 rounded-full shadow hover:bg-gray-100 transition">
+                  <button
+                    onClick={() => toggleLike(product.id)}
+                    className={`absolute top-2 right-2 p-1.5 md:p-2 rounded-full shadow transition 
+                      ${
+                        likedProducts.includes(product.id)
+                          ? "bg-red-500 text-white"
+                          : "bg-white hover:bg-gray-100 text-black"
+                      }`}
+                  >
                     <FaRegHeart className="text-xs md:text-sm" />
                   </button>
                 </div>
@@ -341,7 +373,7 @@ const Collections = () => {
 
                   {/* PRICE */}
                   <div className="flex items-center gap-1 md:gap-2 mt-2 md:mt-3 flex-wrap">
-                    <span className="text-sm md:text-lg font-bold">
+                    <span className="text-sm text-black md:text-lg font-bold">
                       ${product.price}
                     </span>
 
@@ -354,7 +386,10 @@ const Collections = () => {
 
                   {/* BUTTON */}
                   <div className="mt-auto pt-3 md:pt-4">
-                    <button className="w-full flex items-center justify-center gap-2 md:gap-3 bg-black text-white text-[11px] md:text-sm py-1.5 md:py-2 rounded-md hover:bg-gray-800 transition">
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="w-full flex items-center justify-center gap-2 md:gap-3 bg-black text-white text-[11px] md:text-sm py-1.5 md:py-2 rounded-md hover:bg-gray-800 transition"
+                    >
                       <FaShoppingCart className="text-xs md:text-sm" />
                       Add to Cart
                     </button>
@@ -369,7 +404,7 @@ const Collections = () => {
             {visibleProducts < allProducts.length && (
               <button
                 onClick={() => setVisibleProducts((prev) => prev + 8)}
-                className="border border-gray-400 px-6 md:px-8 py-2 md:py-3 text-xs md:text-sm rounded-md hover:bg-black hover:text-white transition"
+                className="border border-gray-400 text-black px-6 md:px-8 py-2 md:py-3 text-xs md:text-sm rounded-md hover:bg-black hover:text-white transition"
               >
                 LOAD MORE PRODUCTS
               </button>
