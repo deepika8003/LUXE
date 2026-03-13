@@ -1,29 +1,29 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { addToCart } from "@/redux/cartSlice";
 // api
 import { getAllProducts } from "@/api/productApi";
 import { useDispatch, useSelector } from "react-redux";
 
 // react icons
-import { FaRegHeart } from "react-icons/fa";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-import { addToCart } from "@/redux/cartSlice";
+import { FaSliders } from "react-icons/fa6";
 
 const normalizeProduct = (item) => {
   return {
     id: item.id,
-    name: item.name || item.title,
+    name: item.title,
     description: item.description,
-    category: item.category,
+    category: item.category?.toUpperCase(),
     price: item.price,
     image: item.image,
-    stock: item.stock ?? 100,
+    rating: item.rating?.rate,
+    stock: item.rating?.count || 0,
+    discount: 0,
     status: "Live",
-    originalPrice: item.price,
-    discount: item.discount ?? 5,
-    offerCount: item.offerCount ?? 0,
+    brand: "Fashion",
   };
 };
 const Collections = () => {
@@ -47,7 +47,7 @@ const Collections = () => {
         console.log(error);
       }
     };
-    // fetch api
+
     fetchProducts();
   }, []);
   const categories = ["MEN", "WOMEN", "ACCESSORIES", "NEW ARRIVALS"];
@@ -80,7 +80,93 @@ const Collections = () => {
   }, []);
 
   const [visibleProducts, setVisibleProducts] = useState(8);
+  const loadMore = () => {
+    setVisibleProducts((prev) => prev + 8);
+  };
+
+  const showLess = () => {
+    setVisibleProducts((prev) => {
+      if (prev <= 8) return 8;
+      return prev - 8;
+    });
+  };
   const allProducts = [...adminProducts, ...apiProducts];
+
+  // filter logic
+  const [filters, setFilters] = useState({
+    category: [],
+    price: [],
+    discount: [],
+    brand: [],
+    rating: [],
+  });
+
+  // Handler for desktop dropdowns
+  const handleSelectChange = (type, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [type]: value ? [value] : [],
+    }));
+  };
+
+  // Handler for mobile checkboxes
+  const handleCheckboxChange = (type, value) => {
+    setFilters((prev) => {
+      const alreadySelected = prev[type].includes(value);
+      if (alreadySelected) {
+        return {
+          ...prev,
+          [type]: prev[type].filter((item) => item !== value),
+        };
+      } else {
+        return {
+          ...prev,
+          [type]: [...prev[type], value],
+        };
+      }
+    });
+  };
+
+  const filteredProducts = allProducts.filter((product) => {
+    // CATEGORY
+    if (
+      filters.category.length &&
+      !filters.category.includes(product.category?.toUpperCase())
+    ) {
+      return false;
+    }
+
+    // BRAND
+    if (filters.brand.length && !filters.brand.includes(product.brand)) {
+      return false;
+    }
+
+    // PRICE
+    if (filters.price.length) {
+      const match = filters.price.some((range) => {
+        if (range === "under50") return product.price < 50;
+        if (range === "50to100")
+          return product.price >= 50 && product.price <= 100;
+        if (range === "100to200")
+          return product.price >= 100 && product.price <= 200;
+      });
+      if (!match) return false;
+    }
+
+    // DISCOUNT
+    if (filters.discount.length) {
+      const match = filters.discount.some((d) => product.discount >= Number(d));
+      if (!match) return false;
+    }
+
+    // RATING
+    if (filters.rating.length) {
+      const match = filters.rating.some((r) => product.rating >= Number(r));
+      if (!match) return false;
+    }
+
+    return true;
+  });
 
   // liked products
   const toggleLike = (id) => {
@@ -101,6 +187,17 @@ const Collections = () => {
       }),
     );
   };
+
+  const clearFilters = () => {
+    setFilters({
+      category: [],
+      price: [],
+      discount: [],
+      brand: [],
+      rating: [],
+    });
+  };
+
   return (
     <>
       {/* Header section */}
@@ -155,8 +252,9 @@ const Collections = () => {
 
           <button
             onClick={() => setShowFilter(true)}
-            className="border px-7 py-1 text-sm rounded-sm hover:bg-gray-100"
+            className="flex items-center  gap-3 border px-7 py-1 text-sm rounded-sm hover:bg-gray-100 text-black"
           >
+            <FaSliders className="text-black" />
             Filter
           </button>
         </div>
@@ -164,53 +262,78 @@ const Collections = () => {
         {/* DESKTOP FILTERS */}
         <div className="hidden md:flex max-w-7xl mx-auto px-6 py-4 flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-3">
-            <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option className="texe-black">Category</option>
-              <option>Men</option>
-              <option>Women</option>
-              <option>Accessories</option>
+            {/* CATEGORY */}
+            <select
+              className="border border-gray-300 px-3 py-2 text-sm rounded-md"
+              onChange={(e) => handleSelectChange("category", e.target.value)}
+              value={filters.category[0] || ""}
+            >
+              <option value="">Category</option>
+              <option value="MEN">Men</option>
+              <option value="WOMEN">Women</option>
+              <option value="ACCESSORIES">Accessories</option>
             </select>
 
-            <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option className="texe-black">Price Range</option>
-              <option>Under $50</option>
-              <option>$50 – $100</option>
-              <option>$100 – $200</option>
-              <option>$200+</option>
+            {/* PRICE */}
+            <select
+              className="border border-gray-300 px-3 py-2 text-sm rounded-md"
+              onChange={(e) => handleSelectChange("price", e.target.value)}
+              value={filters.price[0] || ""}
+            >
+              <option value="">Price Range</option>
+              <option value="under50">Under $50</option>
+              <option value="50to100">$50 – $100</option>
+              <option value="100to200">$100 – $200</option>
             </select>
 
-            <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option className="texe-black">Discount</option>
-              <option>10%+</option>
-              <option>20%+</option>
-              <option>30%+</option>
-            </select>
-            <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option className="texe-black">Brand</option>
-              <option>Nike</option>
-              <option>Zara</option>
-              <option>H&M</option>
-              <option>Adidas</option>
+            {/* DISCOUNT */}
+            <select
+              className="border border-gray-300 px-3 py-2 text-sm rounded-md"
+              onChange={(e) => handleSelectChange("discount", e.target.value)}
+              value={filters.discount[0] || ""}
+            >
+              <option value="">Discount</option>
+              <option value="10">10%+</option>
+              <option value="20">20%+</option>
+              <option value="30">30%+</option>
             </select>
 
-            <select className="border border-gray-300 px-3 py-2 text-sm rounded-md">
-              <option className="texe-black">Rating</option>
-              <option>4 ★ & above</option>
-              <option>3 ★ & above</option>
-              <option>2 ★ & above</option>
+            {/* BRAND */}
+            <select
+              className="border border-gray-300 px-3 py-2 text-sm rounded-md"
+              onChange={(e) => handleSelectChange("brand", e.target.value)}
+              value={filters.brand[0] || ""}
+            >
+              <option value="">Brand</option>
+              <option value="Nike">Nike</option>
+              <option value="Zara">Zara</option>
+              <option value="H&M">H&M</option>
+              <option value="Adidas">Adidas</option>
+            </select>
+
+            {/* RATING */}
+            <select
+              className="border border-gray-300 px-3 py-2 text-sm rounded-md"
+              onChange={(e) => handleSelectChange("rating", e.target.value)}
+              value={filters.rating[0] || ""}
+            >
+              <option value="">Rating</option>
+              <option value="4">4 ★ & above</option>
+              <option value="3">3 ★ & above</option>
+              <option value="2">2 ★ & above</option>
             </select>
           </div>
 
+          {/* RIGHT SIDE */}
           <div className="flex items-center gap-6">
             <p className="text-sm text-gray-500">
-              {allProducts.length} Products Found
+              {filteredProducts.length} Products Found
             </p>
-
             <select className="border border-gray-300 px-4 py-2 text-sm rounded-md">
-              <option>Sort: Popularity</option>
-              <option>Newest</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
+              <option value="popular">Sort: Popularity</option>
+              <option value="new">Newest</option>
+              <option value="low">Price: Low to High</option>
+              <option value="high">Price: High to Low</option>
             </select>
           </div>
         </div>
@@ -224,12 +347,13 @@ const Collections = () => {
         }`}
       >
         <div
+          onClick={(e) => e.stopPropagation()}
           className={`bg-white w-72 h-full p-5 overflow-y-auto transform transition-transform duration-300 ${
             showFilter ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold">Filters</h2>
+          <div className="flex justify-between items-center pb-3 mb-6 border-b border-b-[#e0e0e0]">
+            <h2 className="text-lg font-semibold text-black ">Filters</h2>
 
             <button
               onClick={() => setShowFilter(false)}
@@ -245,13 +369,30 @@ const Collections = () => {
               <p className="font-semibold mb-2 text-black">Category</p>
 
               <label className="flex items-center  gap-2">
-                <input type="checkbox" /> Men
+                <input
+                  type="checkbox"
+                  checked={filters.category.includes("MEN")}
+                  onChange={() => handleCheckboxChange("category", "MEN")}
+                />
+                Men
               </label>
               <label className="flex items-center  gap-2">
-                <input type="checkbox" /> Women
+                <input
+                  type="checkbox"
+                  checked={filters.category.includes("WOMEN")}
+                  onChange={() => handleCheckboxChange("category", "WOMEN")}
+                />
+                Women
               </label>
               <label className="flex items-center  gap-2">
-                <input type="checkbox" /> Accessories
+                <input
+                  type="checkbox"
+                  checked={filters.category.includes("ACCESSORIES")}
+                  onChange={() =>
+                    handleCheckboxChange("category", "ACCESSORIES")
+                  }
+                />
+                Accessories
               </label>
             </div>
 
@@ -259,13 +400,28 @@ const Collections = () => {
               <p className="font-semibold text-black mb-2">Price</p>
 
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> Under $50
+                <input
+                  type="checkbox"
+                  checked={filters.price.includes("under50")}
+                  onChange={() => handleCheckboxChange("price", "under50")}
+                />
+                Under $50
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> $50 - $100
+                <input
+                  type="checkbox"
+                  checked={filters.price.includes("50to100")}
+                  onChange={() => handleCheckboxChange("price", "50to100")}
+                />
+                $50 - $100
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> $100 - $200
+                <input
+                  type="checkbox"
+                  checked={filters.price.includes("100to200")}
+                  onChange={() => handleCheckboxChange("price", "100to200")}
+                />
+                $100 - $200
               </label>
             </div>
 
@@ -273,30 +429,66 @@ const Collections = () => {
               <p className="font-semibold text-black mb-2">Discount</p>
 
               <label className="flex items-center gap-2">
-                <input type="checkbox" /> 10%+
+                <input
+                  type="checkbox"
+                  checked={filters.discount.includes("10")}
+                  onChange={() => handleCheckboxChange("discount", "10")}
+                />
+                10%+
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> 20%+
+                <input
+                  type="checkbox"
+                  checked={filters.discount.includes("20")}
+                  onChange={() => handleCheckboxChange("discount", "20")}
+                />
+                20%+
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" /> 30%+
+                <input
+                  type="checkbox"
+                  checked={filters.discount.includes("30")}
+                  onChange={() => handleCheckboxChange("discount", "30")}
+                />
+                30%+
               </label>
             </div>
+
             {/* BRAND */}
             <div className="text-gray-700">
               <p className="font-semibold text-black mb-2">Brand</p>
 
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> Nike
+                <input
+                  type="checkbox"
+                  checked={filters.brand.includes("Nike")}
+                  onChange={() => handleCheckboxChange("brand", "Nike")}
+                />
+                Nike
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> Zara
+                <input
+                  type="checkbox"
+                  checked={filters.brand.includes("Zara")}
+                  onChange={() => handleCheckboxChange("brand", "Zara")}
+                />
+                Zara
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> H&M
+                <input
+                  type="checkbox"
+                  checked={filters.brand.includes("H&M")}
+                  onChange={() => handleCheckboxChange("brand", "H&M")}
+                />
+                H&M
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" /> Adidas
+                <input
+                  type="checkbox"
+                  checked={filters.brand.includes("Adidas")}
+                  onChange={() => handleCheckboxChange("brand", "Adidas")}
+                />
+                Adidas
               </label>
             </div>
 
@@ -305,23 +497,38 @@ const Collections = () => {
               <p className="font-semibold text-black mb-2">Rating</p>
 
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> 4★ & above
+                <input
+                  type="checkbox"
+                  checked={filters.rating.includes("4")}
+                  onChange={() => handleCheckboxChange("rating", "4")}
+                />
+                4★ & above
               </label>
               <label className="flex  items-center gap-2">
-                <input type="checkbox" /> 3★ & above
+                <input
+                  type="checkbox"
+                  checked={filters.rating.includes("3")}
+                  onChange={() => handleCheckboxChange("rating", "3")}
+                />
+                3★ & above
               </label>
               <label className="flex items-center gap-2">
-                <input type="checkbox" /> 2★ & above
+                <input
+                  type="checkbox"
+                  checked={filters.rating.includes("2")}
+                  onChange={() => handleCheckboxChange("rating", "2")}
+                />
+                2★ & above
               </label>
             </div>
           </div>
 
-          {/* APPLY BUTTON */}
+          {/* CLEAR FILTER */}
           <button
-            className="sticky bottom-0 mt-6 w-full bg-black active:bg-gray-800 text-white py-2 rounded-md"
-            onClick={() => setShowFilter(false)}
+            onClick={clearFilters}
+            className="sticky bottom-0 mt-6 w-full bg-black text-white py-2 rounded-md"
           >
-            Apply Filters
+            Clear Filters
           </button>
         </div>
       </div>
@@ -330,7 +537,17 @@ const Collections = () => {
       <section className="bg-gray-100 py-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-            {allProducts.slice(0, visibleProducts).map((product) => (
+            {/* no product found */}
+            {filteredProducts.length === 0 && (
+              <div className="col-span-full text-center py-20">
+                <p className="text-gray-500 text-lg font-medium">
+                  No products found
+                </p>
+              </div>
+            )}
+
+            {/* product card */}
+            {filteredProducts.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
                 className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden flex flex-col h-full"
@@ -340,6 +557,7 @@ const Collections = () => {
                   <img
                     src={product.image}
                     alt={product.name}
+                    loading="lazy"
                     className="w-full h-full object-cover hover:scale-105 transition duration-500"
                   />
 
@@ -380,7 +598,7 @@ const Collections = () => {
                     <span className="text-[10px] md:text-sm text-gray-400 line-through"></span>
 
                     <span className="text-green-600 text-[10px] md:text-sm font-semibold">
-                      {product.discount}
+                      {product.discount}%
                     </span>
                   </div>
 
@@ -399,14 +617,23 @@ const Collections = () => {
             ))}
           </div>
 
-          {/* LOAD MORE */}
+          {/* LOAD MORE & SHOW LESS */}
           <div className="flex justify-center mt-10">
-            {visibleProducts < allProducts.length && (
+            {visibleProducts < filteredProducts.length && (
               <button
-                onClick={() => setVisibleProducts((prev) => prev + 8)}
-                className="border border-gray-400 text-black px-6 md:px-8 py-2 md:py-3 text-xs md:text-sm rounded-md hover:bg-black hover:text-white transition"
+                onClick={loadMore}
+                className="border border-gray-400 px-6 py-2 rounded-md"
               >
-                LOAD MORE PRODUCTS
+                Load More
+              </button>
+            )}
+
+            {visibleProducts > 8 && (
+              <button
+                onClick={showLess}
+                className="border border-gray-400 px-6 py-2 rounded-md ml-3"
+              >
+                Show Less
               </button>
             )}
           </div>

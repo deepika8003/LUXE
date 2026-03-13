@@ -9,6 +9,10 @@ import { IoShieldCheckmarkSharp } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { deleteAddress, setEditAddress } from "@/redux/addressSlice";
 import Link from "next/link";
+import {
+  calculateCartSummary,
+  calculateSellingPrice,
+} from "@/utils/priceUtils";
 
 const Cart = () => {
   const router = useRouter();
@@ -27,35 +31,19 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const calculateSellingPrice = (item) => {
-    const discount = item.discount ?? 0;
-    const originalPrice = item.originalPrice ?? item.price ?? 0;
-    return Math.round((originalPrice * (100 - discount)) / 100);
-  };
-
   const selectedCart =
     selectedItems.length === 0
       ? cart
       : cart.filter((item) => selectedItems.includes(item.id));
 
-  // total orginal price
-  const totalOriginalPrice = selectedCart.reduce((sum, item) => {
-    const product = item;
-    if (!product) return sum;
-    const price = product.originalPrice ?? product.price ?? 0;
-    return sum + price * item.qty;
-  }, 0);
+  const {
+    totalOriginalPrice,
+    totalSellingPrice,
+    totalDiscount,
+    totalCustomerPrice,
+    totalItems,
+  } = calculateCartSummary(selectedCart, couponDiscount);
 
-  // total selling price
-  const totalSellingPrice = selectedCart.reduce((sum, item) => {
-    const product = item;
-    if (!product) return sum;
-    const selling = calculateSellingPrice(product);
-    return sum + selling * item.qty;
-  }, 0);
-
-  const totalDiscount = totalOriginalPrice - totalSellingPrice;
-  const totalCustomerPrice = totalSellingPrice - (couponDiscount ?? 0);
   // toggle select
   const toggleSelect = (id) => {
     setSelectedItems((prev) =>

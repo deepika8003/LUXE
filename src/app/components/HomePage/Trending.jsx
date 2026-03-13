@@ -33,10 +33,12 @@ const Trending = () => {
               className="min-w-[300px] md:min-w-[350px] group cursor-pointer"
             >
               <div className="relative overflow-hidden mb-4 aspect-[3/4]">
-                <div
-                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
-                  style={{ backgroundImage: `url("${item.image}")` }}
-                ></div>
+                <img
+                  src={item.images?.[0] || item.thumbnail || item.image}
+                  alt={item.title || item.name}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
                 <div className="absolute bottom-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <button
