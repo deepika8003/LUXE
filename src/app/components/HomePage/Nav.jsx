@@ -1,22 +1,40 @@
 "use client";
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
-import { IoMdSearch } from "react-icons/io";
 import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
-import { FaHome, FaRegUserCircle } from "react-icons/fa";
-import { IoIosMan, IoIosWoman } from "react-icons/io";
+import { FaHome, FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
+import { IoIosMan, IoIosWoman, IoMdSearch } from "react-icons/io";
 import { AiOutlineProduct } from "react-icons/ai";
 import Link from "next/link";
+import SignupModal from "../auth/SignupModal";
+import SigninModal from "../auth/SigninModal";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
+  const [signinOpen, setSigninOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.cartItems);
 
+  const openSignup = () => {
+    setSigninOpen(false);
+    setSignupOpen(true);
+  };
+
+  const openSignin = () => {
+    setSignupOpen(false);
+    setSigninOpen(true);
+  };
+
+  const closeAll = () => {
+    setSignupOpen(false);
+    setSigninOpen(false);
+  };
+
   const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
   return (
     <>
       {/* HEADER */}
@@ -24,7 +42,6 @@ const Nav = () => {
         <nav className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4.5 uppercase text-sm tracking-widest">
           {/* LEFT SECTION */}
           <div className="flex items-center">
-            {/* MOBILE MENU ICON */}
             <div className="lg:hidden">
               <FiMenu
                 className="text-2xl text-black cursor-pointer"
@@ -32,7 +49,6 @@ const Nav = () => {
               />
             </div>
 
-            {/* LAPTOP LEFT MENU */}
             <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold">
               <li className="cursor-pointer hover:text-[#1152d4]">
                 <Link href="/">Home</Link>
@@ -51,12 +67,10 @@ const Nav = () => {
 
           {/* RIGHT SECTION */}
           <div className="flex items-center">
-            {/* MOBILE SEARCH ICON */}
             <div className="lg:hidden w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
               <IoMdSearch className="text-xl text-black" />
             </div>
 
-            {/* LAPTOP RIGHT CONTENT */}
             <div className="hidden lg:flex items-center gap-12">
               <ul className="text-black font-semibold flex gap-12 text-[12px]">
                 <li className="cursor-pointer hover:text-[#1152d4]">
@@ -67,7 +81,6 @@ const Nav = () => {
                 </li>
               </ul>
 
-              {/* ICONS */}
               <div className="flex items-center gap-9">
                 <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
                   <IoMdSearch className="text-xl text-black" />
@@ -75,7 +88,6 @@ const Nav = () => {
 
                 <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
                   <Link href="/cart">
-                    {" "}
                     <MdOutlineShoppingBag className="text-xl text-black" />
                   </Link>
                   {totalQty > 0 && (
@@ -85,7 +97,10 @@ const Nav = () => {
                   )}
                 </div>
 
-                <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
+                <div
+                  onClick={() => setSignupOpen(true)}
+                  className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer"
+                >
                   <FaRegUser className="text-md text-black" />
                 </div>
               </div>
@@ -94,7 +109,7 @@ const Nav = () => {
         </nav>
       </header>
 
-      {/* SIDE BAR */}
+      {/* SIDEBAR OVERLAY */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-40 lg:hidden"
@@ -110,7 +125,6 @@ const Nav = () => {
         lg:hidden`}
       >
         <div className="p-6">
-          {/* Sidebar Header */}
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-2">
               <MdOutlineDiamond className="text-2xl text-[#155dfc]" />
@@ -118,29 +132,26 @@ const Nav = () => {
                 LUXE
               </h1>
             </div>
-
             <IoClose
               className="text-2xl cursor-pointer"
               onClick={() => setSidebarOpen(false)}
             />
           </div>
 
-          {/* Sidebar Links */}
           <ul className="space-y-2 text-sm font-medium">
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/"
-                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
+                className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <FaHome className="text-lg" />
                 Home
               </Link>
             </li>
-
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/collections"
-                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
+                className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <AiOutlineProduct className="text-lg" />
                 Collections
@@ -148,8 +159,8 @@ const Nav = () => {
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
-                href=""
-                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
+                href="#"
+                className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <IoIosMan className="text-lg" />
                 Men
@@ -157,8 +168,8 @@ const Nav = () => {
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
-                href=""
-                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
+                href="#"
+                className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <IoIosWoman className="text-lg" />
                 Women
@@ -167,24 +178,35 @@ const Nav = () => {
             <li className="rounded-lg hover:bg-blue-50">
               <Link
                 href="/cart"
-                className="flex  items-center gap-4  px-4 py-3 text-black hover:text-blue-600"
+                className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <FaShoppingCart className="text-lg" />
                 Cart
               </Link>
             </li>
             <li className="rounded-lg hover:bg-blue-50">
-              <Link
-                href=""
-                className="  flex  items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
+              <button
+                onClick={() => {
+                  setSidebarOpen(false);
+                  setSignupOpen(true);
+                }}
+                className="w-full flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <FaRegUserCircle className="text-lg" />
-                Login
-              </Link>
+                SignUp
+              </button>
             </li>
           </ul>
         </div>
       </aside>
+
+      {/* MODALS */}
+      {signupOpen && (
+        <SignupModal switchToSignin={openSignin} closeModal={closeAll} />
+      )}
+      {signinOpen && (
+        <SigninModal switchToSignup={openSignup} closeModal={closeAll} />
+      )}
     </>
   );
 };

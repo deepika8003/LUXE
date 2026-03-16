@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { addToCart } from "@/redux/cartSlice";
-// api
-import { getAllProducts } from "@/api/productApi";
 import { useDispatch, useSelector } from "react-redux";
+
+import { addToCart } from "@/redux/cartSlice";
+import { setFilter, toggleFilter, clearFilters } from "@/redux/filterSlice";
+import { getAllProducts } from "@/api/productApi";
 
 // react icons
 import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
@@ -27,13 +28,15 @@ const normalizeProduct = (item) => {
   };
 };
 const Collections = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.filters);
+  const adminProducts = useSelector((state) => state.product.products);
+
   const [showFilter, setShowFilter] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [apiProducts, setApiProducts] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
-  // get products
-  const dispatch = useDispatch();
-  const adminProducts = useSelector((state) => state.product.products);
+
   // api fetch
   useEffect(() => {
     const fetchProducts = async () => {
@@ -92,41 +95,15 @@ const Collections = () => {
   };
   const allProducts = [...adminProducts, ...apiProducts];
 
-  // filter logic
-  const [filters, setFilters] = useState({
-    category: [],
-    price: [],
-    discount: [],
-    brand: [],
-    rating: [],
-  });
-
   // Handler for desktop dropdowns
   const handleSelectChange = (type, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [type]: value ? [value] : [],
-    }));
+    dispatch(setFilter({ type, value }));
   };
 
   // Handler for mobile checkboxes
   const handleCheckboxChange = (type, value) => {
-    setFilters((prev) => {
-      const alreadySelected = prev[type].includes(value);
-      if (alreadySelected) {
-        return {
-          ...prev,
-          [type]: prev[type].filter((item) => item !== value),
-        };
-      } else {
-        return {
-          ...prev,
-          [type]: [...prev[type], value],
-        };
-      }
-    });
+    dispatch(toggleFilter({ type, value }));
   };
-
   const filteredProducts = allProducts.filter((product) => {
     // CATEGORY
     if (
@@ -188,14 +165,8 @@ const Collections = () => {
     );
   };
 
-  const clearFilters = () => {
-    setFilters({
-      category: [],
-      price: [],
-      discount: [],
-      brand: [],
-      rating: [],
-    });
+  const handleClearFilters = () => {
+    dispatch(clearFilters());
   };
 
   return (
@@ -525,7 +496,7 @@ const Collections = () => {
 
           {/* CLEAR FILTER */}
           <button
-            onClick={clearFilters}
+            onClick={handleClearFilters}
             className="sticky bottom-0 mt-6 w-full bg-black text-white py-2 rounded-md"
           >
             Clear Filters
@@ -553,7 +524,7 @@ const Collections = () => {
                 className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden flex flex-col h-full"
               >
                 {/* IMAGE */}
-                <div className="relative aspect-[4/5] md:aspect-[5/5] bg-gray-100 overflow-hidden">
+                <div className="relative aspect-4/5 md:aspect-5/5 bg-gray-100 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -562,7 +533,7 @@ const Collections = () => {
                   />
 
                   {product.badge && (
-                    <span className="absolute top-2 left-2 bg-black text-white text-[9px] md:text-xs px-2 py-[2px] rounded shadow">
+                    <span className="absolute top-2 left-2 bg-black text-white text-[9px] md:text-xs px-2 py-0.5 rounded shadow">
                       {product.badge}
                     </span>
                   )}
@@ -580,7 +551,7 @@ const Collections = () => {
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-2 md:p-4 flex flex-col flex-grow">
+                <div className="p-2 md:p-4 flex flex-col grow">
                   <h3 className="text-xs md:text-sm font-semibold text-gray-900 line-clamp-1">
                     {product.name}
                   </h3>
