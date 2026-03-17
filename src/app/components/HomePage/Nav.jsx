@@ -1,22 +1,25 @@
 "use client";
 import { useSelector } from "react-redux";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import SignupModal from "../auth/SignupModal";
+import SigninModal from "../auth/SigninModal";
 import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { FaHome, FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
+import { FaHome, FaShoppingCart } from "react-icons/fa";
 import { IoIosMan, IoIosWoman, IoMdSearch } from "react-icons/io";
 import { AiOutlineProduct } from "react-icons/ai";
-import Link from "next/link";
-import SignupModal from "../auth/SignupModal";
-import SigninModal from "../auth/SigninModal";
+import Toast from "../Toast";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [signinOpen, setSigninOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const dropdownRef = useRef(null);
 
   const openSignup = () => {
     setSigninOpen(false);
@@ -33,11 +36,27 @@ const Nav = () => {
     setSigninOpen(false);
   };
 
+  const [toast, setToast] = useState(null);
+  useEffect(() => {
+    if (toast) {
+      setTimeout(() => setToast(null), 3000);
+    }
+  }, [toast]);
+
   const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <>
-      {/* HEADER */}
       <header className="w-full bg-white/80 backdrop-blur-md fixed top-0 z-50 border-b border-black/5">
         <nav className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4.5 uppercase text-sm tracking-widest">
           {/* LEFT SECTION */}
@@ -48,7 +67,6 @@ const Nav = () => {
                 onClick={() => setSidebarOpen(true)}
               />
             </div>
-
             <ul className="hidden lg:flex gap-10 text-black text-[12px] font-sans font-semibold">
               <li className="cursor-pointer hover:text-[#1152d4]">
                 <Link href="/">Home</Link>
@@ -71,8 +89,8 @@ const Nav = () => {
               <IoMdSearch className="text-xl text-black" />
             </div>
 
-            <div className="hidden lg:flex items-center gap-12">
-              <ul className="text-black font-semibold flex gap-12 text-[12px]">
+            <div className="hidden lg:flex items-center gap-6">
+              <ul className="flex gap-6 text-black text-[12px] font-semibold">
                 <li className="cursor-pointer hover:text-[#1152d4]">
                   <Link href="#">Men</Link>
                 </li>
@@ -80,30 +98,50 @@ const Nav = () => {
                   <Link href="#">Women</Link>
                 </li>
               </ul>
-
-              <div className="flex items-center gap-9">
-                <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-                  <IoMdSearch className="text-xl text-black" />
-                </div>
-
-                <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-                  <Link href="/cart">
-                    <MdOutlineShoppingBag className="text-xl text-black" />
-                  </Link>
-                  {totalQty > 0 && (
-                    <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
-                      {totalQty}
-                    </span>
-                  )}
-                </div>
-
-                <div
-                  onClick={() => setSignupOpen(true)}
-                  className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer"
-                >
-                  <FaRegUser className="text-md text-black" />
-                </div>
+              <div className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
+                <IoMdSearch className="text-xl text-black" />
               </div>
+              <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
+                <Link href="/cart">
+                  <MdOutlineShoppingBag className="text-xl text-black" />
+                </Link>
+                {totalQty > 0 && (
+                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white">
+                    {totalQty}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="relative ml-2 lg:ml-6" ref={dropdownRef}>
+              <div
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer"
+              >
+                <FaRegUser className="text-md text-black" />
+              </div>
+              {userMenuOpen && (
+                <div className="absolute right-0 top-12 w-40 bg-white/90 backdrop-blur-md shadow-xl rounded-sm border border-gray-200 text-sm z-50 overflow-hidden">
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      setSigninOpen(true);
+                    }}
+                    className="w-full text-left border-b border-gray-300 px-4 py-2 hover:bg-gray-100 transition active:bg-black active:text-white"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      setSignupOpen(true);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition active:bg-black active:text-white"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </nav>
@@ -119,10 +157,9 @@ const Nav = () => {
 
       {/* SIDEBAR */}
       <aside
-        className={`fixed top-0 left-0 h-screen w-64 bg-white flex flex-col justify-between
-        transform transition-transform duration-300 z-50
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:hidden`}
+        className={`fixed top-0 left-0 h-screen w-64 bg-white flex flex-col justify-between transform transition-transform duration-300 z-50 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:hidden`}
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-10">
@@ -184,29 +221,26 @@ const Nav = () => {
                 Cart
               </Link>
             </li>
-            <li className="rounded-lg hover:bg-blue-50">
-              <button
-                onClick={() => {
-                  setSidebarOpen(false);
-                  setSignupOpen(true);
-                }}
-                className="w-full flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
-              >
-                <FaRegUserCircle className="text-lg" />
-                SignUp
-              </button>
-            </li>
           </ul>
         </div>
       </aside>
 
       {/* MODALS */}
       {signupOpen && (
-        <SignupModal switchToSignin={openSignin} closeModal={closeAll} />
+        <SignupModal
+          switchToSignin={openSignin}
+          closeModal={closeAll}
+          showToast={setToast}
+        />
       )}
       {signinOpen && (
-        <SigninModal switchToSignup={openSignup} closeModal={closeAll} />
+        <SigninModal
+          switchToSignup={openSignup}
+          closeModal={closeAll}
+          showToast={setToast}
+        />
       )}
+      {toast && <Toast message={toast.message} type={toast.type} />}
     </>
   );
 };

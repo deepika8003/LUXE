@@ -1,5 +1,11 @@
 "use client";
+// redux
+import { useDispatch } from "react-redux";
+import { signup } from "@/redux/authSlice";
+// react states
 import React, { useState } from "react";
+
+// icons
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaUser, FaMobileAlt } from "react-icons/fa";
@@ -7,13 +13,33 @@ import { IoMdMail, IoMdLock } from "react-icons/io";
 import { RiShieldCheckFill } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 
-const SignupModal = ({ switchToSignin, closeModal }) => {
+const SignupModal = ({ switchToSignin, closeModal, showToast }) => {
+  const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const isStrongPassword =
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[!@#$%^&*]/.test(password);
+  const [agree, setAgree] = useState(false);
 
   const isPasswordMatch =
     confirmPassword === "" || password === confirmPassword;
+
+  const dispatch = useDispatch();
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    dispatch(signup({ email, password }));
+    showToast({
+      message: "Account created successfully ",
+      type: "success",
+    });
+
+    switchToSignin();
+  };
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
@@ -33,7 +59,7 @@ const SignupModal = ({ switchToSignin, closeModal }) => {
           Join the world of premium fashion and exclusive collections.
         </p>
         {/* form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSignup}>
           {/* Full Name */}
           <div>
             <label className="text-sm text-gray-600">
@@ -60,6 +86,8 @@ const SignupModal = ({ switchToSignin, closeModal }) => {
                 <IoMdMail className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="shinchan@gmail.com"
                   className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
@@ -113,6 +141,11 @@ const SignupModal = ({ switchToSignin, closeModal }) => {
             <p className="text-xs text-gray-400 mt-1">
               Use 8+ characters with a mix of letters, numbers & symbols.
             </p>
+            {!isStrongPassword && password && (
+              <p className="text-red-500 text-xs mt-1">
+                Password must be 8+ chars, include uppercase, number & symbol
+              </p>
+            )}
           </div>
 
           {/* Confirm Password */}
@@ -144,7 +177,13 @@ const SignupModal = ({ switchToSignin, closeModal }) => {
 
           {/* Terms */}
           <div className="flex items-start text-sm gap-2">
-            <input type="checkbox" required className="mt-1 cursor-pointer" />
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+              required
+              className="mt-1 cursor-pointer"
+            />
             <span className="text-gray-600">
               I agree to the{" "}
               <span className="font-medium underline cursor-pointer">
@@ -159,8 +198,19 @@ const SignupModal = ({ switchToSignin, closeModal }) => {
 
           {/* Signup Button */}
           <button
-            type="button"
-            className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-900 transition cursor-pointer"
+            type="submit"
+            disabled={
+              !email ||
+              !password ||
+              !isPasswordMatch ||
+              !agree ||
+              !isStrongPassword
+            }
+            className={`w-full py-3 rounded-md ${
+              !email || !password || !isPasswordMatch
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-black text-white"
+            }`}
           >
             Create Account
           </button>
