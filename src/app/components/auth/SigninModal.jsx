@@ -1,12 +1,7 @@
 "use client";
-// redux
-import { useDispatch } from "react-redux";
-import { signin } from "@/redux/authSlice";
-import { generateOTP } from "@/redux/authSlice";
-// react state
-import React, { useState } from "react";
-
-// react icons
+import { useDispatch, useSelector } from "react-redux";
+import { signin, resetAuthStatus, generateOTP } from "@/redux/authSlice";
+import React, { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoMdMail, IoMdLock } from "react-icons/io";
@@ -16,39 +11,47 @@ import OTPModal from "./OTPModal";
 
 const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
   const dispatch = useDispatch();
+  const authStatus = useSelector((state) => state.auth.authStatus);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSignin = (e) => {
-    e.preventDefault();
-
-    const result = dispatch(signin({ email, password }));
-    const user = result.payload;
-
-    if (user) {
-      showToast({
-        message: "Login successful ",
-        type: "success",
-      });
-      closeModal();
-    } else {
-      showToast({
-        message: "Account not found ",
-        type: "error",
-      });
-    }
-  };
-
   const [showPassword, setShowPassword] = useState(false);
-  const [loginMethod, setLoginMethod] = useState("email"); // "email" or "mobile"
-  // otp
+  const [loginMethod, setLoginMethod] = useState("email");
   const [otpOpen, setOtpOpen] = useState(false);
 
-  const handleOTPClick = () => {
-    dispatch(generateOTP(email));
-    setOtpOpen(true);
+  // Handle signin form submission
+  const handleSignin = (e) => {
+    e.preventDefault();
+    dispatch(signin({ identifier: email, password, loginMethod }));
   };
+
+  // Handle OTP button click
+  const handleOTPClick = () => {
+    if (!email) {
+      showToast({ message: `Please enter your ${loginMethod}`, type: "error" });
+      return;
+    }
+    dispatch(generateOTP({ identifier: email, loginMethod }));
+  };
+
+  useEffect(() => {
+    if (authStatus === "SUCCESS") {
+      showToast({ message: "Login success", type: "success" });
+      closeModal();
+      dispatch(resetAuthStatus());
+    } else if (authStatus === "NO_USER") {
+      showToast({ message: "No account found, please sign up", type: "error" });
+    } else if (authStatus === "WRONG_PASSWORD") {
+      showToast({ message: "Incorrect password", type: "error" });
+    } else if (authStatus === "OTP_SENT") {
+      setOtpOpen(true);
+    } else if (authStatus === "OTP_SUCCESS") {
+      showToast({ message: "Login success", type: "success" });
+      closeModal();
+    } else if (authStatus === "OTP_FAILED") {
+      showToast({ message: "Invalid OTP", type: "error" });
+    }
+  }, [authStatus, closeModal, showToast]);
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
@@ -69,7 +72,7 @@ const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
           </p>
 
           {/* Email / Mobile Toggle */}
-          <div className="flex border rounded-md p-1 mb-4">
+          <div className="flex border border-black rounded-md p-1 mb-4">
             <button
               type="button"
               onClick={() => setLoginMethod("email")}
@@ -117,7 +120,7 @@ const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
                       ? "shinchan@gmail.com"
                       : "+91 9876543210"
                   }
-                  className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full border border-gray-300 text-black rounded-md pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
                 />
               </div>
             </div>
@@ -135,7 +138,7 @@ const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full border border-gray-300 rounded-md pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full border border-gray-300 text-black rounded-md pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-black"
                 />
                 <button
                   type="button"
@@ -171,7 +174,7 @@ const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
             {/* Sign In Button */}
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-900 transition cursor-pointer mt-4"
+              className="w-full bg-black active:bg-gray-800 text-white py-3 rounded-md font-medium hover:bg-gray-800 transition cursor-pointer mt-4"
             >
               Sign In
             </button>
@@ -187,7 +190,9 @@ const SigninModal = ({ switchToSignup, closeModal, showToast }) => {
           {/* Google Login */}
           <button className="w-full border flex items-center justify-center gap-2 py-2 rounded-md hover:bg-gray-50 cursor-pointer">
             <FcGoogle size={20} />
-            <span className="text-sm font-medium">Continue with Google</span>
+            <span className="text-sm font-medium text-black">
+              Continue with Google
+            </span>
           </button>
 
           {/* Sign Up Link */}

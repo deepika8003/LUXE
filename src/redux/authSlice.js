@@ -1,66 +1,112 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    users: [], // store all users
+    users: [],
     currentUser: null,
     otp: null,
-    otpUser: null, //email or mobile
+    otpUser: null,
+    authStatus: null,
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        // signup
         signup: (state, action) => {
-            const { email, password } = action.payload;
+            const { name, email, password, mobile } = action.payload;
 
-            const userExists = state.users.find(u => u.email === email);
+            const userExists = state.users.find((u) => u.email === email || u.mobile === mobile);
 
-            if (!userExists) {
-                state.users.push({ email, password });
+            if (userExists) {
+                state.authStatus = "EXISTS";
+            } else {
+                const newUser = { name, email, password, mobile };
+                state.users.push(newUser);
+                state.authStatus = "CREATED";
+
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("users", JSON.stringify(state.users));
+                }
             }
         },
 
-        // signin
         signin: (state, action) => {
-            const { email, password } = action.payload;
+            const { identifier, password, loginMethod } = action.payload;
 
-            const user = state.users.find(
-                u => u.email === email && u.password === password
+            const user = state.users.find((u) =>
+                loginMethod === "email" ? u.email === identifier : u.mobile === identifier
             );
 
-            if (user) {
-                state.currentUser = user;
-                return user;
+            if (!user) {
+                state.authStatus = "NO_USER";
+            } else if (user.password !== password) {
+                state.authStatus = "WRONG_PASSWORD";
             } else {
-                return null;
+                state.currentUser = user;
+                state.authStatus = "SUCCESS";
             }
         },
 
-        //  generate OTP
+        //  LOAD USERS
+        loadUsers: (state) => {
+            if (typeof window !== "undefined") {
+                const data = localStorage.getItem("users");
+                if (data) {
+                    state.users = JSON.parse(data);
+                }
+            }
+        },
+        resetAuthStatus: (state) => {
+            state.authStatus = null;
+        },
 
+        // OTP GENERATE
         generateOTP: (state, action) => {
-            const otp = Math.floor(100000 + Math.random() * 900000);
-            state.otp = otp;
-            state.otpUser = action.payload;
+            const { identifier, loginMethod } = action.payload;
+            const user = state.users.find((u) =>
+                loginMethod === "email" ? u.email === identifier : u.mobile === identifier
+            );
+            if (!user) {
+                state.authStatus = "NO_USER";
+            } else {
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                state.otp = otp;
+                state.otpUser = identifier;
+                state.authStatus = "OTP_SENT";
 
-            console.log("OTP", otp)
-        },
-
-        // verifyotp
-        verifyOTP: (state, action) => {
-            if (state.otp === action.payload) {
-                state.currentUser = { email: state.otpUser };
+                console.log("OTP:", otp);
             }
         },
 
-        // logout
+        // VERIFY OTP
+        verifyOTP: (state, action) => {
+            const enteredOTP = action.payload;
+
+            if (parseInt(enteredOTP) === state.otp) {
+                const user = state.users.find(
+                    (u) => u.email === state.otpUser || u.mobile === state.otpUser
+                );
+                state.currentUser = user;
+                state.authStatus = "OTP_SUCCESS";
+            } else {
+                state.authStatus = "OTP_FAILED";
+            }
+        },
+
         logout: (state) => {
             state.currentUser = null;
         },
     },
 });
 
-export const { signup, signin, generateOTP, verifyOTP, logout } = authSlice.actions;
+export const {
+    signup,
+    signin,
+    loadUsers,
+    logout,
+    resetAuthStatus,
+    generateOTP,
+    verifyOTP,
+} = authSlice.actions;
+
 export default authSlice.reducer;

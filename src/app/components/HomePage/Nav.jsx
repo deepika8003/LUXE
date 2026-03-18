@@ -1,9 +1,13 @@
 "use client";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import SignupModal from "../auth/SignupModal";
 import SigninModal from "../auth/SigninModal";
+import Toast from "../Toast";
+import { loadUsers, logout } from "@/redux/authSlice";
+
+// React Icons
 import { MdOutlineShoppingBag, MdOutlineDiamond } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
@@ -11,7 +15,8 @@ import { IoClose } from "react-icons/io5";
 import { FaHome, FaShoppingCart } from "react-icons/fa";
 import { IoIosMan, IoIosWoman, IoMdSearch } from "react-icons/io";
 import { AiOutlineProduct } from "react-icons/ai";
-import Toast from "../Toast";
+import { PiSignIn } from "react-icons/pi";
+import { GoSignIn } from "react-icons/go";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,6 +25,24 @@ const Nav = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dropdownRef = useRef(null);
+  const prevUserRef = useRef(null);
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const dispatch = useDispatch();
+
+  const hasShownInitialToast = useRef(false);
+
+  useEffect(() => {
+    dispatch(loadUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const hasShown = sessionStorage.getItem("loginToastShown");
+
+    if (!currentUser && !hasShown) {
+      setToast({ message: "Please login to continue", type: "info" });
+      sessionStorage.setItem("loginToastShown", "true");
+    }
+  }, [currentUser]);
 
   const openSignup = () => {
     setSigninOpen(false);
@@ -39,7 +62,8 @@ const Nav = () => {
   const [toast, setToast] = useState(null);
   useEffect(() => {
     if (toast) {
-      setTimeout(() => setToast(null), 3000);
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
     }
   }, [toast]);
 
@@ -55,6 +79,27 @@ const Nav = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const lastToastMessage = useRef(null);
+
+  // Welcome toast
+  useEffect(() => {
+    if (currentUser && prevUserRef.current === null) {
+      const message = `Welcome ${currentUser.name || currentUser.email}`;
+      if (lastToastMessage.current !== message) {
+        setToast({ message, type: "success" });
+        lastToastMessage.current = message;
+      }
+    }
+    prevUserRef.current = currentUser;
+  }, [currentUser]);
+
+  useEffect(() => {
+    const hasShown = sessionStorage.getItem("hasShownInitialToast");
+    if (!currentUser && !hasShown) {
+      setToast({ message: "Please login to continue", type: "info" });
+      sessionStorage.setItem("hasShownInitialToast", "true");
+    }
+  }, []);
   return (
     <>
       <header className="w-full bg-white/80 backdrop-blur-md fixed top-0 z-50 border-b border-black/5">
@@ -116,30 +161,50 @@ const Nav = () => {
             <div className="relative ml-2 lg:ml-6" ref={dropdownRef}>
               <div
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer"
+                className="w-9 h-11 flex items-center justify-center rounded-full hover:bg-white hover:text-black cursor-pointer"
               >
                 <FaRegUser className="text-md text-black" />
               </div>
+              {/* Drop down */}
               {userMenuOpen && (
-                <div className="absolute right-0 top-12 w-40 bg-white/90 backdrop-blur-md shadow-xl rounded-sm border border-gray-200 text-sm z-50 overflow-hidden">
-                  <button
-                    onClick={() => {
-                      setUserMenuOpen(false);
-                      setSigninOpen(true);
-                    }}
-                    className="w-full text-left border-b border-gray-300 px-4 py-2 hover:bg-gray-100 transition active:bg-black active:text-white"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => {
-                      setUserMenuOpen(false);
-                      setSignupOpen(true);
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition active:bg-black active:text-white"
-                  >
-                    Sign Up
-                  </button>
+                <div className="absolute right-0 top-12 w-40 bg-[#155dfc] backdrop-blur-md shadow-xl rounded-sm border border-gray-200 text-sm z-50 overflow-hidden">
+                  {currentUser ? (
+                    // Logged in – show Sign Out
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        dispatch(logout());
+                      }}
+                      className="flex items-center gap-3 w-full text-left px-4 py-2 text-white transition active:bg-black active:text-white"
+                    >
+                      <GoSignIn className="text-white text-xl" />
+                      Sign Out
+                    </button>
+                  ) : (
+                    // Not logged in – show Sign In / Sign Up
+                    <>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          setSigninOpen(true);
+                        }}
+                        className="flex items-center gap-3 w-full text-left border-b text-white border-gray-300 px-4 py-2 transition active:bg-black active:text-white"
+                      >
+                        <PiSignIn className="text-white text-xl" />
+                        Sign In
+                      </button>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          setSignupOpen(true);
+                        }}
+                        className="flex items-center gap-3 w-full text-left px-4 py-2 text-white transition active:bg-black active:text-white"
+                      >
+                        <GoSignIn className="text-white text-xl" />
+                        Sign Up
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
