@@ -93,8 +93,41 @@ const authSlice = createSlice({
             }
         },
 
+        // logout
         logout: (state) => {
             state.currentUser = null;
+            localStorage.removeItem("admin");
+        },
+
+        // Aadmin Login
+        adminLogin: (state, action) => {
+            const { email, password } = action.payload;
+
+            const ADMIN_EMAIL = "admin@luxe.com";
+            const ADMIN_PASSWORD = "123456";
+
+            if (email !== ADMIN_EMAIL) {
+                state.authStatus = "NO_ADMIN";
+            } else if (password !== ADMIN_PASSWORD) {
+                state.authStatus = "WRONG_PASSWORD";
+            } else {
+                const adminData = { email, role: "admin" };
+
+                state.currentUser = adminData;
+                state.authStatus = "ADMIN_SUCCESS";
+
+                localStorage.setItem("admin", JSON.stringify(adminData));
+            }
+        },
+
+
+        loadAdmin: (state) => {
+            if (typeof window !== "undefined") {
+                const admin = localStorage.getItem("admin");
+                if (admin) {
+                    state.currentUser = JSON.parse(admin);
+                }
+            }
         },
     },
 });
@@ -107,6 +140,8 @@ export const {
     resetAuthStatus,
     generateOTP,
     verifyOTP,
+    adminLogin,
+    loadAdmin,
 } = authSlice.actions;
 
 export default authSlice.reducer;
