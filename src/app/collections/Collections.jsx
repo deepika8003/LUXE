@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { addToCart } from "@/redux/cartSlice";
+import { addToWishlist, removeFromWishlist } from "@/redux/wishlistSlice";
 import { setFilter, toggleFilter, clearFilters } from "@/redux/filterSlice";
 import { getAllProducts } from "@/api/productApi";
 
@@ -31,11 +32,11 @@ const Collections = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.filters);
   const adminProducts = useSelector((state) => state.product.products);
+  const wishlist = useSelector((state) => state.wishlist.items);
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [apiProducts, setApiProducts] = useState([]);
-  const [likedProducts, setLikedProducts] = useState([]);
 
   // api fetch
   useEffect(() => {
@@ -146,10 +147,14 @@ const Collections = () => {
   });
 
   // liked products
-  const toggleLike = (id) => {
-    setLikedProducts((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+  const toggleLike = (product) => {
+    const exists = wishlist.find((item) => item.id === product.id);
+
+    if (exists) {
+      dispatch(removeFromWishlist(product.id));
+    } else {
+      dispatch(addToWishlist(product));
+    }
   };
 
   // add to cart
@@ -538,13 +543,13 @@ const Collections = () => {
                     </span>
                   )}
                   <button
-                    onClick={() => toggleLike(product.id)}
-                    className={`absolute top-2 right-2 p-1.5 md:p-2 rounded-full shadow transition 
-                      ${
-                        likedProducts.includes(product.id)
-                          ? "bg-red-500 text-white"
-                          : "bg-white hover:bg-gray-100 text-black"
-                      }`}
+                    onClick={() => toggleLike(product)}
+                    className={`absolute top-2 right-2 p-2 rounded-full shadow
+                    ${
+                      wishlist.some((item) => item.id === product.id)
+                        ? "bg-red-500 text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     <FaRegHeart className="text-xs md:text-sm" />
                   </button>

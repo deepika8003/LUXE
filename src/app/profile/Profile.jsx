@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { logout } from "@/redux/authSlice";
 import Toast from "../components/Toast";
 import Link from "next/link";
@@ -45,7 +46,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [toast, setToast] = useState(null);
-
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const handleLogout = () => {
     dispatch(logout());
     setToast({ message: "Sign out successful", type: "success" });
@@ -54,6 +55,17 @@ const Profile = () => {
       router.push("/");
     }, 1500);
   };
+  useEffect(() => {
+    const user = localStorage.getItem("currentUser");
+
+    if (user) {
+      dispatch({
+        type: "auth/setUser",
+        payload: JSON.parse(user),
+      });
+    }
+  }, [dispatch]);
+
   return (
     <>
       <section className="min-h-screen pt-20 bg-[#0c0c0d] text-white flex">
@@ -63,10 +75,12 @@ const Profile = () => {
             {/* PROFILE */}
             <div className="flex flex-col items-center text-center mb-10">
               <div className="w-20 h-20 rounded-full bg-[#1a1a1c] flex items-center justify-center text-lg">
-                D
+                {currentUser?.name?.charAt(0) || "U"}
               </div>
 
-              <h2 className="mt-4 text-sm sm:text-lg tracking-wide">Deepika</h2>
+              <h2 className="mt-4 text-sm sm:text-lg tracking-wide">
+                {currentUser?.name || "User"}
+              </h2>
 
               <p className="text-[10px] sm:text-sm text-gray-500 tracking-widest mt-1">
                 PLATINUM MEMBER
@@ -90,7 +104,10 @@ const Profile = () => {
               </li>
 
               <li className="hover:text-white cursor-pointer">
-                <Link href="" className="flex items-center gap-3">
+                <Link
+                  href="/profile/wishlist"
+                  className="flex items-center gap-3"
+                >
                   <FaRegHeart className="text-lg" />
                   WISHLIST
                 </Link>
@@ -123,12 +140,17 @@ const Profile = () => {
         <div className="flex-1 p-10">
           {/* TOP HEADER */}
           <div className="mb-10">
-            <h1 className="text-4xl font-serif">Hello, Deepika </h1>
-            <p className="text-gray-500 text-sm mt-2">deepika@email.com</p>
+            <h1 className="text-4xl font-serif">
+              Hello, {currentUser?.name || "User"}
+            </h1>
+            <p className="text-gray-500 text-sm mt-2">
+              {" "}
+              {currentUser?.email || "user@email.com"}
+            </p>
           </div>
 
           {/* CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {cardsData.map((card, index) => (
               <div
                 key={index}

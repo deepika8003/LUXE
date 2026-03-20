@@ -44,6 +44,7 @@ const authSlice = createSlice({
             } else {
                 state.currentUser = user;
                 state.authStatus = "SUCCESS";
+                localStorage.setItem("currentUser", JSON.stringify(user));
             }
         },
 
@@ -88,6 +89,7 @@ const authSlice = createSlice({
                 );
                 state.currentUser = user;
                 state.authStatus = "OTP_SUCCESS";
+                localStorage.setItem("currentUser", JSON.stringify(user));
             } else {
                 state.authStatus = "OTP_FAILED";
             }
@@ -96,9 +98,12 @@ const authSlice = createSlice({
         // logout
         logout: (state) => {
             state.currentUser = null;
-            localStorage.removeItem("admin");
+            localStorage.removeItem("currentUser");
         },
 
+        setUser: (state, action) => {
+            state.currentUser = action.payload;
+        },
         // Aadmin Login
         adminLogin: (state, action) => {
             const { email, password } = action.payload;
@@ -142,6 +147,7 @@ export const {
     verifyOTP,
     adminLogin,
     loadAdmin,
+    setUser
 } = authSlice.actions;
 
 export default authSlice.reducer;

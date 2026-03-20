@@ -18,6 +18,7 @@ import { IoIosMan, IoIosWoman, IoMdSearch } from "react-icons/io";
 import { AiOutlineProduct } from "react-icons/ai";
 import { PiSignIn } from "react-icons/pi";
 import { GoSignIn } from "react-icons/go";
+import { FaRegHeart } from "react-icons/fa";
 
 const Nav = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -145,7 +146,9 @@ const Nav = () => {
             <div className="hidden lg:flex items-center gap-6">
               <ul className="flex gap-6 text-black text-[12px] font-semibold">
                 <li className="cursor-pointer hover:text-[#1152d4]">
-                  <Link href="#">Men</Link>
+                  <Link href="/profile/wishlist">
+                    <FaRegHeart className="text-black text-lg" />
+                  </Link>
                 </li>
                 <li
                   onClick={() => {
@@ -246,7 +249,7 @@ const Nav = () => {
               </h1>
             </div>
             <IoClose
-              className="text-2xl cursor-pointer"
+              className="text-2xl cursor-pointer text-black"
               onClick={() => setSidebarOpen(false)}
             />
           </div>
@@ -287,11 +290,11 @@ const Nav = () => {
             </li>
             <li className="rounded-lg hover:bg-blue-50">
               <Link
-                href="#"
+                href="/profile/wishlist"
                 className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
-                <IoIosMan className="text-lg" />
-                Men
+                <FaRegHeart className="text-lg" />
+                Wishlist
               </Link>
             </li>
 

@@ -21,7 +21,14 @@ const AdminLoginModal = ({ closeModal, showToast }) => {
 
   useEffect(() => {
     if (authStatus === "ADMIN_SUCCESS") {
-      showToast({ message: "Admin Login Success 🔐", type: "success" });
+      const welcomeShown = localStorage.getItem("welcomeShown");
+
+      if (!welcomeShown) {
+        showToast({ message: "Welcome Admin", type: "info" });
+        localStorage.setItem("welcomeShown", "true");
+      } else {
+        showToast({ message: "Admin Login Success", type: "success" });
+      }
       closeModal();
       dispatch(resetAuthStatus());
     } else if (authStatus === "NO_ADMIN") {
@@ -30,7 +37,6 @@ const AdminLoginModal = ({ closeModal, showToast }) => {
       showToast({ message: "Incorrect Password ", type: "error" });
     }
   }, [authStatus]);
-
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <div className="bg-[#111] text-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative border border-[#C9A96E]/20">
