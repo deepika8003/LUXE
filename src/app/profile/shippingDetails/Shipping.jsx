@@ -54,7 +54,7 @@ const Shipping = () => {
       dispatch(addAddress({ ...formData, id: Date.now() }));
     }
 
-    router.push("/cart");
+    router.push("/profile/cart");
   };
   const calculateSellingPrice = (item) => {
     const discount = item.discount ?? 0;

@@ -8,6 +8,8 @@ import { FaCaretDown } from "react-icons/fa";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { deleteAddress, setEditAddress } from "@/redux/addressSlice";
+import { addOrder } from "@/redux/orderSlice";
+
 import Link from "next/link";
 import {
   calculateCartSummary,
@@ -59,22 +61,7 @@ const Cart = () => {
       setSelectedItems(cart.map((item) => item.id));
     }
   };
-  const handleContinue = () => {
-    if (!selectedAddress) {
-      alert("Please select an address");
-      return;
-    }
 
-    if (selectedItems.length === 0) {
-      alert("Please select products");
-      return;
-    }
-
-    localStorage.setItem("checkoutItems", JSON.stringify(selectedCart));
-    localStorage.setItem("selectedAddress", selectedAddress);
-
-    router.push("/payment");
-  };
   const [cartChecked, setCartChecked] = useState(false);
 
   useEffect(() => {
@@ -92,6 +79,30 @@ const Cart = () => {
     setSelectedItems(cart.map((item) => item.id));
   }, [cart]);
 
+  const handleContinue = () => {
+    if (!selectedAddress) {
+      alert("Please select an address");
+      return;
+    }
+
+    if (selectedItems.length === 0) {
+      alert("Please select products");
+      return;
+    }
+
+    const order = {
+      id: Date.now(),
+      items: selectedCart,
+      total: totalCustomerPrice,
+      status: "Processing",
+      date: new Date().toDateString(),
+      address: addresses.find((a) => a.id === selectedAddress),
+    };
+
+    dispatch(addOrder(order));
+
+    router.push("/profile/orders");
+  };
   return (
     <section className="w-full bg-[#f6f6f8] pt-17">
       <div className="max-w-7xl mx-auto sm:px-6 py-6 md:flex gap-4">
@@ -150,7 +161,7 @@ const Cart = () => {
               )}
             </div>
             <Link
-              href="/shippingDetails"
+              href="/profile/shippingDetails"
               className="text-[#155dfc] p-4  font-medium cursor-pointer text-sm md:text-md"
             >
               Add Delivery Address

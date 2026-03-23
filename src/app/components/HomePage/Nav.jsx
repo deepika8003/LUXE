@@ -167,7 +167,7 @@ const Nav = () => {
                 <IoMdSearch className="text-xl text-black" />
               </div>
               <div className="relative w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
-                <Link href="/cart">
+                <Link href="/profile/cart">
                   <MdOutlineShoppingBag className="text-xl text-black" />
                 </Link>
                 {totalQty > 0 && (
@@ -300,7 +300,7 @@ const Nav = () => {
 
             <li className="rounded-lg hover:bg-blue-50">
               <Link
-                href="/cart"
+                href="profile/cart"
                 className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <FaShoppingCart className="text-lg" />

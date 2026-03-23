@@ -7,6 +7,8 @@ import { addToCart } from "@/redux/cartSlice";
 import { addToWishlist, removeFromWishlist } from "@/redux/wishlistSlice";
 import { setFilter, toggleFilter, clearFilters } from "@/redux/filterSlice";
 import { getAllProducts } from "@/api/productApi";
+import { addOrder } from "@/redux/orderSlice";
+import { useRouter } from "next/navigation";
 
 // react icons
 import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
@@ -38,6 +40,12 @@ const Collections = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [apiProducts, setApiProducts] = useState([]);
 
+  const [openSection, setOpenSection] = useState(null);
+
+  // toggele filter sections
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
   // api fetch
   useEffect(() => {
     const fetchProducts = async () => {
@@ -174,6 +182,20 @@ const Collections = () => {
     dispatch(clearFilters());
   };
 
+  // add to orders page
+  const handleBuyNow = (product) => {
+    const order = {
+      id: Date.now(),
+      items: [product],
+      total: product.price,
+      status: "Processing",
+      date: new Date().toDateString(),
+      address: JSON.parse(localStorage.getItem("selectedAddress")) || null,
+    };
+
+    dispatch(addOrder(order));
+    router.push("/orders");
+  };
   return (
     <>
       {/* Header section */}
@@ -223,7 +245,7 @@ const Collections = () => {
         {/* MOBILE FILTER BAR */}
         <div className="flex md:hidden items-center justify-between px-4 py-3">
           <p className="text-sm font-medium text-gray-700">
-            {allProducts.length} Products
+            {filteredProducts.length} Products
           </p>
 
           <button
@@ -587,6 +609,12 @@ const Collections = () => {
                       <FaShoppingCart className="text-xs md:text-sm" />
                       Add to Cart
                     </button>
+                    <button
+                      onClick={() => handleBuyNow(product)}
+                      className="w-full mt-2 bg-blue-600 text-white py-1.5 rounded-md text-xs md:text-sm"
+                    >
+                      Buy Now
+                    </button>
                   </div>
                 </div>
               </div>
@@ -598,7 +626,7 @@ const Collections = () => {
             {visibleProducts < filteredProducts.length && (
               <button
                 onClick={loadMore}
-                className="border border-gray-400 px-6 py-2 rounded-md"
+                className="border text-black border-gray-400 px-6 py-2 rounded-md"
               >
                 Load More
               </button>
@@ -607,7 +635,7 @@ const Collections = () => {
             {visibleProducts > 8 && (
               <button
                 onClick={showLess}
-                className="border border-gray-400 px-6 py-2 rounded-md ml-3"
+                className="border text-black border-gray-400 px-6 py-2 rounded-md ml-3"
               >
                 Show Less
               </button>
