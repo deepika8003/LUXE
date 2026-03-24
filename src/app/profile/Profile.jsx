@@ -23,24 +23,28 @@ const Profile = () => {
       desc: "Manage your past and current deliveries.",
       status: "NO ORDERS YET",
       icon: <MdOutlineShoppingBag />,
+      path: "/profile/orders",
     },
     {
       title: "Cart",
       desc: "Items waiting for your confirmation.",
       status: "YOUR CART IS EMPTY",
       icon: <IoCartOutline />,
+      path: "/profile/cart",
     },
     {
       title: "Wishlist",
       desc: "Curated pieces for future acquisitions.",
       status: "YOUR WISHLIST IS EMPTY",
       icon: <FaRegHeart />,
+      path: "/profile/wishlist",
     },
     {
       title: "Rewards",
       desc: "Earn points and unlock exclusive benefits.",
       status: "NO REWARDS YET",
       icon: <MdOutlineDiamond />,
+      path: "/profile/#",
     },
   ];
 
@@ -157,7 +161,10 @@ const Profile = () => {
               className="hover:text-white cursor-pointer"
               onClick={closeSidebar}
             >
-              <Link href="" className="flex items-center gap-3">
+              <Link
+                href="/profile/settings"
+                className="flex items-center gap-3"
+              >
                 <IoSettings className="text-lg" />
                 SETTINGS
               </Link>
@@ -198,7 +205,8 @@ const Profile = () => {
             {cardsData.map((card, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-r from-[#111] to-[#1a1a1c] p-6 rounded-lg border border-white/10 hover:border-[#c6a96a]/40 transition duration-300"
+                onClick={() => router.push(card.path)}
+                className="bg-gradient-to-r cursor-pointer from-[#111] to-[#1a1a1c] p-6 rounded-lg border border-white/10 hover:border-[#c6a96a]/40 transition duration-300"
               >
                 <p className="text-[#155dfc] text-xl mb-4">{card.icon}</p>
                 <h3 className="text-sm mb-1 text-[#c6a96a]">{card.title}</h3>

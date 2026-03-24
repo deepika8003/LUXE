@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { FaSliders } from "react-icons/fa6";
+import { AiOutlineThunderbolt } from "react-icons/ai";
 
 const normalizeProduct = (item) => {
   return {
@@ -548,7 +549,7 @@ const Collections = () => {
             {filteredProducts.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden flex flex-col h-full"
+                className="bg-white rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full"
               >
                 {/* IMAGE */}
                 <div className="relative aspect-4/5 md:aspect-5/5 bg-gray-100 overflow-hidden">
@@ -601,18 +602,20 @@ const Collections = () => {
                   </div>
 
                   {/* BUTTON */}
-                  <div className="mt-auto pt-3 md:pt-4">
+                  <div className="mt-auto pt-3 md:pt-4 flex gap-2">
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="w-full flex items-center justify-center gap-2 md:gap-3 bg-black text-white text-[11px] md:text-sm py-1.5 md:py-2 rounded-md hover:bg-gray-800 transition"
+                      className="w-1/2 flex items-center justify-center gap-2 bg-black text-white text-[11px] md:text-sm py-2 rounded-md hover:bg-gray-700 active:bg-gray-600 transition"
                     >
                       <FaShoppingCart className="text-xs md:text-sm" />
                       Add to Cart
                     </button>
+
                     <button
                       onClick={() => handleBuyNow(product)}
-                      className="w-full mt-2 bg-blue-600 text-white py-1.5 rounded-md text-xs md:text-sm"
+                      className="w-1/2  flex items-center gap-2 justify-center bg-black text-white py-2 rounded-md text-[11px] md:text-sm hover:bg-gray-700 active:bg-gray-600 transition"
                     >
+                      <AiOutlineThunderbolt />
                       Buy Now
                     </button>
                   </div>

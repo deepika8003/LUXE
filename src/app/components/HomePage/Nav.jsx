@@ -300,7 +300,7 @@ const Nav = () => {
 
             <li className="rounded-lg hover:bg-blue-50">
               <Link
-                href="profile/cart"
+                href="/profile/cart"
                 className="flex items-center gap-4 px-4 py-3 text-black hover:text-blue-600"
               >
                 <FaShoppingCart className="text-lg" />

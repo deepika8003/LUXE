@@ -1,28 +1,45 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { addAddress, updateAddress } from "@/redux/addressSlice";
+import { FaLock } from "react-icons/fa";
 
 const Shipping = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const cart = useSelector((state) => state.cart.cartItems);
-  const products = useSelector((state) => state.product.products);
   const editAddress = useSelector((state) => state.address.editAddress);
+  const orders = useSelector((state) => state.orders.orders);
+
+  // active orders
+  const activeOrders = orders.filter((order) => order.status !== "Cancelled");
+
+  const orderItems = activeOrders.flatMap((order) =>
+    order.items.map((item) => ({
+      ...item,
+      status: order.status,
+    })),
+  );
+
+  const subtotal = orderItems.reduce((sum, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.qty) || 1;
+    return sum + price * qty;
+  }, 0);
+
+  const discount = 0;
+  const coupon = 0;
+  const estimatedTax = 10;
+
+  const finalTotal = subtotal - discount - coupon + estimatedTax;
 
   useEffect(() => {
     if (editAddress) {
       setFormData(editAddress);
     }
   }, [editAddress]);
-
-  const tax = 3.5;
-  const shippingFee = 10;
-  const couponDiscount = 0;
 
   const [formData, setFormData] = useState(
     editAddress || {
@@ -56,31 +73,6 @@ const Shipping = () => {
 
     router.push("/profile/cart");
   };
-  const calculateSellingPrice = (item) => {
-    const discount = item.discount ?? 0;
-    const originalPrice = item.originalPrice ?? item.price ?? 0;
-    return Math.round((originalPrice * (100 - discount)) / 100);
-  };
-
-  const totalOriginalPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + (product.originalPrice ?? product.price ?? 0) * item.qty;
-  }, 0);
-
-  const totalSellingPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + calculateSellingPrice(product) * item.qty;
-  }, 0);
-
-  const totalDiscount = totalOriginalPrice - totalSellingPrice;
-
-  const totalCustomerPrice = totalSellingPrice - couponDiscount;
-
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-
-  const finalTotal = totalCustomerPrice + tax + shippingFee;
 
   return (
     <div className="min-h-screen bg-[#f6f6f8]">
@@ -196,6 +188,7 @@ const Shipping = () => {
                 />
               </div>
             </div>
+
             {/* Shipping Method */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-black mb-4">
@@ -228,7 +221,7 @@ const Shipping = () => {
             {/* Buttons */}
             <div className="flex justify-between items-center pt-4">
               <Link
-                href="/cart"
+                href="profile/cart"
                 className="text-gray-600 hover:text-black font-medium"
               >
                 ← Back to shopping cart
@@ -245,60 +238,78 @@ const Shipping = () => {
 
           {/* RIGHT SUMMARY */}
           <div className="lg:w-1/3 mt-8 lg:mt-0">
-            <div className="bg-white rounded-xl p-6 shadow-sm sticky top-24">
-              <h3 className="text-md sm:text-lg font-semibold text-black mb-4">
-                Summary
-              </h3>
+            <div className="bg-[#f1f1f3] rounded-2xl p-6 sticky top-24">
+              {/* TITLE */}
+              <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                Order Summary
+              </h2>
 
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">{totalItems} items</span>
-                  <span className="text-gray-900 font-medium">
-                    ${totalSellingPrice.toLocaleString()}
-                  </span>
-                </div>
+              {/* ITEMS */}
+              <div className="space-y-4">
+                {orderItems.map((item, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 object-cover rounded-lg"
+                    />
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Discount</span>
-                  <span className="text-green-600 font-medium">
-                    -${totalDiscount.toLocaleString()}
-                  </span>
-                </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-800">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item.qty || 1}
+                      </p>
+                    </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Coupon</span>
-                  <span className="text-green-600 font-medium">
-                    -${couponDiscount.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax</span>
-                  <span className="text-gray-900 font-medium">
-                    ${tax.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Shipping fee</span>
-                  <span className="text-gray-900 font-medium">
-                    ${shippingFee.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="border-t border-gray-200 pt-3 mt-3">
-                  <div className="flex justify-between font-semibold text-md sm:text-lg">
-                    <span className="text-black">Total cost</span>
-                    <span className="text-black">
-                      ${finalTotal.toLocaleString()}
-                    </span>
+                    <p className="text-sm font-medium text-gray-800">
+                      ${Number(item.price) || 0}
+                    </p>
                   </div>
+                ))}
+              </div>
+
+              {/* DIVIDER */}
+              <div className="border-t border-gray-300 my-6"></div>
+
+              {/* PRICE DETAILS */}
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex justify-between">
+                  <span>Subtotal ({orderItems.length} items)</span>
+                  <span>${subtotal}</span>
                 </div>
 
-                <p className="text-green-600 text-sm">
-                  You will save $
-                  {(totalDiscount + couponDiscount).toLocaleString()}
-                </p>
+                <div className="flex justify-between text-red-500">
+                  <span>Discount</span>
+                  <span>-${discount}</span>
+                </div>
+
+                <div className="flex justify-between text-red-500">
+                  <span>Coupon</span>
+                  <span>-${coupon}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Estimated Tax</span>
+                  <span>${estimatedTax}</span>
+                </div>
+              </div>
+
+              {/* TOTAL */}
+              <div className="border-t border-gray-300 my-6"></div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">TOTAL</span>
+                <span className="text-xl font-bold text-gray-900">
+                  ${finalTotal}
+                </span>
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-6 text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+                <FaLock className="w-3 h-3" />
+                <span>Secure encrypted checkout</span>
               </div>
             </div>
           </div>

@@ -32,7 +32,7 @@ const Cart = () => {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const orders = useSelector((state) => state.orders.orders);
   const selectedCart =
     selectedItems.length === 0
       ? cart
@@ -67,11 +67,6 @@ const Cart = () => {
   useEffect(() => {
     if (cartChecked) return;
 
-    if (cart.length === 0) {
-      alert("Your cart is empty. Add your products");
-      router.push("/");
-    }
-
     setCartChecked(true);
   }, [cart]);
 
@@ -79,9 +74,40 @@ const Cart = () => {
     setSelectedItems(cart.map((item) => item.id));
   }, [cart]);
 
-  const handleContinue = () => {
+  const handlePlaceOrder = (item) => {
     if (!selectedAddress) {
-      alert("Please select an address");
+      alert("Please select address");
+      return;
+    }
+
+    const selectedAddr = addresses.find((a) => a.id === selectedAddress);
+
+    const order = {
+      id: Date.now(),
+      items: [item],
+      total: item.price * item.qty,
+      status: "Processing",
+      date: new Date().toDateString(),
+      address: selectedAddr,
+    };
+
+    dispatch(addOrder(order));
+
+    const updatedOrders = [order, ...orders];
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
+    // remove from cart
+    dispatch(removeFromCart(item.id));
+
+    // redirect
+    router.push("/profile/orders");
+  };
+
+  const handleContinue = () => {
+    const selectedAddr = addresses.find((a) => a.id === selectedAddress);
+
+    if (!selectedAddr) {
+      alert("Address not found");
       return;
     }
 
@@ -96,10 +122,11 @@ const Cart = () => {
       total: totalCustomerPrice,
       status: "Processing",
       date: new Date().toDateString(),
-      address: addresses.find((a) => a.id === selectedAddress),
+      address: selectedAddr,
     };
 
     dispatch(addOrder(order));
+    localStorage.setItem("orders", JSON.stringify([order, ...orders]));
 
     router.push("/profile/orders");
   };
@@ -177,127 +204,161 @@ const Cart = () => {
             />
             <p className="text-sm text-black font-medium">Select All</p>
           </div>
-          {cart.map((item) => {
-            const product = item;
-            const sellingPrice = calculateSellingPrice(product);
-            return (
-              <div key={product.id} className="bg-white mb-3">
-                <div className="p-4 flex justify-between gap-4">
-                  {/* CHECKBOX */}
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(item.id)}
-                    onChange={() => toggleSelect(item.id)}
-                    className="mt-2 mr-3"
-                  />
 
-                  {/* PRODUCT DETAILS */}
-                  <div className="flex-1">
-                    <h2 className="text-sm md:text-xl text-black">
-                      {product.name}
-                    </h2>
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto mt-5">
+              {/* ICON */}
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg mb-6">
+                <ImBoxAdd className="text-2xl text-blue-500" />
+              </div>
 
-                    <p className="text-xs text-gray-500 mt-2 mb-4">
-                      {product.description}
-                    </p>
+              {/* TITLE */}
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Your Cart is Empty
+              </h2>
 
-                    <p className="text-green-600 text-sm md:text-md font-medium my-1">
-                      {product.discount ?? 0}% off
-                      <del className="text-gray-400 mx-2">
-                        ${product.originalPrice ?? product.price}
-                      </del>
-                      ${sellingPrice}
-                    </p>
+              {/* TEXT */}
+              <p className="text-gray-500 text-sm mb-8">
+                Looks like you haven’t added anything to your cart yet. Start
+                exploring and add your favorite products.
+              </p>
 
-                    <p className="text-xs text-green-600">
-                      {product.offerCount ?? 0} offers available
-                    </p>
+              {/* BUTTON */}
+              <button
+                onClick={() => router.push("/collections")}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transform transition-all duration-200 shadow-md hover:shadow-xl"
+              >
+                Browse Products
+              </button>
+            </div>
+          ) : (
+            cart.map((item) => {
+              const product = item;
+              const sellingPrice = calculateSellingPrice(product);
+              return (
+                <div key={product.id} className="bg-white mb-3">
+                  <div className="p-4 flex justify-between gap-4">
+                    {/* CHECKBOX */}
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item.id)}
+                      onChange={() => toggleSelect(item.id)}
+                      className="mt-2 mr-3"
+                    />
 
-                    <p className="text-xs text-black mt-5 mb-3">
-                      Delivery by 5 - 7 days
-                    </p>
-                  </div>
+                    {/* PRODUCT DETAILS */}
+                    <div className="flex-1">
+                      <h2 className="text-sm md:text-xl text-black">
+                        {product.name}
+                      </h2>
 
-                  {/* IMAGE & QTY */}
-                  <div className="flex flex-col items-end">
-                    {/* IMAGE */}
-                    <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-contain"
-                      />
+                      <p className="text-xs text-gray-500 mt-2 mb-4">
+                        {product.description}
+                      </p>
+
+                      <p className="text-green-600 text-sm md:text-md font-medium my-1">
+                        {product.discount ?? 0}% off
+                        <del className="text-gray-400 mx-2">
+                          ${product.originalPrice ?? product.price}
+                        </del>
+                        ${sellingPrice}
+                      </p>
+
+                      <p className="text-xs text-green-600">
+                        {product.offerCount ?? 0} offers available
+                      </p>
+
+                      <p className="text-xs text-black mt-5 mb-3">
+                        Delivery by 5 - 7 days
+                      </p>
                     </div>
 
-                    {/* QTY */}
-                    <div className="relative w-full md:w-32">
-                      <div
-                        className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
-                        onClick={() =>
-                          setOpenQty(openQty === item.id ? null : item.id)
-                        }
-                      >
-                        <h4 className="flex text-black items-center justify-center gap-2 text-sm">
-                          Qty: {item.qty} <FaCaretDown />
-                        </h4>
+                    {/* IMAGE & QTY */}
+                    <div className="flex flex-col items-end">
+                      {/* IMAGE */}
+                      <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
 
-                      {openQty === item.id && (
+                      {/* QTY */}
+                      <div className="relative w-full md:w-32">
                         <div
-                          className="absolute top-0 left-0 w-full bg-white border border-[#ababab] z-10"
-                          onClick={(e) => e.stopPropagation()}
+                          className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
+                          onClick={() =>
+                            setOpenQty(openQty === item.id ? null : item.id)
+                          }
                         >
-                          {[1, 2, 3].map((num) => (
+                          <h4 className="flex text-black items-center justify-center gap-2 text-sm">
+                            Qty: {item.qty} <FaCaretDown />
+                          </h4>
+                        </div>
+
+                        {openQty === item.id && (
+                          <div
+                            className="absolute top-0 left-0 w-full bg-white border border-[#ababab] z-10"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {[1, 2, 3].map((num) => (
+                              <p
+                                key={num}
+                                className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm"
+                                onClick={() => {
+                                  dispatch(
+                                    updateQty({ id: item.id, qty: num }),
+                                  );
+                                  setOpenQty(null);
+                                }}
+                              >
+                                {num}
+                              </p>
+                            ))}
+
                             <p
-                              key={num}
-                              className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm"
+                              className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm border-t border-gray-200"
                               onClick={() => {
-                                dispatch(updateQty({ id: item.id, qty: num }));
+                                setSelectedItem(item);
+                                setCustomQty(item.qty.toString());
+                                setShowQtyModal(true);
                                 setOpenQty(null);
                               }}
                             >
-                              {num}
+                              more
                             </p>
-                          ))}
-
-                          <p
-                            className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm border-t border-gray-200"
-                            onClick={() => {
-                              setSelectedItem(item);
-                              setCustomQty(item.qty.toString());
-                              setShowQtyModal(true);
-                              setOpenQty(null);
-                            }}
-                          >
-                            more
-                          </p>
-                        </div>
-                      )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* BUTTONS */}
-                <div className="flex w-full border-t border-[#f0f0f0]">
-                  <button className="flex items-center cursor-pointer justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50">
-                    <ImBoxAdd className="text-sm text-[#ababab]" />
-                    Save For Later
-                  </button>
+                  {/* BUTTONS */}
+                  <div className="flex w-full border-t border-[#f0f0f0]">
+                    <button
+                      className="flex items-center justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50"
+                      onClick={() => handlePlaceOrder(item)}
+                    >
+                      <ImBoxAdd className="text-sm text-[#ababab]" />
+                      Place Order
+                    </button>
 
-                  <button
-                    className="flex items-center justify-center cursor-pointer gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
-                    onClick={() => {
-                      setSelectedItem(item);
-                      setShowDeleteModal(true);
-                    }}
-                  >
-                    <MdDelete className="text-[#ababab] text-xl" />
-                    Remove
-                  </button>
+                    <button
+                      className="flex items-center justify-center cursor-pointer gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      <MdDelete className="text-[#ababab] text-xl" />
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
         {/* RIGHT */}
