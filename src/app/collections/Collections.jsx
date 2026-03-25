@@ -36,6 +36,7 @@ const Collections = () => {
   const filters = useSelector((state) => state.filters);
   const adminProducts = useSelector((state) => state.product.products);
   const wishlist = useSelector((state) => state.wishlist.items);
+  const router = useRouter();
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
@@ -549,6 +550,7 @@ const Collections = () => {
             {filteredProducts.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
+                onClick={() => router.push(`/productDetails/${product.id}`)}
                 className="bg-white rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full"
               >
                 {/* IMAGE */}

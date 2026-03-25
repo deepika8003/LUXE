@@ -100,9 +100,18 @@ const authSlice = createSlice({
             state.currentUser = null;
             localStorage.removeItem("currentUser");
         },
-
+        // set user
         setUser: (state, action) => {
-            state.currentUser = action.payload;
+            const updatedUser = action.payload;
+
+            state.currentUser = updatedUser;
+
+            state.users = state.users.map((u) =>
+                u.email === state.currentUser.email ? updatedUser : u
+            );
+
+            localStorage.setItem("users", JSON.stringify(state.users));
+            localStorage.setItem("currentUser", JSON.stringify(updatedUser));
         },
         // Aadmin Login
         adminLogin: (state, action) => {

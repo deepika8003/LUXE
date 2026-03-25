@@ -44,7 +44,7 @@ const Profile = () => {
       desc: "Earn points and unlock exclusive benefits.",
       status: "NO REWARDS YET",
       icon: <MdOutlineDiamond />,
-      path: "/profile/#",
+      path: "/profile/rewards",
     },
   ];
 
