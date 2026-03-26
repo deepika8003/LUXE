@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
+
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { BsTruck } from "react-icons/bs";
 import { FaBoxArchive } from "react-icons/fa6";
@@ -156,11 +158,18 @@ const Product = () => {
 
   return (
     <>
-      <section className="bg-[#fcfcfc] py-24 w-full">
-        <div className="py-10 md:flex">
-          <div className="max-w-7xl mx-auto px-6 md:flex gap-8">
+      <section className="bg-[#fcfcfc] py-24 w-full px-6">
+        <h2 className="text-xl sm:text-2xl text-center font-bold text-black  pt-5">
+          Product Details
+        </h2>
+        <p className="text-center text-gray-600 text-sm sm:text-base mt-2 max-w-2xl mx-auto">
+          Explore detailed information about this product, including features,
+          pricing, and specifications to help you make the right choice.
+        </p>
+        <div className="pt-10 md:flex">
+          <div className="max-w-7xl mx-auto  lg:flex gap-8">
             {/* LEFT IMAGE SECTION */}
-            <div className="md:w-[60%] flex flex-col md:flex-row gap-6 flex-shrink-0">
+            <div className="w-full lg:w-[60%] flex flex-col lg:flex-row gap-6 flex-shrink-0">
               <div className="w-full aspect-[3/4] relative overflow-hidden order-1">
                 <img
                   src={activeImage}
@@ -181,7 +190,7 @@ const Product = () => {
               </div>
 
               {/* THUMBNAILS */}
-              <div className="flex flex-row md:flex-col gap-4 mt-4 md:mt-0 order-2 md:order-none">
+              <div className="flex flex-row lg:flex-col gap-4 mt-4 md:mt-0 order-2 lg:order-none">
                 {thumbnails.map((img, i) => (
                   <img
                     key={i}
@@ -199,12 +208,12 @@ const Product = () => {
             </div>
 
             {/* RIGHT CONTENT */}
-            <div className="md:w-[40%] md:px-5 mt-8 md:mt-0">
+            <div className="lg:w-[40%] md:px-5 mt-8 md:mt-0">
               <div>
                 <h4 className="text-[#6b7280] uppercase font-extralight mb-5 pt-10 text-[10px] tracking-[3px]">
                   {product.category || "Product Details"}
                 </h4>
-                <p className="font-serif mb-5 text-xl sm:text-3xl md:text-4xl text-black">
+                <p className="font-serif mb-5 text-xl md:text-3xl  text-black">
                   {product.title}
                 </p>
                 <span className="font-serif text-lg sm:text-2xl text-[#4b5563]">
@@ -212,8 +221,8 @@ const Product = () => {
                 </span>
               </div>
 
-              <div className="mb-18 mt-8">
-                <i className="font-serif text-md sm:text-xl text-[#4b5563]">
+              <div className="mb-10  mt-4">
+                <i className="font-serif text-md line-clamp-3 sm:text-md text-[#4b5563]">
                   {product.description}
                 </i>
               </div>
@@ -246,17 +255,17 @@ const Product = () => {
               </div>
 
               {/* BUTTONS */}
-              <div className="w-full mt-10 mb-5 flex  gap-4">
+              <div className="w-full mt-7 mb-5 flex  gap-4">
                 <button
                   onClick={handleAddToCart}
-                  className="text-white flex items-center w-1/2  justify-center gap-2 cursor-pointer tracking-[5]  text-sm bg-black hover:bg-gray-800 px-6  py-4.5 uppercase"
+                  className="text-white cursor-pointer flex items-center w-1/2  justify-center gap-2 cursor-pointer   text-sm bg-black hover:bg-gray-800 px-6  py-4.5 uppercase"
                 >
                   <FaShoppingCart />
                   add to bag
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  className="flex items-center w-1/2 justify-center gap-2 bg-black text-white py-4.5 px-6 uppercase text-sm hover:bg-gray-800 transition"
+                  className="flex items-center cursor-pointer w-1/2 justify-center gap-2 bg-black text-white py-4.5 px-3 uppercase text-sm hover:bg-gray-800 transition"
                 >
                   <AiOutlineThunderbolt className="text-lg" />
                   Buy Now
@@ -369,7 +378,7 @@ const Product = () => {
 
       {/* RELATED PRODUCTS SECTION */}
       {relatedProducts.length > 0 && (
-        <div className="mt-10">
+        <div>
           <ProductCard productData={relatedProducts} />
         </div>
       )}

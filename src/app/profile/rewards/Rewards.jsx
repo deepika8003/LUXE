@@ -65,8 +65,8 @@ const Rewards = () => {
     <div className="bg-gray-100">
       <section className="max-w-7xl min-h-screen mx-auto pt-26 pb-10 px-6">
         {/* HEADER */}
-        <div className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-800">
+        <div className="mb-10 text-center">
+          <h1 className="text-2xl md:text-4xl font-semibold text-gray-800">
             Welcome back, Julianne Moore
           </h1>
           <p className="text-gray-500 mt-2">
@@ -96,7 +96,7 @@ const Rewards = () => {
               </div>
 
               <h2
-                className={`text-3xl font-bold ${card.bg.includes("blue") ? "text-white" : "text-gray-800"}`}
+                className={`text-xl sm:text-3xl font-bold ${card.bg.includes("blue") ? "text-white" : "text-gray-800"}`}
               >
                 {card.value}
               </h2>
@@ -210,11 +210,25 @@ const Rewards = () => {
         </div>
 
         {/* BUTTONS */}
-        <div className="flex justify-center gap-6 mt-12">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition">
+        <div className="flex justify-center gap-6 mt-12 flex-wrap">
+          {/* Redeem Rewards */}
+          <button
+            className="px-6 py-3 rounded-full text-sm font-medium 
+    bg-gradient-to-r from-blue-600 to-purple-600 text-white 
+    shadow-md hover:shadow-lg hover:scale-105 active:scale-95 
+    transition-all duration-200"
+          >
             REDEEM REWARDS
           </button>
-          <button className="border border-black px-6 py-3 rounded-md font-medium hover:bg-black hover:text-white transition">
+
+          {/* Explore Offers */}
+          <button
+            className="px-6 py-3 rounded-full text-sm font-medium 
+    border border-gray-300 text-black 
+    hover:bg-black hover:text-white 
+    hover:scale-105 active:scale-95 
+    transition-all duration-200"
+          >
             EXPLORE OFFERS
           </button>
         </div>

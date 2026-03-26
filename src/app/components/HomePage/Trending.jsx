@@ -28,10 +28,7 @@ const Trending = () => {
         </h2>
         <div className="flex gap-6 overflow-x-auto pb-10">
           {allProducts?.slice(0, 8).map((item) => (
-            <div
-              key={item.id}
-              className="min-w-[300px] md:min-w-[350px] group cursor-pointer"
-            >
+            <div key={item.id} className="min-w-[300px] md:min-w-[350px] group">
               <div className="relative overflow-hidden mb-4 aspect-[3/4]">
                 <img
                   src={item.images?.[0] || item.thumbnail || item.image}
@@ -57,7 +54,7 @@ const Trending = () => {
                         }),
                       )
                     }
-                    className="w-full flex justify-center items-center gap-2 bg-gray-950 active:bg-gray-800 text-white py-4 text-xs font-bold uppercase tracking-widest"
+                    className="w-full cursor-pointer flex justify-center items-center gap-2 bg-gray-950 active:bg-gray-800 text-white py-4 text-xs font-bold uppercase tracking-widest"
                   >
                     <BsPlusLg />
                     Add to Cart

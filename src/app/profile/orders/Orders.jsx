@@ -12,16 +12,27 @@ const Orders = () => {
   const [openAddressId, setOpenAddressId] = useState(null);
   const orders = useSelector((state) => state.orders.orders);
 
-  const orderItems = orders.flatMap((order) =>
-    order.items.map((item) => ({
+  const getAutoStatus = (date) => {
+    const orderDate = new Date(date);
+    const today = new Date();
+
+    const diffDays = Math.floor((today - orderDate) / (1000 * 60 * 60 * 24));
+
+    if (diffDays >= 7) return "Delivered";
+    if (diffDays >= 2) return "Shipped";
+    return "Processing";
+  };
+  const orderItems = orders.flatMap((order) => {
+    const autoStatus = getAutoStatus(order.date);
+
+    return order.items.map((item) => ({
       ...item,
       orderId: order.id,
-      status: order.status,
+      status: autoStatus,
       date: order.date,
       address: order.address,
-    })),
-  );
-
+    }));
+  });
   const getStatusColor = (status) => {
     if (status === "Delivered") return "bg-green-100 text-green-600";
     if (status === "Shipped") return "bg-blue-100 text-blue-600";
@@ -32,7 +43,7 @@ const Orders = () => {
     <section className="min-h-screen bg-gray-100 py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* HEADER  */}
-        <div className="mb-8">
+        <div className="mb-8 mx-auto text-center">
           <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
             Your Orders
           </h1>
@@ -73,7 +84,7 @@ const Orders = () => {
             {orderItems.map((order) => (
               <div
                 key={order.id + order.orderId}
-                className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition"
+                className="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-white p-4 rounded-lg shadow-sm hover:shadow-md  transition-all duration-300 hover:scale-[1.02]"
               >
                 {/* LEFT  */}
                 <div className="flex gap-4 md:col-span-3">
@@ -84,8 +95,12 @@ const Orders = () => {
                   />
 
                   <div>
-                    <h3 className="font-medium text-gray-900">{order.name}</h3>
-                    <p className="text-sm text-gray-500">{order.description}</p>
+                    <h3 className="text-sm md:text-lg font-medium text-gray-900">
+                      {order.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 line-clamp-2">
+                      {order.description}
+                    </p>
 
                     <div className="text-xs text-gray-500 mt-2 flex gap-4">
                       <span>Qty: {order.qty || 1}</span>
@@ -94,7 +109,7 @@ const Orders = () => {
                 </div>
 
                 {/* RIGHT  */}
-                <div className="flex flex-col justify-between md:items-end md:col-span-1 gap-2">
+                <div className="flex flex-col justify-between lg:items-end md:col-span-1 gap-2">
                   <p className="font-semibold text-gray-900">₹{order.price}</p>
 
                   {/* ADDRESS PREVIEW */}
@@ -139,14 +154,18 @@ const Orders = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
-                      onClick={() => router.push(`/trackorder`)}
-                      className="text-xs px-4 py-2 border border-gray-300 rounded-md hover:bg-black hover:text-white transition"
+                      onClick={() =>
+                        router.push(
+                          `/trackorder/${order.orderId}?itemId=${order.id}`,
+                        )
+                      }
+                      className="text-xs cursor-pointer  px-4 py-2 border border-gray-300 rounded-md hover:bg-black hover:text-white transition"
                     >
                       Track Order
                     </button>
 
                     {order.status === "Delivered" && (
-                      <button className="text-xs px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition">
+                      <button className="text-xs cursor-pointer px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition">
                         Reorder
                       </button>
                     )}
@@ -154,7 +173,7 @@ const Orders = () => {
                     {order.status === "Processing" && (
                       <button
                         onClick={() => dispatch(cancelOrder(order.orderId))}
-                        className="text-xs px-4 py-2 border border-red-400 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
+                        className="text-xs cursor-pointer px-4 py-2 border border-red-400 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
                       >
                         Cancel
                       </button>

@@ -122,7 +122,7 @@ export default function AccountSettingsUI() {
 
   // Address edit navigation
   const handleEditAddress = () => {
-    router.push("profile/shipping");
+    router.push("/profile/shippingDetails");
   };
 
   // Language change handler
@@ -143,9 +143,13 @@ export default function AccountSettingsUI() {
     <section className="bg-gray-50 min-h-screen pt-26 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <h1 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-10 tracking-tight">
+        <h1 className="text-2xl sm:text-4xl text-center font-semibold text-gray-900 mb-2 tracking-tight">
           Account Settings
         </h1>
+        <p className="text-sm text-center text-gray-500 mt-2 text-center max-w-xl mx-auto mb-6">
+          Update your profile, control your security, and customize your
+          experience effortlessly.
+        </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* LEFT */}
@@ -158,7 +162,7 @@ export default function AccountSettingsUI() {
                 </h2>
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 text-xs font-medium tracking-wider text-blue-600 hover:text-blue-800 transition"
+                  className="flex items-center cursor-pointer gap-2 text-xs font-medium tracking-wider text-blue-600 hover:text-blue-800 transition"
                 >
                   <FaPencilAlt size={12} />
                   EDIT DETAILS
@@ -189,7 +193,7 @@ export default function AccountSettingsUI() {
                       }
                       className={`w-full px-3 py-2 border rounded-lg bg-gray-50 text-gray-600 text-sm focus:outline-none focus:ring-1 transition-all ${
                         isEditing
-                          ? "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+                          ? "border-gray-300 text-black focus:border-blue-500 focus:ring-blue-200"
                           : "border-gray-200 cursor-not-allowed"
                       }`}
                     />
@@ -204,7 +208,7 @@ export default function AccountSettingsUI() {
                       type="email"
                       value={formData?.email || ""}
                       disabled
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-not-allowed"
+                      className="w-full  px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 text-sm cursor-not-allowed"
                     />
                   </div>
 
@@ -222,7 +226,7 @@ export default function AccountSettingsUI() {
                       }
                       className={`w-full px-3 py-2 border rounded-lg bg-gray-50 text-gray-600 text-sm focus:outline-none focus:ring-1 transition-all ${
                         isEditing
-                          ? "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
+                          ? "border-gray-300 text-black focus:border-blue-500 focus:ring-blue-200"
                           : "border-gray-200 cursor-not-allowed"
                       }`}
                     />
@@ -235,7 +239,7 @@ export default function AccountSettingsUI() {
                 <div className="mt-8 flex justify-end">
                   <button
                     onClick={handleUpdate}
-                    className="px-6 py-2 bg-black hover:bg-gray-800 text-white text-xs font-semibold tracking-wider rounded-lg transition shadow-sm"
+                    className="px-6 cursor-pointer py-2 bg-black hover:bg-gray-800 text-white text-xs font-semibold tracking-wider rounded-lg transition shadow-sm"
                   >
                     SAVE CHANGES
                   </button>
@@ -263,7 +267,7 @@ export default function AccountSettingsUI() {
                       onChange={(e) =>
                         setPasswords({ ...passwords, current: e.target.value })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
+                      className="w-full  px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
                     />
                     <button
                       type="button"
@@ -294,7 +298,7 @@ export default function AccountSettingsUI() {
                       onChange={(e) =>
                         setPasswords({ ...passwords, new: e.target.value })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
+                      className="w-full  px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
                     />
                     <button
                       type="button"
@@ -323,7 +327,7 @@ export default function AccountSettingsUI() {
                       onChange={(e) =>
                         setPasswords({ ...passwords, confirm: e.target.value })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
+                      className="w-full  px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
                     />
                     <button
                       type="button"
@@ -349,7 +353,7 @@ export default function AccountSettingsUI() {
               <div className="mt-8 flex justify-end">
                 <button
                   onClick={handlePasswordUpdate}
-                  className="px-6 py-2 bg-black hover:bg-gray-800 text-white text-xs font-semibold tracking-wider rounded-lg transition shadow-sm"
+                  className="px-6 py-2 cursor-pointer bg-black hover:bg-gray-800 text-white text-xs font-semibold tracking-wider rounded-lg transition shadow-sm"
                 >
                   UPDATE PASSWORD
                 </button>
@@ -364,7 +368,7 @@ export default function AccountSettingsUI() {
                 </h2>
                 <button
                   onClick={handleEditAddress}
-                  className="flex items-center gap-2 text-xs font-medium tracking-wider text-blue-600 hover:text-blue-800 transition"
+                  className="flex cursor-pointer items-center gap-2 text-xs font-medium tracking-wider text-blue-600 hover:text-blue-800 transition"
                 >
                   <FaPencilAlt size={12} />
                   EDIT
@@ -423,7 +427,7 @@ export default function AccountSettingsUI() {
                         type="checkbox"
                         checked={emailNewsletter}
                         onChange={(e) => setEmailNewsletter(e.target.checked)}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        className="h-4 w-4 cursor-pointer text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                       />
                     </label>
                     <label className="flex justify-between items-center cursor-pointer">
@@ -434,7 +438,7 @@ export default function AccountSettingsUI() {
                         type="checkbox"
                         checked={smsAlerts}
                         onChange={(e) => setSmsAlerts(e.target.checked)}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        className="h-4 w-4 cursor-pointer text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                       />
                     </label>
                   </div>
@@ -448,7 +452,7 @@ export default function AccountSettingsUI() {
                   <select
                     value={language}
                     onChange={handleLanguageChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
+                    className="w-full cursor-pointer px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-500"
                   >
                     <option>English</option>
                     <option>Tamil</option>
@@ -469,14 +473,14 @@ export default function AccountSettingsUI() {
               <div className="space-y-4">
                 <button
                   onClick={handleDeleteAccount}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-red-50 hover:bg-red-100 rounded-lg transition text-red-700 group"
+                  className="w-full cursor-pointer flex items-center justify-between px-4 py-3 bg-red-50 hover:bg-red-100 rounded-lg transition text-red-700 group"
                 >
                   <span className="text-sm font-medium">DELETE MY ACCOUNT</span>
                   <FaTrashAlt className="text-red-500 group-hover:text-red-700 text-sm" />
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition text-gray-700 group"
+                  className="w-full cursor-pointer flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition text-gray-700 group"
                 >
                   <span className="text-sm font-medium">
                     Logout of All Sessions

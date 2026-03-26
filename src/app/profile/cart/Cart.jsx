@@ -84,7 +84,10 @@ const Cart = () => {
 
     const order = {
       id: Date.now(),
-      items: [item],
+      items: selectedCart.map((item) => ({
+        ...item,
+        id: item.id,
+      })),
       total: item.price * item.qty,
       status: "Processing",
       date: new Date().toDateString(),
@@ -118,7 +121,10 @@ const Cart = () => {
 
     const order = {
       id: Date.now(),
-      items: selectedCart,
+      items: selectedCart.map((item) => ({
+        ...item,
+        id: item.id,
+      })),
       total: totalCustomerPrice,
       status: "Processing",
       date: new Date().toDateString(),
@@ -248,7 +254,7 @@ const Cart = () => {
 
                     {/* PRODUCT DETAILS */}
                     <div className="flex-1">
-                      <h2 className="text-sm md:text-xl text-black">
+                      <h2 className="text-xs md:text-xl text-black">
                         {product.name}
                       </h2>
 
@@ -256,7 +262,7 @@ const Cart = () => {
                         {product.description}
                       </p>
 
-                      <p className="text-green-600 text-sm md:text-md font-medium my-1">
+                      <p className="text-green-600 text-xs md:text-md font-medium my-1">
                         {product.discount ?? 0}% off
                         <del className="text-gray-400 mx-2">
                           ${product.originalPrice ?? product.price}
@@ -337,7 +343,7 @@ const Cart = () => {
                   {/* BUTTONS */}
                   <div className="flex w-full border-t border-[#f0f0f0]">
                     <button
-                      className="flex items-center justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50"
+                      className="cursor-pointer flex items-center justify-center gap-2 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50"
                       onClick={() => handlePlaceOrder(item)}
                     >
                       <ImBoxAdd className="text-sm text-[#ababab]" />
@@ -416,15 +422,20 @@ const Cart = () => {
           </div>
 
           {/* SECURE */}
-          <div className="my-4 p-4 bg-white rounded">
-            <p className="text-[#878787] text-sm flex items-center gap-3">
-              <IoShieldCheckmarkSharp className="text-xl text-[#878787]" />
-              Safe and secure payments. Easy returns. 100% Authentic products.
-            </p>
+          <div className="my-4 p-4 bg-white ">
+            <div className="flex items-start gap-3">
+              {/* ICON */}
+              <IoShieldCheckmarkSharp className="text-xl md:text-2xl text-blue-600 flex-shrink-0 mt-0.5" />
+
+              {/* TEXT */}
+              <p className="text-sm text-gray-600 truncate max-w-[220px]">
+                Safe and secure payments. Easy returns. 100% Authentic products.
+              </p>
+            </div>
           </div>
 
           {/* PAYMENT DIV */}
-          <div className="bg-white p-4 rounded flex justify-between items-center">
+          <div className="bg-white p-4 rounded flex justify-between items-center gap-2">
             <div>
               <del className="text-[#878787] text-sm block">
                 ${totalOriginalPrice.toLocaleString()}
@@ -437,7 +448,7 @@ const Cart = () => {
             <div>
               <button
                 onClick={handleContinue}
-                className="bg-black cursor-pointer text-white px-10 py-3 rounded-sm hover:bg-gray-800 font-medium"
+                className="bg-black cursor-pointer text-white px-6 py-3 rounded-sm hover:bg-gray-800 font-medium"
               >
                 Continue
               </button>
@@ -475,12 +486,12 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowQtyModal(false)}
-                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black cursor-pointer py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
               <button
-                className="text-blue-600 text-sm font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
+                className="text-blue-600 cursor-pointer text-sm font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
                 onClick={() => {
                   if (!customQty) return;
                   dispatch(
@@ -521,13 +532,13 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black cursor-pointer py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
 
               <button
-                className="text-red-600 text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
+                className="text-red-600 cursor-pointer text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
                 onClick={() => {
                   setSelectedItems((prev) =>
                     prev.filter((id) => id !== selectedItem.id),

@@ -132,13 +132,13 @@ const Nav = () => {
           </div>
 
           {/* LOGO */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 text-3xl font-serif font-bold tracking-wider">
+          <div className="absolute left-1/2 -translate-x-[70%] flex items-center gap-2 text-2xl  sm:text-3xl font-serif font-bold tracking-wider">
             <MdOutlineDiamond className="text-blue-600 text-3xl" />
             <h1 className="text-black">LUXE</h1>
           </div>
 
           {/* RIGHT SECTION */}
-          <div className="flex items-center">
+          <div className="flex gap-0 items-center">
             <div className="lg:hidden w-9 h-11 flex items-center justify-center rounded-full hover:bg-white cursor-pointer">
               <IoMdSearch className="text-xl text-black" />
             </div>

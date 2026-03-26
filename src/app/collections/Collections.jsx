@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 
 import { addToCart } from "@/redux/cartSlice";
 import { addToWishlist, removeFromWishlist } from "@/redux/wishlistSlice";
@@ -15,7 +16,7 @@ import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { FaSliders } from "react-icons/fa6";
 import { AiOutlineThunderbolt } from "react-icons/ai";
-
+import { FaSearch } from "react-icons/fa";
 const normalizeProduct = (item) => {
   return {
     id: item.id,
@@ -82,7 +83,6 @@ const Collections = () => {
   }, [images.length]);
 
   // mobile view filter
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -196,7 +196,7 @@ const Collections = () => {
     };
 
     dispatch(addOrder(order));
-    router.push("/orders");
+    router.push("/profile/orders");
   };
   return (
     <>
@@ -539,18 +539,38 @@ const Collections = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
             {/* no product found */}
             {filteredProducts.length === 0 && (
-              <div className="col-span-full text-center py-20">
-                <p className="text-gray-500 text-lg font-medium">
+              <div className="col-span-full flex flex-col items-center justify-center text-center py-20">
+                {/* ICON */}
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg mb-6">
+                  <FaSearch className="text-xl text-blue-500" />
+                </div>
+
+                {/* TITLE */}
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
                   No products found
+                </h2>
+
+                {/* DESCRIPTION */}
+                <p className="text-gray-500 text-sm mb-8">
+                  Try adjusting your filters or explore our collections.
                 </p>
+
+                {/* BUTTON */}
+                <Link href="/collections">
+                  <button
+                    onClick={() => setShowFilter(true)}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transform transition-all duration-200 shadow-md hover:shadow-xl flex items-center gap-2"
+                  >
+                    <FaSliders />
+                    Try Other Filters
+                  </button>
+                </Link>
               </div>
             )}
-
             {/* product card */}
             {filteredProducts.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
-                onClick={() => router.push(`/productDetails/${product.id}`)}
                 className="bg-white rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full"
               >
                 {/* IMAGE */}
@@ -558,6 +578,7 @@ const Collections = () => {
                   <img
                     src={product.image}
                     alt={product.name}
+                    onClick={() => router.push(`/productDetails/${product.id}`)}
                     loading="lazy"
                     className="w-full h-full object-cover hover:scale-105 transition duration-500"
                   />
@@ -568,11 +589,14 @@ const Collections = () => {
                     </span>
                   )}
                   <button
-                    onClick={() => toggleLike(product)}
-                    className={`absolute top-2 right-2 p-2 rounded-full shadow
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(product);
+                    }}
+                    className={`absolute top-2 cursor-pointer right-2 p-2 rounded-full shadow
                     ${
                       wishlist.some((item) => item.id === product.id)
-                        ? "bg-red-500 text-white"
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
                         : "bg-white text-black"
                     }`}
                   >
@@ -604,18 +628,26 @@ const Collections = () => {
                   </div>
 
                   {/* BUTTON */}
-                  <div className="mt-auto pt-3 md:pt-4 flex gap-2">
+                  <div className="mt-auto pt-3 md:pt-4 flex flex-col sm:flex-row gap-2">
+                    {/* Add to Cart */}
                     <button
-                      onClick={() => handleAddToCart(product)}
-                      className="w-1/2 flex items-center justify-center gap-2 bg-black text-white text-[11px] md:text-sm py-2 rounded-md hover:bg-gray-700 active:bg-gray-600 transition"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddToCart(product);
+                      }}
+                      className="w-full cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[11px] md:text-sm py-2 rounded-lg flex items-center justify-center gap-2 hover:scale-[1.03] active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
                     >
                       <FaShoppingCart className="text-xs md:text-sm" />
                       Add to Cart
                     </button>
 
+                    {/* Buy Now */}
                     <button
-                      onClick={() => handleBuyNow(product)}
-                      className="w-1/2  flex items-center gap-2 justify-center bg-black text-white py-2 rounded-md text-[11px] md:text-sm hover:bg-gray-700 active:bg-gray-600 transition"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBuyNow(product);
+                      }}
+                      className="w-full cursor-pointer border border-gray-300 text-black text-[11px] md:text-sm py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-black hover:text-white hover:scale-[1.03] active:scale-95 transition-all duration-200"
                     >
                       <AiOutlineThunderbolt />
                       Buy Now
@@ -627,20 +659,29 @@ const Collections = () => {
           </div>
 
           {/* LOAD MORE & SHOW LESS */}
-          <div className="flex justify-center mt-10">
+          <div className="flex justify-center mt-10 gap-3 flex-wrap">
+            {/* Load More */}
             {visibleProducts < filteredProducts.length && (
               <button
                 onClick={loadMore}
-                className="border text-black border-gray-400 px-6 py-2 rounded-md"
+                className="cursor-pointer px-6 py-2 rounded-full text-sm font-medium 
+      bg-gradient-to-r from-blue-600 to-purple-600 text-white 
+      shadow-md hover:shadow-lg hover:scale-105 active:scale-95 
+      transition-all duration-200"
               >
                 Load More
               </button>
             )}
 
+            {/* Show Less */}
             {visibleProducts > 8 && (
               <button
                 onClick={showLess}
-                className="border text-black border-gray-400 px-6 py-2 rounded-md ml-3"
+                className="cursor-pointer px-6 py-2 rounded-full text-sm font-medium 
+      border border-gray-300 text-black 
+      hover:bg-black hover:text-white 
+      hover:scale-105 active:scale-95 
+      transition-all duration-200"
               >
                 Show Less
               </button>

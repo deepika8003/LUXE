@@ -41,6 +41,7 @@ const orderSlice = createSlice({
                 localStorage.setItem("orders", JSON.stringify(state.orders));
             }
         },
+        
     },
 });
 

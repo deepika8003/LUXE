@@ -77,10 +77,14 @@ const Shipping = () => {
   return (
     <div className="min-h-screen bg-[#f6f6f8]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 my-8 py-16">
-        <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">
-          Shipping Information
-        </h2>
-
+        <div className="text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mb-2">
+            Shipping Information
+          </h2>
+          <p className="text-sm text-gray-500 mb-6">
+            Secure checkout with quick and reliable delivery.
+          </p>
+        </div>
         <div className="lg:flex lg:gap-8">
           {/* LEFT FORM */}
           <form onSubmit={handleSubmit} className="lg:w-2/3 space-y-6">
@@ -139,7 +143,7 @@ const Shipping = () => {
                   value={formData.street}
                   onChange={handleChange}
                   placeholder="Enter your street address"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
                 />
 
                 <select
@@ -147,7 +151,7 @@ const Shipping = () => {
                   required
                   value={formData.country}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
                 >
                   <option value="">Select your country</option>
                   <option>United States</option>
@@ -160,7 +164,7 @@ const Shipping = () => {
                   required
                   value={formData.region}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
                 >
                   <option value="">Select your region</option>
                   <option>Kerala</option>
@@ -174,7 +178,7 @@ const Shipping = () => {
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="Enter your city"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
                 />
 
                 <input
@@ -184,7 +188,7 @@ const Shipping = () => {
                   value={formData.postal}
                   onChange={handleChange}
                   placeholder="Enter your postal code"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full text-black border border-gray-300 rounded-lg px-4 py-2"
                 />
               </div>
             </div>
@@ -205,9 +209,11 @@ const Shipping = () => {
                         <input
                           type="radio"
                           name="shippingMethod"
-                          className="w-4 h-4 text-black"
+                          className="w-4 h-4 "
                         />
-                        <span className="font-medium text-md">{method}</span>
+                        <span className="font-medium text-black text-sm sm:text-md">
+                          {method}
+                        </span>
                       </div>
                       <span className="text-xs md:text-sm text-gray-500">
                         Estimated arrival: 7-30 Oct '24
@@ -219,17 +225,17 @@ const Shipping = () => {
             </div>
 
             {/* Buttons */}
-            <div className="flex justify-between items-center pt-4">
+            <div className="sm:flex justify-between items-center gap-2 pt-4">
               <Link
                 href="profile/cart"
-                className="text-gray-600 hover:text-black font-medium"
+                className="text-gray-600 cursor-pointer hover:text-black font-medium"
               >
                 ← Back to shopping cart
               </Link>
 
               <button
                 type="submit"
-                className="bg-black text-white font-medium py-2 px-8 rounded-lg"
+                className="bg-black cursor-pointer text-white font-medium py-2  mt-2 sm:mt-0 px-8 rounded-lg"
               >
                 Add Address
               </button>
@@ -255,7 +261,7 @@ const Shipping = () => {
                     />
 
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-xs sm:text-sm line-clamp-2 font-medium text-gray-800">
                         {item.name}
                       </p>
                       <p className="text-xs text-gray-500">
@@ -277,7 +283,7 @@ const Shipping = () => {
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Subtotal ({orderItems.length} items)</span>
-                  <span>${subtotal}</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between text-red-500">
@@ -292,7 +298,7 @@ const Shipping = () => {
 
                 <div className="flex justify-between">
                   <span>Estimated Tax</span>
-                  <span>${estimatedTax}</span>
+                  <span>${estimatedTax.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -301,8 +307,8 @@ const Shipping = () => {
 
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-500">TOTAL</span>
-                <span className="text-xl font-bold text-gray-900">
-                  ${finalTotal}
+                <span className="text-md sm:text-xl font-bold text-gray-900">
+                  ${finalTotal.toFixed(2)}
                 </span>
               </div>
 

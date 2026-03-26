@@ -61,40 +61,49 @@ const WishlistPage = () => {
               Save items you love by clicking the heart icon on any product.
             </p>
             <Link href="/collections">
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transform transition-all duration-200 shadow-md hover:shadow-xl">
+              <button className="bg-gradient-to-r cursor-pointer from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transform transition-all duration-200 shadow-md hover:shadow-xl">
                 Continue Shopping
               </button>
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
             {wishlist.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition duration-300 flex flex-col h-full"
+                className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
               >
                 {/* IMAGE */}
-                <div className="relative">
+                <div className="relative overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-44 sm:h-48 md:h-52 object-cover transition-transform duration-500 group-hover:scale-105"
                   />
 
-                  {/* Discount */}
-                  <span className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 rounded">
+                  {/* Discount Badge */}
+                  <span className="absolute top-2 left-2 bg-black text-white text-[10px] px-2 py-1 rounded-full shadow">
                     {item.discount}% OFF
                   </span>
+
+                  {/* DELETE BUTTON - TOP RIGHT */}
+                  <button
+                    onClick={() => handleRemove(item.id)}
+                    className="absolute top-2 right-2 cursor-pointer p-2 bg-white/90 backdrop-blur rounded-full shadow-md hover:bg-red-100 hover:scale-110 active:scale-95 transition-all duration-200"
+                  >
+                    <MdDeleteOutline className="text-gray-700 text-sm" />
+                  </button>
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-3 flex flex-col flex-grow">
-                  <h3 className="text-sm text-gray-800 line-clamp-2 mb-1">
+                <div className="p-3 md:p-4 flex flex-col flex-grow">
+                  <h3 className="text-[10px] sm:text-sm md:text-base font-semibold text-black line-clamp-1 mb-1">
                     {item.name}
                   </h3>
 
+                  {/* PRICE */}
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="font-semibold text-gray-900 text-sm">
+                    <span className="font-bold text-black text-xs sm:text-sm md:text-base">
                       ${item.price}
                     </span>
                     <span className="text-gray-400 line-through text-xs">
@@ -102,23 +111,14 @@ const WishlistPage = () => {
                     </span>
                   </div>
 
-                  {/* PUSH BUTTONS TO BOTTOM */}
-                  <div className="mt-auto flex items-center gap-2">
-                    {/* Move to Cart */}
+                  {/* SINGLE BUTTON */}
+                  <div className="mt-auto">
                     <button
                       onClick={() => handleMoveToCart(item)}
-                      className="flex-1 bg-black text-white text-xs py-2 rounded-md flex items-center justify-center gap-1 hover:bg-gray-800 transition"
+                      className="w-full cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs md:text-sm py-2 rounded-lg flex items-center justify-center gap-2 hover:scale-[1.03] active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
                     >
                       <IoCartOutline />
                       Move to Cart
-                    </button>
-
-                    {/* Delete */}
-                    <button
-                      onClick={() => handleRemove(item.id)}
-                      className="p-2.5 bg-gray-100 rounded-md hover:bg-red-100 transition"
-                    >
-                      <MdDeleteOutline className="text-gray-700 text-sm" />
                     </button>
                   </div>
                 </div>
