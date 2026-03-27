@@ -30,9 +30,9 @@ const TrackOrder = () => {
   const orderItems = rawItems.map((item) => ({
     ...item,
     qty: item.qty ?? 1,
-    price: item.price ?? 0, 
-    color: item.color ?? "N/A", 
-    storage: item.storage ?? "", 
+    price: item.price ?? 0,
+    color: item.color ?? "N/A",
+    storage: item.storage ?? "",
   }));
 
   const address = order.address;
@@ -66,7 +66,7 @@ const TrackOrder = () => {
     deliveryDate,
   ];
 
-  // Timeline steps 
+  // Timeline steps
   const timelineSteps = [
     {
       id: 1,
@@ -107,7 +107,7 @@ const TrackOrder = () => {
     }
   }, [autoStatus, order.id, order.status, dispatch]);
 
-  // Calculate totals 
+  // Calculate totals
   const totalItems = orderItems.reduce((acc, item) => acc + item.qty, 0);
   const grandTotal = orderItems.reduce(
     (acc, item) => acc + item.price * item.qty,

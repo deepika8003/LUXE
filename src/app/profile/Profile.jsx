@@ -17,25 +17,37 @@ import { IoSettings, IoCartOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 
 const Profile = () => {
+  const cartItems = useSelector((state) => state.cart?.cartItems || []);
+  const wishlistItems = useSelector((state) => state.wishlist?.items || []);
+  const orders = useSelector((state) => state.orders?.orders || []);
+
+  const cartCount = cartItems.length;
+  const wishlistCount = wishlistItems.length;
+  const ordersCount = orders.length;
+
   const cardsData = [
     {
       title: "Orders",
       desc: "Manage your past and current deliveries.",
-      status: "NO ORDERS YET",
+      status: ordersCount === 0 ? "NO ORDERS YET" : `${ordersCount} ORDERS`,
       icon: <MdOutlineShoppingBag />,
       path: "/profile/orders",
     },
     {
       title: "Cart",
       desc: "Items waiting for your confirmation.",
-      status: "YOUR CART IS EMPTY",
+      status:
+        cartCount === 0 ? "YOUR CART IS EMPTY" : `${cartCount} ITEMS IN CART`,
       icon: <IoCartOutline />,
       path: "/profile/cart",
     },
     {
       title: "Wishlist",
       desc: "Curated pieces for future acquisitions.",
-      status: "YOUR WISHLIST IS EMPTY",
+      status:
+        wishlistCount === 0
+          ? "YOUR WISHLIST IS EMPTY"
+          : `${wishlistCount} ITEMS SAVED`,
       icon: <FaRegHeart />,
       path: "/profile/wishlist",
     },

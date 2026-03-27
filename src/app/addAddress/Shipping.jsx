@@ -1,190 +1,316 @@
 "use client";
+import { useSelector, useDispatch } from "react-redux";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  addAddress,
+  updateAddress,
+  loadUserAddresses,
+} from "@/redux/addressSlice";
+import { FaLock } from "react-icons/fa";
 
-import React, { useEffect, useState } from "react";
-import { calculateCartSummary } from "@/utils/priceUtils";
+const EMPTY_ARRAY = [];
 
 const Shipping = () => {
-  const [checkoutItems, setCheckoutItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const selectedCart =
-    selectedItems.length === 0
-      ? cart
-      : cart.filter((item) => selectedItems.includes(item.id));
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    street: "",
-    country: "India",
-    state: "",
-    city: "",
-    postal: "",
+  const currentUser = useSelector((state) => state?.auth?.currentUser || null);
+  const editAddress = useSelector(
+    (state) => state?.address?.editAddress || null,
+  );
+
+  // ✅ SAFE addresses
+  const addresses = useSelector((state) => {
+    const userId = state?.auth?.currentUser?.id;
+    if (!userId) return EMPTY_ARRAY;
+    return state?.address?.userAddresses?.[userId] || EMPTY_ARRAY;
   });
 
+  // ✅ SAFE orders
+  const orders = useSelector((state) => {
+    const userId = state?.auth?.currentUser?.id;
+    if (!userId) return EMPTY_ARRAY;
+
+    const userOrders = state?.orders?.userOrders;
+    if (!userOrders || typeof userOrders !== "object") return EMPTY_ARRAY;
+
+    return userOrders[userId] || EMPTY_ARRAY;
+  });
+
+  // Load addresses
   useEffect(() => {
-    const storedItems = localStorage.getItem("checkoutItems");
-
-    if (storedItems) {
-      const parsedItems = JSON.parse(storedItems);
-
-      const cleanedItems = parsedItems.map((item) => ({
-        ...item,
-        qty: item.qty ?? 1,
-        originalPrice: item.originalPrice ?? item.price ?? 0,
-        discount: item.discount ?? 0,
-      }));
-
-      setCheckoutItems(cleanedItems);
+    if (currentUser?.id) {
+      dispatch(loadUserAddresses({ userId: currentUser.id }));
     }
-  }, []);
-  const couponDiscount = 0;
-  const tax = 3.5;
-  const shippingFee = 10;
+  }, [currentUser, dispatch]);
 
-  const {
-    totalOriginalPrice,
-    totalSellingPrice,
-    totalDiscount,
-    totalCustomerPrice,
-    totalItems,
-  } = calculateCartSummary(selectedCart, checkoutItems, couponDiscount);
+  // ✅ SAFE filtering
+  const safeOrders = Array.isArray(orders) ? orders : [];
 
-  const finalTotal = totalCustomerPrice + tax + shippingFee;
+  const activeOrders = safeOrders.filter(
+    (order) => order?.status !== "Cancelled",
+  );
+
+  // ✅ SAFE flatMap
+  const orderItems = activeOrders.flatMap((order) =>
+    Array.isArray(order?.items)
+      ? order.items.map((item) => ({
+          ...item,
+          status: order?.status,
+        }))
+      : [],
+  );
+
+  const subtotal = orderItems.reduce((sum, item) => {
+    const price = Number(item?.price) || 0;
+    const qty = Number(item?.qty) || 1;
+    return sum + price * qty;
+  }, 0);
+
+  const discount = 0;
+  const coupon = 0;
+  const estimatedTax = 10;
+  const finalTotal = subtotal - discount - coupon + estimatedTax;
+
+  const [formData, setFormData] = useState(
+    editAddress || {
+      id: Date.now(),
+      name: "",
+      email: "",
+      phone: "",
+      street: "",
+      country: "",
+      region: "",
+      city: "",
+      postal: "",
+    },
+  );
+
+  useEffect(() => {
+    if (editAddress) {
+      setFormData(editAddress);
+    }
+  }, [editAddress]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!currentUser?.id) {
+      alert("Please sign in to continue");
+      return;
+    }
+
+    if (editAddress) {
+      dispatch(updateAddress({ userId: currentUser.id, address: formData }));
+    } else {
+      dispatch(addAddress({ userId: currentUser.id, address: formData }));
+    }
+
+    router.push("/profile/cart");
+  };
+
+  // Auth Guard
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <p className="text-xl mb-4">Please sign in to manage your addresses</p>
+        <button
+          onClick={() => router.push("/")}
+          className="bg-blue-600 text-white px-6 py-2 rounded"
+        >
+          Sign In
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <section className="w-full bg-[#f6f6f8] pt-20 pb-10">
-      <div className="max-w-7xl mx-auto flex gap-6">
-        {/* LEFT SIDE */}
-        <div className="w-[65%] space-y-6">
-          {/* CONTACT INFO */}
-          <div className="bg-white rounded p-6">
-            <h2 className="text-lg font-semibold text-black mb-4">
-              Contact Information
-            </h2>
-
-            <div className="space-y-3">
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Full name"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-
-              <input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="Phone number"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-            </div>
-          </div>
-
-          {/* SHIPPING ADDRESS */}
-          <div className="bg-white rounded p-6">
-            <h2 className="text-lg font-semibold text-black mb-4">
-              Shipping Address
-            </h2>
-
-            <div className="space-y-3">
-              <input
-                name="street"
-                value={form.street}
-                onChange={handleChange}
-                placeholder="Street address"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-
-              <select
-                name="country"
-                value={form.country}
-                onChange={handleChange}
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              >
-                <option>India</option>
-              </select>
-
-              <input
-                name="state"
-                value={form.state}
-                onChange={handleChange}
-                placeholder="State"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-
-              <input
-                name="city"
-                value={form.city}
-                onChange={handleChange}
-                placeholder="City"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-
-              <input
-                name="postal"
-                value={form.postal}
-                onChange={handleChange}
-                placeholder="Postal code"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-black"
-              />
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#f6f6f8]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 my-8 py-16">
+        <div className="text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mb-2">
+            Shipping Information
+          </h2>
+          <p className="text-sm text-gray-500 mb-6">
+            Secure checkout with quick and reliable delivery.
+          </p>
         </div>
-        {/* RIGHT SIDE SUMMARY */}
 
-        <div className="w-[35%]">
-          <div className="bg-white rounded p-6 sticky top-24">
-            <h2 className="text-lg font-semibold text-black mb-4">Summary</h2>
-            <div className="space-y-3 text-sm">
+        <div className="lg:flex lg:gap-8">
+          {/* LEFT FORM */}
+          <form onSubmit={handleSubmit} className="lg:w-2/3 space-y-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-md sm:text-lg font-semibold text-black mb-4">
+                Contact information
+              </h3>
+
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your full name"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your e-mail"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  maxLength={10}
+                  pattern="[6-9]{1}[0-9]{9}"
+                  placeholder="Enter your phone number"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
+                />
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-md sm:text-lg font-semibold text-black mb-4">
+                Shipping address
+              </h3>
+
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  name="street"
+                  required
+                  value={formData.street}
+                  onChange={handleChange}
+                  placeholder="Enter your street address"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
+                />
+                <select
+                  name="country"
+                  required
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
+                >
+                  <option value="">Select your country</option>
+                  <option>United States</option>
+                  <option>United Kingdom</option>
+                  <option>India</option>
+                </select>
+                <select
+                  name="region"
+                  required
+                  value={formData.region}
+                  onChange={handleChange}
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
+                >
+                  <option value="">Select your region</option>
+                  <option>Kerala</option>
+                  <option>Tamil Nadu</option>
+                </select>
+                <input
+                  type="text"
+                  name="city"
+                  required
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Enter your city"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
+                />
+                <input
+                  type="text"
+                  name="postal"
+                  required
+                  value={formData.postal}
+                  onChange={handleChange}
+                  placeholder="Enter your postal code"
+                  className="w-full text-black border border-gray-300 rounded-lg px-4 py-2"
+                />
+              </div>
+            </div>
+
+            <div className="sm:flex justify-between items-center gap-2 pt-4">
+              <Link
+                href="/profile/cart"
+                className="text-gray-600 hover:text-black font-medium"
+              >
+                ← Back to shopping cart
+              </Link>
+              <button
+                type="submit"
+                className="bg-black text-white font-medium py-2 mt-2 sm:mt-0 px-8 rounded-lg"
+              >
+                Add Address
+              </button>
+            </div>
+          </form>
+
+          {/* RIGHT SUMMARY */}
+          <div className="lg:w-1/3 mt-8 lg:mt-0">
+            <div className="bg-[#f1f1f3] rounded-2xl p-6 sticky top-24">
+              <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                Order Summary
+              </h2>
+
+              {orderItems.length === 0 ? (
+                <p className="text-sm text-gray-500">No items in cart</p>
+              ) : (
+                orderItems.map((item, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <img
+                      src={item?.image}
+                      alt={item?.name}
+                      className="w-14 h-14 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <p className="text-xs sm:text-sm font-medium text-gray-800">
+                        {item?.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item?.qty || 1}
+                      </p>
+                    </div>
+                    <p className="text-sm font-medium text-gray-800">
+                      ${Number(item?.price) || 0}
+                    </p>
+                  </div>
+                ))
+              )}
+
+              <div className="border-t border-gray-300 my-6"></div>
+
               <div className="flex justify-between">
-                <p className="text-gray-600">Price ({totalItems} items)</p>
-                <p className="text-black font-medium">
-                  ${totalSellingPrice.toLocaleString()}
-                </p>
+                <span className="text-sm text-gray-500">TOTAL</span>
+                <span className="text-lg font-bold text-gray-900">
+                  ${finalTotal.toFixed(2)}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <p className="text-gray-600">Discount</p>
-                <p className="text-green-600 font-medium">
-                  -${totalDiscount.toLocaleString()}
-                </p>
+
+              <div className="mt-6 text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+                <FaLock className="w-3 h-3" />
+                <span>Secure encrypted checkout</span>
               </div>
-              <div className="flex justify-between">
-                <p className="text-gray-600">Coupon</p>
-                <p className="text-green-600 font-medium">-${couponDiscount}</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-600">Tax</p>
-                <p className="text-black">${tax}</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-600">Shipping</p>
-                <p className="text-black">${shippingFee}</p>
-              </div>
-              <div className="border-t pt-3 flex justify-between font-semibold text-black">
-                <p>Total cost</p> <p>${finalTotal.toLocaleString()}</p>
-              </div>
-              <p className="text-green-600 text-sm">
-                You will save ${totalDiscount.toLocaleString()}
-              </p>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
