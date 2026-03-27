@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 
@@ -21,7 +22,7 @@ const Featured = () => {
 
           <div className="w-full relative">
             <a
-              href="#"
+              href="/collections"
               className=" text-black absolute right-0 font-semibold flex items-center gap-2 text-sm tracking-widest uppercase "
             >
               View All Categories
@@ -46,9 +47,12 @@ const Featured = () => {
                 Featured Collection
               </p>
               <h3 className="font-serif text-4xl mb-4">The Winter Edit</h3>
-              <button className="border border-white cursor-pointer px-6 py-2 text-xs tracking-widest uppercase hover:bg-white hover:text-black">
+              <Link
+                href="/collections"
+                className="border border-white cursor-pointer px-6 py-2 text-xs tracking-widest uppercase hover:bg-white hover:text-black"
+              >
                 Explore
-              </button>
+              </Link>
             </div>
           </div>
 

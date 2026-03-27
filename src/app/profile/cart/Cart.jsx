@@ -8,12 +8,18 @@ import { FaCaretDown } from "react-icons/fa";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { deleteAddress, setEditAddress } from "@/redux/addressSlice";
+import { addOrder } from "@/redux/orderSlice";
+
 import Link from "next/link";
+import {
+  calculateCartSummary,
+  calculateSellingPrice,
+} from "@/utils/priceUtils";
 
 const Cart = () => {
   const router = useRouter();
-  const cart = useSelector((state) => state.cart.cartItems);
   const products = useSelector((state) => state.product.products);
+  const cart = useSelector((state) => state.cart.cartItems);
   const addresses = useSelector((state) => state.address.addresses);
   console.log("All Products:", products);
   console.log("Cart Items:", cart);
@@ -26,36 +32,20 @@ const Cart = () => {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  const calculateSellingPrice = (item) => {
-    const discount = item.discount ?? 0;
-    const originalPrice = item.originalPrice ?? item.price ?? 0;
-    return Math.round((originalPrice * (100 - discount)) / 100);
-  };
-
+  const orders = useSelector((state) => state.orders.orders);
   const selectedCart =
     selectedItems.length === 0
       ? cart
       : cart.filter((item) => selectedItems.includes(item.id));
 
-  // total orginal price
-  const totalOriginalPrice = selectedCart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    const price = product.originalPrice ?? product.price ?? 0;
-    return sum + price * item.qty;
-  }, 0);
+  const {
+    totalOriginalPrice,
+    totalSellingPrice,
+    totalDiscount,
+    totalCustomerPrice,
+    totalItems,
+  } = calculateCartSummary(selectedCart, couponDiscount);
 
-  // total selling price
-  const totalSellingPrice = selectedCart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    const selling = calculateSellingPrice(product);
-    return sum + selling * item.qty;
-  }, 0);
-
-  const totalDiscount = totalOriginalPrice - totalSellingPrice;
-  const totalCustomerPrice = totalSellingPrice - (couponDiscount ?? 0);
   // toggle select
   const toggleSelect = (id) => {
     setSelectedItems((prev) =>
@@ -71,31 +61,11 @@ const Cart = () => {
       setSelectedItems(cart.map((item) => item.id));
     }
   };
-  const handleContinue = () => {
-    if (!selectedAddress) {
-      alert("Please select an address");
-      return;
-    }
 
-    if (selectedItems.length === 0) {
-      alert("Please select products");
-      return;
-    }
-
-    localStorage.setItem("checkoutItems", JSON.stringify(selectedCart));
-    localStorage.setItem("selectedAddress", selectedAddress);
-
-    router.push("/payment");
-  };
   const [cartChecked, setCartChecked] = useState(false);
 
   useEffect(() => {
     if (cartChecked) return;
-
-    if (cart.length === 0) {
-      alert("Your cart is empty. Add your products");
-      router.push("/");
-    }
 
     setCartChecked(true);
   }, [cart]);
@@ -104,6 +74,68 @@ const Cart = () => {
     setSelectedItems(cart.map((item) => item.id));
   }, [cart]);
 
+  const handlePlaceOrder = (item) => {
+    if (!selectedAddress) {
+      alert("Please select address");
+      return;
+    }
+
+    const selectedAddr = addresses.find((a) => a.id === selectedAddress);
+
+    const order = {
+      id: Date.now(),
+      items: selectedCart.map((item) => ({
+        ...item,
+        id: item.id,
+      })),
+      total: item.price * item.qty,
+      status: "Processing",
+      date: new Date().toDateString(),
+      address: selectedAddr,
+    };
+
+    dispatch(addOrder(order));
+
+    const updatedOrders = [order, ...orders];
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
+    // remove from cart
+    dispatch(removeFromCart(item.id));
+
+    // redirect
+    router.push("/profile/orders");
+  };
+
+  const handleContinue = () => {
+    const selectedAddr = addresses.find((a) => a.id === selectedAddress);
+
+    if (!selectedAddr) {
+      alert("Address not found");
+      return;
+    }
+
+    if (selectedItems.length === 0) {
+      alert("Please select products");
+      return;
+    }
+
+    const order = {
+      id: Date.now(),
+      items: selectedCart.map((item) => ({
+        ...item,
+        id: item.id,
+      })),
+      total: totalCustomerPrice,
+      status: "Processing",
+      date: new Date().toDateString(),
+      address: selectedAddr,
+    };
+
+    dispatch(addOrder(order));
+    localStorage.setItem("orders", JSON.stringify([order, ...orders]));
+
+    router.push("/profile/orders");
+  };
   return (
     <section className="w-full bg-[#f6f6f8] pt-17">
       <div className="max-w-7xl mx-auto sm:px-6 py-6 md:flex gap-4">
@@ -162,7 +194,7 @@ const Cart = () => {
               )}
             </div>
             <Link
-              href="/shippingDetails"
+              href="/profile/shippingDetails"
               className="text-[#155dfc] p-4  font-medium cursor-pointer text-sm md:text-md"
             >
               Add Delivery Address
@@ -178,130 +210,161 @@ const Cart = () => {
             />
             <p className="text-sm text-black font-medium">Select All</p>
           </div>
-          {cart.map((item) => {
-            const product = products.find((p) => p.id === item.id);
 
-            if (!product) return null;
-            const sellingPrice = calculateSellingPrice(product);
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto mt-5">
+              {/* ICON */}
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg mb-6">
+                <ImBoxAdd className="text-2xl text-blue-500" />
+              </div>
 
-            return (
-              <div key={product.id} className="bg-white mb-3">
-                <div className="p-4 flex justify-between gap-4">
-                  {/* CHECKBOX */}
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(item.id)}
-                    onChange={() => toggleSelect(item.id)}
-                    className="mt-2 mr-3"
-                  />
+              {/* TITLE */}
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Your Cart is Empty
+              </h2>
 
-                  {/* PRODUCT DETAILS */}
-                  <div className="flex-1">
-                    <h2 className="text-sm md:text-xl text-black">
-                      {product.name}
-                    </h2>
+              {/* TEXT */}
+              <p className="text-gray-500 text-sm mb-8">
+                Looks like you haven’t added anything to your cart yet. Start
+                exploring and add your favorite products.
+              </p>
 
-                    <p className="text-xs text-gray-500 mt-2 mb-4">
-                      {product.description}
-                    </p>
+              {/* BUTTON */}
+              <button
+                onClick={() => router.push("/collections")}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transform transition-all duration-200 shadow-md hover:shadow-xl"
+              >
+                Browse Products
+              </button>
+            </div>
+          ) : (
+            cart.map((item) => {
+              const product = item;
+              const sellingPrice = calculateSellingPrice(product);
+              return (
+                <div key={product.id} className="bg-white mb-3">
+                  <div className="p-4 flex justify-between gap-4">
+                    {/* CHECKBOX */}
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item.id)}
+                      onChange={() => toggleSelect(item.id)}
+                      className="mt-2 mr-3"
+                    />
 
-                    <p className="text-green-600 text-sm md:text-md font-medium my-1">
-                      {product.discount ?? 0}% off
-                      <del className="text-gray-400 mx-2">
-                        ${product.originalPrice ?? product.price}
-                      </del>
-                      ${sellingPrice}
-                    </p>
+                    {/* PRODUCT DETAILS */}
+                    <div className="flex-1">
+                      <h2 className="text-xs md:text-xl text-black">
+                        {product.name}
+                      </h2>
 
-                    <p className="text-xs text-green-600">
-                      {product.offerCount ?? 0} offers available
-                    </p>
+                      <p className="text-xs text-gray-500 mt-2 mb-4">
+                        {product.description}
+                      </p>
 
-                    <p className="text-xs text-black mt-5 mb-3">
-                      Delivery by 5 - 7 days
-                    </p>
-                  </div>
+                      <p className="text-green-600 text-xs md:text-md font-medium my-1">
+                        {product.discount ?? 0}% off
+                        <del className="text-gray-400 mx-2">
+                          ${product.originalPrice ?? product.price}
+                        </del>
+                        ${sellingPrice}
+                      </p>
 
-                  {/* IMAGE & QTY */}
-                  <div className="flex flex-col items-end">
-                    {/* IMAGE */}
-                    <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-contain"
-                      />
+                      <p className="text-xs text-green-600">
+                        {product.offerCount ?? 0} offers available
+                      </p>
+
+                      <p className="text-xs text-black mt-5 mb-3">
+                        Delivery by 5 - 7 days
+                      </p>
                     </div>
 
-                    {/* QTY */}
-                    <div className="relative w-full md:w-32">
-                      <div
-                        className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
-                        onClick={() =>
-                          setOpenQty(openQty === item.id ? null : item.id)
-                        }
-                      >
-                        <h4 className="flex text-black items-center justify-center gap-2 text-sm">
-                          Qty: {item.qty} <FaCaretDown />
-                        </h4>
+                    {/* IMAGE & QTY */}
+                    <div className="flex flex-col items-end">
+                      {/* IMAGE */}
+                      <div className="w-28 h-28 md:w-32 md:h-32 mb-2">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
 
-                      {openQty === item.id && (
+                      {/* QTY */}
+                      <div className="relative w-full md:w-32">
                         <div
-                          className="absolute top-0 left-0 w-full bg-white border border-[#ababab] z-10"
-                          onClick={(e) => e.stopPropagation()}
+                          className="w-full border border-[#dbdbdb] text-center py-1 px-3 cursor-pointer"
+                          onClick={() =>
+                            setOpenQty(openQty === item.id ? null : item.id)
+                          }
                         >
-                          {[1, 2, 3].map((num) => (
+                          <h4 className="flex text-black items-center justify-center gap-2 text-sm">
+                            Qty: {item.qty} <FaCaretDown />
+                          </h4>
+                        </div>
+
+                        {openQty === item.id && (
+                          <div
+                            className="absolute top-0 left-0 w-full bg-white border border-[#ababab] z-10"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {[1, 2, 3].map((num) => (
+                              <p
+                                key={num}
+                                className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm"
+                                onClick={() => {
+                                  dispatch(
+                                    updateQty({ id: item.id, qty: num }),
+                                  );
+                                  setOpenQty(null);
+                                }}
+                              >
+                                {num}
+                              </p>
+                            ))}
+
                             <p
-                              key={num}
-                              className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm"
+                              className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm border-t border-gray-200"
                               onClick={() => {
-                                dispatch(updateQty({ id: item.id, qty: num }));
+                                setSelectedItem(item);
+                                setCustomQty(item.qty.toString());
+                                setShowQtyModal(true);
                                 setOpenQty(null);
                               }}
                             >
-                              {num}
+                              more
                             </p>
-                          ))}
-
-                          <p
-                            className="py-1 px-3 hover:bg-gray-100 text-black cursor-pointer text-sm border-t border-gray-200"
-                            onClick={() => {
-                              setSelectedItem(item);
-                              setCustomQty(item.qty.toString());
-                              setShowQtyModal(true);
-                              setOpenQty(null);
-                            }}
-                          >
-                            more
-                          </p>
-                        </div>
-                      )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* BUTTONS */}
-                <div className="flex w-full border-t border-[#f0f0f0]">
-                  <button className="flex items-center cursor-pointer justify-center gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50">
-                    <ImBoxAdd className="text-sm text-[#ababab]" />
-                    Save For Later
-                  </button>
+                  {/* BUTTONS */}
+                  <div className="flex w-full border-t border-[#f0f0f0]">
+                    <button
+                      className="cursor-pointer flex items-center justify-center gap-2 md:gap-4 text-sm text-black px-5 py-4 w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50"
+                      onClick={() => handlePlaceOrder(item)}
+                    >
+                      <ImBoxAdd className="text-sm text-[#ababab]" />
+                      Place Order
+                    </button>
 
-                  <button
-                    className="flex items-center justify-center cursor-pointer gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
-                    onClick={() => {
-                      setSelectedItem(item);
-                      setShowDeleteModal(true);
-                    }}
-                  >
-                    <MdDelete className="text-[#ababab] text-xl" />
-                    Remove
-                  </button>
+                    <button
+                      className="flex items-center justify-center cursor-pointer gap-1 md:gap-4 text-sm text-black px-5 py-4 w-[50%] hover:bg-gray-50"
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      <MdDelete className="text-[#ababab] text-xl" />
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
         {/* RIGHT */}
@@ -359,15 +422,20 @@ const Cart = () => {
           </div>
 
           {/* SECURE */}
-          <div className="my-4 p-4 bg-white rounded">
-            <p className="text-[#878787] text-sm flex items-center gap-3">
-              <IoShieldCheckmarkSharp className="text-xl text-[#878787]" />
-              Safe and secure payments. Easy returns. 100% Authentic products.
-            </p>
+          <div className="my-4 p-4 bg-white ">
+            <div className="flex items-start gap-3">
+              {/* ICON */}
+              <IoShieldCheckmarkSharp className="text-xl md:text-2xl text-blue-600 flex-shrink-0 mt-0.5" />
+
+              {/* TEXT */}
+              <p className="text-sm text-gray-600 truncate max-w-[220px]">
+                Safe and secure payments. Easy returns. 100% Authentic products.
+              </p>
+            </div>
           </div>
 
           {/* PAYMENT DIV */}
-          <div className="bg-white p-4 rounded flex justify-between items-center">
+          <div className="bg-white p-4 rounded flex justify-between items-center gap-2">
             <div>
               <del className="text-[#878787] text-sm block">
                 ${totalOriginalPrice.toLocaleString()}
@@ -380,7 +448,7 @@ const Cart = () => {
             <div>
               <button
                 onClick={handleContinue}
-                className="bg-black cursor-pointer text-white px-10 py-3 rounded-sm hover:bg-gray-800 font-medium"
+                className="bg-black cursor-pointer text-white px-6 py-3 rounded-sm hover:bg-gray-800 font-medium"
               >
                 Continue
               </button>
@@ -396,7 +464,7 @@ const Cart = () => {
           onClick={() => setShowQtyModal(false)}
         >
           <div
-            className="bg-white w-[80%] rounded-xl shadow-lg"
+            className="bg-white w-[70%] md:w-[40%] rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4">
@@ -418,12 +486,12 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowQtyModal(false)}
-                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black cursor-pointer py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
               <button
-                className="text-blue-600 text-sm font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
+                className="text-blue-600 cursor-pointer text-sm font-medium w-[50%] py-4 hover:bg-blue-50 rounded-br-xl"
                 onClick={() => {
                   if (!customQty) return;
                   dispatch(
@@ -447,7 +515,7 @@ const Cart = () => {
           onClick={() => setShowDeleteModal(false)}
         >
           <div
-            className="bg-white w-[80%] rounded-xl shadow-lg"
+            className="bg-white w-[80%] sm:w-[50%] rounded-xl shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* CONTENT */}
@@ -464,13 +532,13 @@ const Cart = () => {
             <div className="w-full flex border-t border-[#f0f0f0]">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="text-black py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
+                className="text-black cursor-pointer py-4 text-sm font-medium w-[50%] border-r border-[#f0f0f0] hover:bg-gray-50 rounded-bl-xl"
               >
                 CANCEL
               </button>
 
               <button
-                className="text-red-600 text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
+                className="text-red-600 cursor-pointer text-sm font-medium w-[50%] py-4 hover:bg-red-50 rounded-br-xl"
                 onClick={() => {
                   setSelectedItems((prev) =>
                     prev.filter((id) => id !== selectedItem.id),
