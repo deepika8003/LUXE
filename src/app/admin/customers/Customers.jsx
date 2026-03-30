@@ -263,7 +263,6 @@ const Customers = () => {
 
   const PER_PAGE = 10;
 
-  // Filter customers based on search and status
   const filtered = CUSTOMERS.filter((c) => {
     const q = search.toLowerCase();
     const matchSearch =
@@ -281,7 +280,6 @@ const Customers = () => {
   const end = Math.min(start + PER_PAGE, totalItems);
   const currentCustomers = filtered.slice(start, end);
 
-  // Reset page when filters change
   useEffect(() => {
     setPage(1);
   }, [search, statusFilter]);
@@ -357,7 +355,7 @@ const Customers = () => {
         })}
       </div>
 
-      {/* Main Grid: Table + Sidebar */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Table Card */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -501,13 +499,12 @@ const Customers = () => {
           </div>
         </div>
 
-        {/* Sidebar: Top Spenders */}
+        {/* Sidebar */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-2 mb-5">
             <h2 className="text-md font-bold text-gray-900">Top Spenders</h2>
             <BsBarChartFill className="text-amber-500 text-sm" />
           </div>
-
           <div className="space-y-4">
             {TOP_SPENDERS.map((s, i) => (
               <div key={i} className="flex items-center justify-between">
@@ -533,7 +530,6 @@ const Customers = () => {
               </div>
             ))}
           </div>
-
           <button
             className="mt-6 w-full border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 transition cursor-pointer"
             onMouseEnter={(e) =>
