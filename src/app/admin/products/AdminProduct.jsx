@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { LuClipboardCheck } from "react-icons/lu";
 import { RiVerifiedBadgeLine } from "react-icons/ri";
@@ -9,7 +9,7 @@ import { MdOutlineVisibility } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
 import { AiFillCheckCircle } from "react-icons/ai";
-import AddProduct from "./AddProduct";
+import AddProduct from "../../components/AdminPage/AddProduct";
 
 const AdminProduct = ({
   showModal,
@@ -22,10 +22,28 @@ const AdminProduct = ({
   onDeleteClick,
 }) => {
   const products = useSelector((state) => state.product.products);
+
+  const dashboardStats = useMemo(() => {
+    const totalInventory = products.reduce((sum, p) => sum + (p.stock || 0), 0);
+    const activeListings = products.filter(
+      (p) => p.status === "Live" || (p.stock && p.stock > 0),
+    ).length;
+    const outOfStock = products.filter((p) => p.stock === 0).length;
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const newArrivals = products.filter((p) => {
+      if (!p.createdAt) return false;
+      const created = new Date(p.createdAt);
+      return created >= thirtyDaysAgo;
+    }).length;
+
+    return { totalInventory, activeListings, outOfStock, newArrivals };
+  }, [products]);
+
   const dashboardCards = [
     {
       title: "Total Inventory",
-      value: "12,450",
+      value: dashboardStats.totalInventory.toLocaleString(),
       subText: "+2% from last month",
       subTextColor: "text-green-600",
       icon: <LuClipboardCheck className="text-2xl text-[#1241a0]" />,
@@ -33,15 +51,15 @@ const AdminProduct = ({
     },
     {
       title: "New Arrivals",
-      value: "328",
-      subText: "+15% this month",
+      value: dashboardStats.newArrivals.toLocaleString(),
+      subText: "Last 30 days",
       subTextColor: "text-green-600",
       icon: <RiVerifiedBadgeLine className="text-2xl text-[#059669]" />,
       iconBg: "bg-[#d1fae5]",
     },
     {
       title: "Active Listings",
-      value: "1,084",
+      value: dashboardStats.activeListings.toLocaleString(),
       subText: "Current status",
       subTextColor: "text-gray-400",
       icon: <MdOutlineVisibility className="text-2xl text-[#2563eb]" />,
@@ -49,33 +67,30 @@ const AdminProduct = ({
     },
     {
       title: "Out of Stock",
-      value: "14",
+      value: dashboardStats.outOfStock.toLocaleString(),
       subText: "Needs attention",
       subTextColor: "text-red-500",
       icon: <AiOutlineExclamationCircle className="text-2xl text-[#e11d48]" />,
       iconBg: "bg-[#ffe4e6]",
     },
   ];
+
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
-
   const totalItems = products.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
+    if (currentPage > totalPages) setCurrentPage(1);
   }, [products, totalPages, currentPage]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
-  const currentProducts =
-    totalItems > 0 ? products.slice(startIndex, endIndex) : [];
+  const currentProducts = products.slice(startIndex, endIndex);
 
   return (
-    <section className="">
+    <section>
+      {/* Success Toast */}
       {showSuccess && (
         <div className="fixed top-5 right-5 z-[9999] transition-all duration-500 ease-in-out">
           <div className="flex items-center gap-3 bg-[#0074eb] text-white px-5 py-3 rounded-lg shadow-xl animate-slideDown">
@@ -91,6 +106,7 @@ const AdminProduct = ({
         </div>
       )}
 
+      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {dashboardCards.map((card, index) => (
           <div
@@ -110,7 +126,6 @@ const AdminProduct = ({
                 {card.subText}
               </p>
             </div>
-
             <div className={`${card.iconBg} px-3 py-4 rounded-lg`}>
               {card.icon}
             </div>
@@ -118,6 +133,7 @@ const AdminProduct = ({
         ))}
       </div>
 
+      {/* Product Table  */}
       <div className="bg-white rounded-xl border border-[#e0e0e0] overflow-hidden">
         <div className="flex justify-between p-6 border-b border-[#e0e0e0]">
           <div>
@@ -182,16 +198,14 @@ const AdminProduct = ({
                             {item.name}
                           </h2>
                           <span className="text-xs text-[#64748b] block truncate">
-                            SKU: {item.sku}
+                            SKU: {item.sku || `SKU${item.id}`}
                           </span>
                         </div>
                       </div>
                     </td>
-
                     <td className="w-[14%] py-4 px-6 text-sm text-[#475569] align-middle">
                       {item.category}
                     </td>
-
                     <td
                       className={`w-[14%] py-4 px-6 text-sm align-middle ${
                         item.stock === 0 ? "text-red-500" : "text-[#475569]"
@@ -199,11 +213,9 @@ const AdminProduct = ({
                     >
                       {item.stock} in stock
                     </td>
-
                     <td className="w-[12%] py-4 px-6 text-sm font-medium text-black align-middle">
                       ${item.price}.00
                     </td>
-
                     <td className="w-[14%] py-4 px-6 align-middle">
                       <span
                         className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full
@@ -215,7 +227,6 @@ const AdminProduct = ({
                         {item.status}
                       </span>
                     </td>
-
                     <td className="w-[14%] py-4 px-6 align-middle">
                       <div className="flex items-center gap-3 text-sm cursor-pointer">
                         <span

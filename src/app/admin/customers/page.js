@@ -1,9 +1,13 @@
 import AdminLayout from '@/app/components/layout/AdminLayout'
 import React from 'react'
+import Customers from './Customers'
+
 
 const page = () => {
     return (
-        <AdminLayout>page</AdminLayout>
+        <AdminLayout>
+            <Customers />
+        </AdminLayout>
     )
 }
 

@@ -1,28 +1,45 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { addAddress, updateAddress } from "@/redux/addressSlice";
+import { FaLock } from "react-icons/fa";
 
 const Shipping = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const cart = useSelector((state) => state.cart.cartItems);
-  const products = useSelector((state) => state.product.products);
   const editAddress = useSelector((state) => state.address.editAddress);
+  const orders = useSelector((state) => state.orders.orders);
+
+  // active orders
+  const activeOrders = orders.filter((order) => order.status !== "Cancelled");
+
+  const orderItems = activeOrders.flatMap((order) =>
+    order.items.map((item) => ({
+      ...item,
+      status: order.status,
+    })),
+  );
+
+  const subtotal = orderItems.reduce((sum, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.qty) || 1;
+    return sum + price * qty;
+  }, 0);
+
+  const discount = 0;
+  const coupon = 0;
+  const estimatedTax = 10;
+
+  const finalTotal = subtotal - discount - coupon + estimatedTax;
 
   useEffect(() => {
     if (editAddress) {
       setFormData(editAddress);
     }
   }, [editAddress]);
-
-  const tax = 3.5;
-  const shippingFee = 10;
-  const couponDiscount = 0;
 
   const [formData, setFormData] = useState(
     editAddress || {
@@ -54,41 +71,20 @@ const Shipping = () => {
       dispatch(addAddress({ ...formData, id: Date.now() }));
     }
 
-    router.push("/cart");
+    router.push("/profile/cart");
   };
-  const calculateSellingPrice = (item) => {
-    const discount = item.discount ?? 0;
-    const originalPrice = item.originalPrice ?? item.price ?? 0;
-    return Math.round((originalPrice * (100 - discount)) / 100);
-  };
-
-  const totalOriginalPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + (product.originalPrice ?? product.price ?? 0) * item.qty;
-  }, 0);
-
-  const totalSellingPrice = cart.reduce((sum, item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (!product) return sum;
-    return sum + calculateSellingPrice(product) * item.qty;
-  }, 0);
-
-  const totalDiscount = totalOriginalPrice - totalSellingPrice;
-
-  const totalCustomerPrice = totalSellingPrice - couponDiscount;
-
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-
-  const finalTotal = totalCustomerPrice + tax + shippingFee;
 
   return (
     <div className="min-h-screen bg-[#f6f6f8]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 my-8 py-16">
-        <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">
-          Shipping Information
-        </h2>
-
+        <div className="text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mb-2">
+            Shipping Information
+          </h2>
+          <p className="text-sm text-gray-500 mb-6">
+            Secure checkout with quick and reliable delivery.
+          </p>
+        </div>
         <div className="lg:flex lg:gap-8">
           {/* LEFT FORM */}
           <form onSubmit={handleSubmit} className="lg:w-2/3 space-y-6">
@@ -147,7 +143,7 @@ const Shipping = () => {
                   value={formData.street}
                   onChange={handleChange}
                   placeholder="Enter your street address"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
                 />
 
                 <select
@@ -155,7 +151,7 @@ const Shipping = () => {
                   required
                   value={formData.country}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
                 >
                   <option value="">Select your country</option>
                   <option>United States</option>
@@ -168,7 +164,7 @@ const Shipping = () => {
                   required
                   value={formData.region}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-3"
                 >
                   <option value="">Select your region</option>
                   <option>Kerala</option>
@@ -182,7 +178,7 @@ const Shipping = () => {
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="Enter your city"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full border text-black border-gray-300 rounded-lg px-4 py-2"
                 />
 
                 <input
@@ -192,10 +188,11 @@ const Shipping = () => {
                   value={formData.postal}
                   onChange={handleChange}
                   placeholder="Enter your postal code"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full text-black border border-gray-300 rounded-lg px-4 py-2"
                 />
               </div>
             </div>
+
             {/* Shipping Method */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-black mb-4">
@@ -212,9 +209,11 @@ const Shipping = () => {
                         <input
                           type="radio"
                           name="shippingMethod"
-                          className="w-4 h-4 text-black"
+                          className="w-4 h-4 "
                         />
-                        <span className="font-medium text-md">{method}</span>
+                        <span className="font-medium text-black text-sm sm:text-md">
+                          {method}
+                        </span>
                       </div>
                       <span className="text-xs md:text-sm text-gray-500">
                         Estimated arrival: 7-30 Oct '24
@@ -226,17 +225,17 @@ const Shipping = () => {
             </div>
 
             {/* Buttons */}
-            <div className="flex justify-between items-center pt-4">
+            <div className="sm:flex justify-between items-center gap-2 pt-4">
               <Link
-                href="/cart"
-                className="text-gray-600 hover:text-black font-medium"
+                href="profile/cart"
+                className="text-gray-600 cursor-pointer hover:text-black font-medium"
               >
                 ← Back to shopping cart
               </Link>
 
               <button
                 type="submit"
-                className="bg-black text-white font-medium py-2 px-8 rounded-lg"
+                className="bg-black cursor-pointer text-white font-medium py-2  mt-2 sm:mt-0 px-8 rounded-lg"
               >
                 Add Address
               </button>
@@ -245,60 +244,78 @@ const Shipping = () => {
 
           {/* RIGHT SUMMARY */}
           <div className="lg:w-1/3 mt-8 lg:mt-0">
-            <div className="bg-white rounded-xl p-6 shadow-sm sticky top-24">
-              <h3 className="text-md sm:text-lg font-semibold text-black mb-4">
-                Summary
-              </h3>
+            <div className="bg-[#f1f1f3] rounded-2xl p-6 sticky top-24">
+              {/* TITLE */}
+              <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                Order Summary
+              </h2>
 
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">{totalItems} items</span>
-                  <span className="text-gray-900 font-medium">
-                    ${totalSellingPrice.toLocaleString()}
-                  </span>
-                </div>
+              {/* ITEMS */}
+              <div className="space-y-4">
+                {orderItems.map((item, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 object-cover rounded-lg"
+                    />
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Discount</span>
-                  <span className="text-green-600 font-medium">
-                    -${totalDiscount.toLocaleString()}
-                  </span>
-                </div>
+                    <div className="flex-1">
+                      <p className="text-xs sm:text-sm line-clamp-2 font-medium text-gray-800">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item.qty || 1}
+                      </p>
+                    </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Coupon</span>
-                  <span className="text-green-600 font-medium">
-                    -${couponDiscount.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax</span>
-                  <span className="text-gray-900 font-medium">
-                    ${tax.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Shipping fee</span>
-                  <span className="text-gray-900 font-medium">
-                    ${shippingFee.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="border-t border-gray-200 pt-3 mt-3">
-                  <div className="flex justify-between font-semibold text-md sm:text-lg">
-                    <span className="text-black">Total cost</span>
-                    <span className="text-black">
-                      ${finalTotal.toLocaleString()}
-                    </span>
+                    <p className="text-sm font-medium text-gray-800">
+                      ${Number(item.price) || 0}
+                    </p>
                   </div>
+                ))}
+              </div>
+
+              {/* DIVIDER */}
+              <div className="border-t border-gray-300 my-6"></div>
+
+              {/* PRICE DETAILS */}
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex justify-between">
+                  <span>Subtotal ({orderItems.length} items)</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
 
-                <p className="text-green-600 text-sm">
-                  You will save $
-                  {(totalDiscount + couponDiscount).toLocaleString()}
-                </p>
+                <div className="flex justify-between text-red-500">
+                  <span>Discount</span>
+                  <span>-${discount}</span>
+                </div>
+
+                <div className="flex justify-between text-red-500">
+                  <span>Coupon</span>
+                  <span>-${coupon}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Estimated Tax</span>
+                  <span>${estimatedTax.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* TOTAL */}
+              <div className="border-t border-gray-300 my-6"></div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">TOTAL</span>
+                <span className="text-md sm:text-xl font-bold text-gray-900">
+                  ${finalTotal.toFixed(2)}
+                </span>
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-6 text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+                <FaLock className="w-3 h-3" />
+                <span>Secure encrypted checkout</span>
               </div>
             </div>
           </div>
